@@ -131,6 +131,7 @@ export default class ClientStore extends BaseStore {
     @observable mt5_trading_servers = [];
     @observable dxtrade_trading_servers = [];
     @observable is_cfd_poi_completed = false;
+    @observable is_new_affiliate_account_modal_visible = false;
 
     is_mt5_account_list_updated = false;
 
@@ -585,6 +586,11 @@ export default class ClientStore extends BaseStore {
     }
 
     @computed
+    get is_cra() {
+        return this.loginid?.toLowerCase().includes('cra');
+    }
+
+    @computed
     get is_uk() {
         return this.residence === 'gb';
     }
@@ -966,6 +972,11 @@ export default class ClientStore extends BaseStore {
         const list = response.payout_currencies || response;
         this.currencies_list = buildCurrenciesList(list);
         this.selectCurrency('');
+    }
+
+    @action.bound
+    toggleNewAffiliateAccountModal() {
+        this.is_new_affiliate_account_modal_visible = !this.is_new_affiliate_account_modal_visible;
     }
 
     @action.bound

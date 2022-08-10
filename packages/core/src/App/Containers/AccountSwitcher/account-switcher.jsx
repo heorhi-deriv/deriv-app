@@ -425,6 +425,10 @@ const AccountSwitcher = props => {
         return localize('Total assets in your Deriv real accounts.');
     };
 
+    const is_cra = loginid => {
+        return loginid?.toLowerCase().includes('cra');
+    };
+
     const isMT5Allowed = account_type => {
         if (!props.is_mt5_allowed) return false;
 
@@ -635,6 +639,30 @@ const AccountSwitcher = props => {
                     }}
                 >
                     <div className='acc-switcher__accounts'>
+                        {/* TODO I just added this here to handle the onclick, I'll change that when the BE gets ready */}
+                        {/* TODO I need to add this type to store | sort that, it sould be the toppest account */}
+                        <AccountList
+                            account_type='CRA'
+                            is_dark_mode_on={props.is_dark_mode_on}
+                            loginid='CRA1234567'
+                            balance='1000.00 USD'
+                            currency='cra'
+                            currency_icon={`IcCurrency-cra`}
+                            country_standpoint={props.country_standpoint}
+                            display_type={'currency'}
+                            is_eu={props.is_eu}
+                            redirectAccount={() => {
+                                // TODO add the redirect here
+                                const has_logged_in_before = localStorage.getItem('new_partner_logged_in');
+                                if (!has_logged_in_before) {
+                                    closeAccountsDialog();
+                                    localStorage.setItem('new_partner_logged_in', true);
+                                    props.toggleNewAffiliateAccountModal();
+                                }
+                            }}
+                            selected_loginid={props.account_loginid}
+                        />
+
                         {getSortedAccountList(props.account_list, props.accounts)
                             .filter(account => !account.is_virtual)
                             .map(account => {
@@ -645,7 +673,7 @@ const AccountSwitcher = props => {
                                         key={account.loginid}
                                         balance={props.accounts[account.loginid].balance}
                                         currency={props.accounts[account.loginid].currency}
-                                        currency_icon={`IcCurrency-${account.icon}`}
+                                        currency_icon={`IcCurrency-${is_cra(account.loginid) ? 'cra' : account.icon}`}
                                         country_standpoint={props.country_standpoint}
                                         display_type={'currency'}
                                         has_balance={'balance' in props.accounts[account.loginid]}
@@ -983,6 +1011,7 @@ AccountSwitcher.propTypes = {
     switchAccount: PropTypes.func,
     resetVirtualBalance: PropTypes.func,
     toggleAccountsDialog: PropTypes.func,
+    toggleNewAffiliateAccountModal: PropTypes.func,
     togglePositionsDrawer: PropTypes.func,
     toggleSetCurrencyModal: PropTypes.func,
     trading_platform_available_accounts: PropTypes.array,
@@ -1002,6 +1031,7 @@ const account_switcher = withRouter(
         can_upgrade_to: client.can_upgrade_to,
         client_residence: client.residence,
         country_standpoint: client.country_standpoint,
+        is_cra: client.is_cra,
         is_dark_mode_on: ui.is_dark_mode_on,
         is_eu: client.is_eu,
         is_fully_authenticated: client.is_fully_authenticated,
@@ -1046,6 +1076,7 @@ const account_switcher = withRouter(
         should_show_real_accounts_list: ui.should_show_real_accounts_list,
         toggleShouldShowRealAccountsList: ui.toggleShouldShowRealAccountsList,
         trading_platform_available_accounts: client.trading_platform_available_accounts,
+        toggleNewAffiliateAccountModal: client.toggleNewAffiliateAccountModal,
     }))(AccountSwitcher)
 );
 

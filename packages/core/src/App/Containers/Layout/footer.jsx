@@ -42,6 +42,7 @@ const Footer = ({
     toggleSettingsModal,
     settings_extension,
     landing_company_shortcode,
+    is_cra,
 }) => {
     let footer_extensions_left = [];
     let footer_extensions_right = [];
@@ -69,8 +70,8 @@ const Footer = ({
                 <LiveChat />
                 <FooterIconSeparator />
                 <GoToDeriv />
-                <ResponsibleTrading />
-                {is_logged_in && <AccountLimitsFooter />}
+                {!is_cra && <ResponsibleTrading />}
+                {is_logged_in && !is_cra && <AccountLimitsFooter />}
                 {is_logged_in && !is_virtual && (
                     <RegulatoryInformation landing_company={landing_company_shortcode} is_eu={is_eu} />
                 )}
@@ -91,6 +92,7 @@ const Footer = ({
 
 Footer.propTypes = {
     is_app_disabled: PropTypes.bool,
+    is_cra: PropTypes.bool,
     is_logged_in: PropTypes.bool,
     is_route_modal_on: PropTypes.bool,
     is_settings_modal_on: PropTypes.bool,
@@ -114,6 +116,7 @@ export default withRouter(
         is_route_modal_on: ui.is_route_modal_on,
         is_logged_in: client.is_logged_in,
         is_eu: client.is_eu,
+        is_cra: client.is_cra,
         is_loading: ui.is_loading,
         is_settings_modal_on: ui.is_settings_modal_on,
         is_virtual: client.is_virtual,
