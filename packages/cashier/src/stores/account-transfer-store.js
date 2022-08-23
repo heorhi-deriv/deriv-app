@@ -328,6 +328,7 @@ export default class AccountTransferStore {
                 platform: account.account_type,
                 is_eu: this.root_store.client.is_eu,
             })}`;
+            // eslint-disable-next-line no-nested-ternary
             const account_text_display = is_cfd
                 ? account.account_type === 'mt5'
                     ? `${cfd_text_display} ${getCFDAccountDisplay({
@@ -473,9 +474,12 @@ export default class AccountTransferStore {
     onChangeTransferTo({ target }) {
         this.error.setErrorMessage('');
         this.selected_to.error = '';
-
         const accounts = this.accounts_list;
-        this.selected_to = accounts.find(account => account.value === target.value) || {};
+        this.selected_to = target.value.toLowerCase().includes('cra')
+            ? accounts.find(
+                  account => !account.value.toLowerCase().includes('cra') && account.value !== this.selected_to.value
+              )
+            : accounts.find(account => account.value === target.value) || {};
         if (hasTransferNotAllowedLoginid(this.selected_to.value)) {
             this.selected_to.error = getSelectedError(this.selected_to.value);
         }
