@@ -108,4 +108,4 @@ const ApplicationStatusDialog = ({ is_visible, onClose, status, onButtonClick }:
     );
 };
 
-export { ApplicationStatusDialog };
+export default ApplicationStatusDialog;
