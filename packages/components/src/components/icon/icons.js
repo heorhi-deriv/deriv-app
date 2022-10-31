@@ -187,6 +187,7 @@ import './cashier/ic-cashier-xanpool-dark.svg';
 import './cashier/ic-cashier-xanpool-light.svg';
 import './cashier/ic-cashier-xanpool-small-dark.svg';
 import './cashier/ic-cashier-xanpool-small-light.svg';
+import './cashier/ic-cashier-yellow-warning.svg';
 import './cashier/ic-cashier-zenithbank-dark.svg';
 import './cashier/ic-cashier-zenithbank-light.svg';
 import './cashier/ic-cashier.svg';
