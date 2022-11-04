@@ -1,3 +1,3 @@
-import PaymentAgentSignupSideNote from './signup-side-note';
+import SignupSideNote from './signup-side-note';
 
-export { PaymentAgentSignupSideNote };
+export { SignupSideNote };

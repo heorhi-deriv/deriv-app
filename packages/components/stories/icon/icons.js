@@ -93,6 +93,8 @@ export const icons =
         'IcCashierFundsProtection',
         'IcCashierGoPayDark',
         'IcCashierGoPayLight',
+        'IcCashierGreenCheck',
+        'IcCashierGreenHorn',
         'IcCashierGtbankDark',
         'IcCashierGtbankLight',
         'IcCashierHelpToPayDark',

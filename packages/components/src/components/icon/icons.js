@@ -88,6 +88,8 @@ import './cashier/ic-cashier-fps-light.svg';
 import './cashier/ic-cashier-funds-protection.svg';
 import './cashier/ic-cashier-go-pay-dark.svg';
 import './cashier/ic-cashier-go-pay-light.svg';
+import './cashier/ic-cashier-green-check.svg';
+import './cashier/ic-cashier-green-horn.svg';
 import './cashier/ic-cashier-gtbank-dark.svg';
 import './cashier/ic-cashier-gtbank-light.svg';
 import './cashier/ic-cashier-help-to-pay-dark.svg';

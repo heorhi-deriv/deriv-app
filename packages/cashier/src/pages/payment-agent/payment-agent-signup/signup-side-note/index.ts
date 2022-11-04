@@ -1,3 +1,3 @@
-import PaymentAgentSignupSideNote from './payment-agent-signup-side-note';
+import SignupSideNote from './signup-side-note';
 
-export default PaymentAgentSignupSideNote;
+export default SignupSideNote;

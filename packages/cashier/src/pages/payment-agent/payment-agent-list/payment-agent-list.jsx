@@ -9,7 +9,7 @@ import VerificationEmail from 'Components/verification-email';
 import PaymentAgentContainer from '../payment-agent-container';
 import PaymentAgentWithdrawalLocked from '../payment-agent-withdrawal-locked';
 import PaymentAgentDisclaimer from '../payment-agent-disclaimer';
-import { PaymentAgentSignupSideNote } from '../payment-agent-signup';
+import { SignupSideNote as PaymentAgentSignupSideNote } from '../payment-agent-signup';
 import SideNote from 'Components/side-note';
 import './payment-agent-list.scss';
 
