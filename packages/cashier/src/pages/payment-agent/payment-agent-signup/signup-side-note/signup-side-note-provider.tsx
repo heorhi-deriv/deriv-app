@@ -52,7 +52,7 @@ const getNote = ({
                           components={[<Money key={0} amount={initial_deposit} />]}
                       />
                   ),
-                  icon: 'IcCashierYellowWarning',
+                  icon: 'IcAlertWarning',
                   is_primary_button: true,
                   onClick: () => history.push(routes.cashier_deposit),
                   title: <Localize i18n_default_text="You don't meet the requirements" />,
@@ -90,7 +90,7 @@ const getNote = ({
             description: (
                 <Localize i18n_default_text='It seems that certain actions are restricted on your account. Please contact us via live chat to resolve this issue.' />
             ),
-            icon: 'IcCashierYellowWarning',
+            icon: 'IcAlertWarning',
             is_primary_light_button: true,
             onClick: () => window.LC_API.open_chat_window(),
             title: <Localize i18n_default_text='Your account is locked' />,
@@ -102,7 +102,8 @@ const getNote = ({
             description: (
                 <Localize i18n_default_text="Thank you for making the deposit. You've met the minimum required account balance for us to continue with the review." />
             ),
-            icon: 'IcCashierGreenCheck',
+            icon: 'IcCheckmarkCircle',
+            icon_color: 'var(--status-success)',
             is_primary_light_button: true,
             // onClick: () => window.LC_API.open_chat_window(),send paymentagent_create request with all data received from paymentagent_details
             title: <Localize i18n_default_text='Your application is back in review' />,
@@ -116,7 +117,7 @@ const getNote = ({
                     components={[<Money key={0} amount={initial_deposit} />]}
                 />
             ),
-            icon: 'IcCashierYellowWarning',
+            icon: 'IcAlertWarning',
             title: <Localize i18n_default_text='Application under review' />,
             title_color: 'warning',
         };
@@ -125,7 +126,7 @@ const getNote = ({
             description: (
                 <Localize i18n_default_text='Congratulations! Your application to be a payment agent on Deriv is approved and now you are ready to begin.' />
             ),
-            icon: 'IcCashierGreenHorn',
+            icon: 'IcAlertSuccess',
             title: <Localize i18n_default_text='Success' />,
             title_color: 'profit-success',
         };

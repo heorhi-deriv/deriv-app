@@ -12,6 +12,7 @@ export type TNote = {
     button_text?: JSX.Element;
     description: JSX.Element;
     icon?: string;
+    icon_color?: string;
     is_primary_button?: boolean;
     is_primary_light_button?: boolean;
     onClick?: VoidFunction;
@@ -23,7 +24,7 @@ const Note = ({ note }: { note: TNote }) => {
     return (
         <div className='signup-side-note'>
             <div className='signup-side-note__header'>
-                {note.icon && <Icon icon={note.icon} size={16} />}
+                {note.icon && <Icon icon={note.icon} size={16} custom_color={note.icon_color} />}
                 <Text as='p' color={note.title_color} size='xxs' line-height='m' weight='bold'>
                     {note.title}
                 </Text>
@@ -61,8 +62,6 @@ const SignupSideNote = () => {
         account_settings: { country_code },
     } = client;
 
-    const wizard_root_el = document.getElementById('wizard_root');
-
     const closeWizard = () => {
         setIsWizardOpen(false);
     };
@@ -79,9 +78,7 @@ const SignupSideNote = () => {
     return (
         <>
             <Note note={note} />
-            {is_wizard_open &&
-                wizard_root_el &&
-                ReactDOM.createPortal(<SignupWizard closeWizard={closeWizard} />, wizard_root_el)}
+            {is_wizard_open && <SignupWizard closeWizard={closeWizard} />}
         </>
     );
 };
