@@ -6,10 +6,12 @@
     }
 
     &__description {
-        margin: 0.8rem 0 1.2rem;
+        margin: 0.8rem 0;
     }
 
     .dc-btn {
+        display: block;
+        margin-top: 1.2rem;
         padding: 0 0.8rem;
     }
 }

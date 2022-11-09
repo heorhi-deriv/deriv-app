@@ -143,6 +143,12 @@ const getNote = ({
         ),
         is_primary_button: true,
         onClick: () => openWizard(),
+        tip: (
+            <Localize
+                i18n_default_text='Note: If your account balance falls below <0/> USD, you’ll need to resubmit your application.'
+                components={[<Money key={0} amount={initial_deposit} />]}
+            />
+        ),
         title: <Localize i18n_default_text='Want to become a payment agent?' />,
         title_color: 'prominent',
     };

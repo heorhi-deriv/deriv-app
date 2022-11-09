@@ -16,6 +16,7 @@ export type TNote = {
     is_primary_button?: boolean;
     is_primary_light_button?: boolean;
     onClick?: VoidFunction;
+    tip?: JSX.Element;
     title: JSX.Element;
     title_color?: string;
 };
@@ -32,6 +33,11 @@ const Note = ({ note }: { note: TNote }) => {
             <Text as='p' className='signup-side-note__description' size='xxxs' line-height='s'>
                 {note.description}
             </Text>
+            {note.tip && (
+                <Text as='p' className='signup-side-note__tip' size='xxxs' line-height='s' color='less-prominent'>
+                    {note.tip}
+                </Text>
+            )}
             {note.button_text && (
                 <Button
                     type='button'
