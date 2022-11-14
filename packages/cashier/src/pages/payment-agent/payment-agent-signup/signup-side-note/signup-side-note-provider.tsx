@@ -29,7 +29,7 @@ const getNote = ({
     const can_apply_to_be_a_payment_agent = !!paymentagent_details?.can_apply;
     const is_applied = paymentagent_details.status === 'applied';
     const is_authorized = paymentagent_details.status === 'authorized';
-    const is_rejcted = paymentagent_details.status === 'rejected';
+    const is_rejected = paymentagent_details.status === 'rejected';
     const is_verified = paymentagent_details.status === 'verified';
     const insufficient_deposit = paymentagent_details.eligibility_validation?.some(
         status => status === 'PaymentAgentInsufficientDeposit'
@@ -43,7 +43,7 @@ const getNote = ({
         initial_deposit_per_country[country_code.toUpperCase()] || initial_deposit_per_country.default;
 
     if (insufficient_deposit) {
-        return is_rejcted
+        return is_rejected
             ? {
                   button_text: <Localize i18n_default_text='Deposit now' />,
                   description: (
@@ -72,7 +72,7 @@ const getNote = ({
                   title: <Localize i18n_default_text='Sign-up failed' />,
                   title_color: 'loss-danger',
               };
-    } else if (is_rejcted && (needs_poi || needs_poa)) {
+    } else if (is_rejected && (needs_poi || needs_poa)) {
         return {
             button_text: <Localize i18n_default_text='Go to live chat' />,
             description: (
@@ -96,7 +96,7 @@ const getNote = ({
             title: <Localize i18n_default_text='Your account is locked' />,
             title_color: 'warning',
         };
-    } else if (can_apply_to_be_a_payment_agent && is_rejcted) {
+    } else if (can_apply_to_be_a_payment_agent && is_rejected) {
         return {
             button_text: <Localize i18n_default_text='Submit again' />,
             description: (
