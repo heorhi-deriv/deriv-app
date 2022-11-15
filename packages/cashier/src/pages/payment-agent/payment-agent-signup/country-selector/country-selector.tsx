@@ -1,13 +1,13 @@
 import React from 'react';
-import { connect } from 'Stores/connect';
 import { ResidenceList, CountriesListResponse } from '@deriv/api-types';
 import { Formik, Field, FieldProps } from 'formik';
 import { Autocomplete, DesktopWrapper, MobileWrapper, SelectNative, Loading } from '@deriv/components';
 import { localize } from '@deriv/translations';
-import { TRootStore, TReactChangeEvent } from 'Types';
+import { useStore } from '../../../../hooks';
+import { TReactChangeEvent } from 'Types';
+import { observer } from 'mobx-react';
 
 type TCountrySelectorProps = {
-    fetchResidenceList: () => Promise<CountriesListResponse>;
     selectedCountry: (country: ResidenceList[0]) => void;
     className: string;
 };
@@ -16,7 +16,9 @@ type TValues = {
     country_input: string;
 };
 
-const CountrySelector = ({ fetchResidenceList, selectedCountry, className }: TCountrySelectorProps) => {
+const CountrySelector = ({ selectedCountry, className }: TCountrySelectorProps) => {
+    const { client } = useStore();
+    const { fetchResidenceList } = client;
     const [residence_list, setResidenceList] = React.useState<ResidenceList>();
 
     const initial_form_values = {
@@ -46,7 +48,7 @@ const CountrySelector = ({ fetchResidenceList, selectedCountry, className }: TCo
     };
 
     React.useEffect(() => {
-        fetchResidenceList().then((response: CountriesListResponse) => {
+        fetchResidenceList?.().then((response: CountriesListResponse) => {
             setResidenceList(response.residence_list);
         });
     }, [fetchResidenceList]);
@@ -122,6 +124,4 @@ const CountrySelector = ({ fetchResidenceList, selectedCountry, className }: TCo
     );
 };
 
-export default connect(({ client }: TRootStore) => ({
-    fetchResidenceList: client.fetchResidenceList,
-}))(CountrySelector);
+export default observer(CountrySelector);

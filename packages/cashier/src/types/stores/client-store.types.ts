@@ -1,4 +1,4 @@
-import { GetAccountStatus, Authorize, ResidenceList } from '@deriv/api-types';
+import { GetAccountStatus, Authorize, CountriesListResponse } from '@deriv/api-types';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
 
@@ -20,7 +20,7 @@ export type TClientStore = {
     currency: string;
     current_currency_type?: string;
     current_fiat_currency?: string;
-    fetchResidenceList?: () => Promise<ResidenceList>;
+    fetchResidenceList?: () => Promise<CountriesListResponse>;
     getLimits: () => void;
     is_account_setting_loaded: boolean;
     is_eu: boolean;

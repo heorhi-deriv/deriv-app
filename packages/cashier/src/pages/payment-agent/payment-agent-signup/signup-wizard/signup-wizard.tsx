@@ -63,7 +63,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         secondary_button_label={localize('Back')}
                         onChangeStep={onChangeStep}
                     >
-                        <Wizard.Step title='Country of issue' is_fullwidth is_submit_disabled={!is_country_selected}>
+                        <Wizard.Step
+                            title={localize('Country of issue')}
+                            is_fullwidth
+                            is_submit_disabled={!is_country_selected}
+                        >
                             <>
                                 <Text as='p' size='m' line-height='m' weight='bold'>
                                     <Localize i18n_default_text='Country of issue' />
