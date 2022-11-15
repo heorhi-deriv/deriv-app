@@ -26,19 +26,20 @@ const getNote = ({
     openWizard,
     paymentagent_details,
 }: TGetNoteProps): TNote => {
-    const can_apply_to_be_a_payment_agent = !!paymentagent_details?.can_apply;
+    const can_apply_as_payment_agent = !!paymentagent_details?.can_apply;
     const is_applied = paymentagent_details.status === 'applied';
     const is_authorized = paymentagent_details.status === 'authorized';
     const is_rejected = paymentagent_details.status === 'rejected';
     const is_verified = paymentagent_details.status === 'verified';
-    const insufficient_deposit = paymentagent_details.eligibility_validation?.some(
-        status => status === 'PaymentAgentInsufficientDeposit'
-    );
-    const needs_poi = paymentagent_details.eligibility_validation?.some(status => status === 'NotAgeVerified');
-    const needs_poa = paymentagent_details.eligibility_validation?.some(status => status === 'NotAuthenticated');
-    const locked_account = paymentagent_details.eligibility_validation?.some(
-        status => status === 'PaymentAgentClientStatusNotEligible'
-    );
+
+    const checkEligibilityStatus = (status: string) => {
+        return paymentagent_details.eligibility_validation?.some(s => s === status);
+    };
+
+    const insufficient_deposit = checkEligibilityStatus('PaymentAgentInsufficientDeposit');
+    const locked_account = checkEligibilityStatus('PaymentAgentClientStatusNotEligible');
+    const needs_poi = checkEligibilityStatus('NotAgeVerified');
+    const needs_poa = checkEligibilityStatus('NotAuthenticated');
     const initial_deposit =
         initial_deposit_per_country[country_code.toUpperCase()] || initial_deposit_per_country.default;
 
@@ -72,7 +73,8 @@ const getNote = ({
                   title: <Localize i18n_default_text='Sign-up failed' />,
                   title_color: 'loss-danger',
               };
-    } else if (is_rejected && (needs_poi || needs_poa)) {
+    }
+    if (is_rejected && (needs_poi || needs_poa)) {
         return {
             button_text: <Localize i18n_default_text='Go to live chat' />,
             description: (
@@ -84,7 +86,8 @@ const getNote = ({
             title: <Localize i18n_default_text='Sign-up failed' />,
             title_color: 'loss-danger',
         };
-    } else if (locked_account) {
+    }
+    if (locked_account) {
         return {
             button_text: <Localize i18n_default_text='Go to live chat' />,
             description: (
@@ -96,7 +99,8 @@ const getNote = ({
             title: <Localize i18n_default_text='Your account is locked' />,
             title_color: 'warning',
         };
-    } else if (can_apply_to_be_a_payment_agent && is_rejected) {
+    }
+    if (can_apply_as_payment_agent && is_rejected) {
         return {
             button_text: <Localize i18n_default_text='Submit again' />,
             description: (
@@ -109,7 +113,8 @@ const getNote = ({
             title: <Localize i18n_default_text='Your application is back in review' />,
             title_color: 'profit-success',
         };
-    } else if (is_applied) {
+    }
+    if (is_applied) {
         return {
             description: (
                 <Localize
@@ -121,7 +126,8 @@ const getNote = ({
             title: <Localize i18n_default_text='Application under review' />,
             title_color: 'warning',
         };
-    } else if (is_authorized || is_verified) {
+    }
+    if (is_authorized || is_verified) {
         return {
             description: (
                 <Localize i18n_default_text='Congratulations! Your application to be a payment agent on Deriv is approved and now you are ready to begin.' />
