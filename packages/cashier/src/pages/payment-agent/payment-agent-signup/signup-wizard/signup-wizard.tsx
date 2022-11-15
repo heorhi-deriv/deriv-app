@@ -6,7 +6,7 @@ import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
-import CountrySelector from '../country-selector';
+import SelectCountryStep from '../signup-wizard-steps/select-country-step';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -68,27 +68,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_fullwidth
                             is_submit_disabled={!is_country_selected}
                         >
-                            <>
-                                <Text as='p' size='m' line-height='m' weight='bold'>
-                                    <Localize i18n_default_text='Country of issue' />
-                                </Text>
-                                <Text as='p' size='xs' line-height='m' className='pa-signup-wizard__step-text'>
-                                    <Localize i18n_default_text='First, we’ll need to know the country that your document was issued.' />
-                                </Text>
-                                <Text
-                                    as='p'
-                                    size='xs'
-                                    color='less-prominent'
-                                    line-height='m'
-                                    className='pa-signup-wizard__step-hint'
-                                >
-                                    <Localize i18n_default_text='Note: This helps with determining which documents are to be requested from you.' />
-                                </Text>
-                                <CountrySelector
-                                    className='pa-signup-wizard__step-country-dropdown'
-                                    selectedCountry={selectedCountry}
-                                />
-                            </>
+                            <SelectCountryStep selectedCountry={selectedCountry} />
                         </Wizard.Step>
                         <Wizard.Step title='Step 2' is_fullwidth>
                             <>
