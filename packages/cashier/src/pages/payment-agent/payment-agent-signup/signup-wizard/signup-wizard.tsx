@@ -1,10 +1,13 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
+import { useStore } from '../../../../hooks';
 import CancelWizardDialog from '../cancel-wizard-dialog';
+import ProofOfIdentityContainerForPA from '@deriv/account';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -15,6 +18,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const is_final_step = current_step_key === 'complete_step';
+
+    const { client, notifications } = useStore();
+
+    const { refreshNotifications } = notifications;
+    const { account_status, residence_list } = client;
 
     const onClose = () => {
         setIsCancelWizardDialogActive(true);
@@ -56,7 +64,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step title='Step 1' is_fullwidth>
                             <>
-                                <Text as='p' size='m' line-height='m' weight='bold'>
+                                {/* <Text as='p' size='m' line-height='m' weight='bold'>
                                     <Localize i18n_default_text='Step 1: Identity verification' />
                                 </Text>
                                 <Text as='p' size='xs' line-height='m'>
@@ -64,7 +72,15 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 </Text>
                                 <Text as='p' size='xs' line-height='m'>
                                     <Localize i18n_default_text='Note: Please ensure all your personal details are up-to-date before uploading the photo of your document.' />
-                                </Text>
+                                </Text> */}
+                                <ProofOfIdentityContainerForPA
+                                    height='auto'
+                                    is_from_external
+                                    onStateChange={(status: string) => status}
+                                    account_status={account_status}
+                                    refreshNotifications={refreshNotifications}
+                                    selected_country={residence_list[2]}
+                                />
                             </>
                         </Wizard.Step>
                         <Wizard.Step title='Step 2' is_fullwidth>
@@ -97,4 +113,4 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     return null;
 };
 
-export default SignupWizard;
+export default observer(SignupWizard);

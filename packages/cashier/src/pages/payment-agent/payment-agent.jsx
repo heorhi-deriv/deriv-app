@@ -5,6 +5,7 @@ import { connect } from 'Stores/connect';
 import CashierLocked from 'Components/cashier-locked';
 import { Virtual } from 'Components/cashier-container';
 import PaymentAgentList from './payment-agent-list';
+import SignupWizard from './payment-agent-signup/signup-wizard';
 
 const PaymentAgent = ({
     container,
@@ -41,11 +42,14 @@ const PaymentAgent = ({
         return <CashierLocked />;
     }
     return (
-        <PaymentAgentList
-            verification_code={verification_code}
-            is_payment_agent_withdraw={is_payment_agent_withdraw}
-            setSideNotes={setSideNotes}
-        />
+        <>
+            <SignupWizard />;
+            <PaymentAgentList
+                verification_code={verification_code}
+                is_payment_agent_withdraw={is_payment_agent_withdraw}
+                setSideNotes={setSideNotes}
+            />
+        </>
     );
 };
 
