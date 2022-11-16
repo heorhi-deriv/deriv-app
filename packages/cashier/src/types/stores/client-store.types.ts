@@ -20,7 +20,7 @@ export type TClientStore = {
     currency: string;
     current_currency_type?: string;
     current_fiat_currency?: string;
-    fetchResidenceList?: () => Promise<CountriesListResponse>;
+    fetchResidenceList: () => Promise<CountriesListResponse>;
     getLimits: () => void;
     is_account_setting_loaded: boolean;
     is_eu: boolean;

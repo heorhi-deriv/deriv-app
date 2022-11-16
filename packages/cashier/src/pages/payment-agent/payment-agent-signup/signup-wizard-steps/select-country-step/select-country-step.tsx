@@ -5,10 +5,10 @@ import { Localize } from '@deriv/translations';
 import CountrySelector from '../../country-selector';
 
 type TCountrySelectorProps = {
-    selectedCountry: (country: ResidenceList[0]) => void;
+    onSelect: (country: ResidenceList[0]) => void;
 };
 
-const SelectCountryStep = ({ selectedCountry }: TCountrySelectorProps) => {
+const SelectCountryStep = ({ onSelect }: TCountrySelectorProps) => {
     return (
         <>
             <Text as='p' size='m' line-height='m' weight='bold'>
@@ -20,7 +20,7 @@ const SelectCountryStep = ({ selectedCountry }: TCountrySelectorProps) => {
             <Text as='p' size='xs' color='less-prominent' line-height='m' className='pa-signup-wizard__step-hint'>
                 <Localize i18n_default_text='Note: This helps with determining which documents are to be requested from you.' />
             </Text>
-            <CountrySelector className='pa-signup-wizard__step-country-dropdown' selectedCountry={selectedCountry} />
+            <CountrySelector className='pa-signup-wizard__step-country-dropdown' onSelect={onSelect} />
         </>
     );
 };

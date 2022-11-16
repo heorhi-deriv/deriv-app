@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
-import { ResidenceList } from '@deriv/api-types';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
@@ -28,7 +27,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
         closeWizard();
     };
 
-    const selectedCountry = (country: ResidenceList[0]) => {
+    const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
         if (country) {
             setIsCountrySelected(true);
         }
@@ -68,7 +67,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_fullwidth
                             is_submit_disabled={!is_country_selected}
                         >
-                            <SelectCountryStep selectedCountry={selectedCountry} />
+                            <SelectCountryStep onSelect={onCountrySelect} />
                         </Wizard.Step>
                         <Wizard.Step title='Step 2' is_fullwidth>
                             <>
