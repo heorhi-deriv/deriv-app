@@ -1,9 +1,9 @@
 import React from 'react';
-import { ResidenceList, CountriesListResponse } from '@deriv/api-types';
+import { ResidenceList } from '@deriv/api-types';
 import { Formik, Field, FieldProps } from 'formik';
 import { Autocomplete, DesktopWrapper, MobileWrapper, SelectNative, Loading } from '@deriv/components';
 import { localize } from '@deriv/translations';
-import { useStore } from '../../../../hooks';
+import { useWS } from '../../../../hooks';
 import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 
@@ -17,9 +17,8 @@ type TValues = {
 };
 
 const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
-    const { client } = useStore();
-    const { fetchResidenceList } = client;
     const [residence_list, setResidenceList] = React.useState<ResidenceList>();
+    const WS = useWS('residence_list');
 
     const initial_form_values = {
         country_input: '',
@@ -48,10 +47,11 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
     };
 
     React.useEffect(() => {
-        fetchResidenceList().then((response: CountriesListResponse) => {
-            setResidenceList(response.residence_list);
-        });
-    }, [fetchResidenceList]);
+        if (!residence_list) {
+            WS.send();
+            setResidenceList(WS.data);
+        }
+    }, [WS, residence_list]);
 
     return (
         <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={submitCountry}>
