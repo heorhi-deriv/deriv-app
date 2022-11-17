@@ -8,7 +8,7 @@ import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 
 type TCountrySelectorProps = {
-    onSelect: (country: ResidenceList[0]) => void;
+    onSelect: (country: ResidenceList[number]) => void;
     className: string;
 };
 
