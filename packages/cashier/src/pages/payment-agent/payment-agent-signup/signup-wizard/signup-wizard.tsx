@@ -16,6 +16,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const is_final_step = current_step_key === 'complete_step';
 
+    const wizard_root_el = document.getElementById('wizard_root');
+
     const onClose = () => {
         setIsCancelWizardDialogActive(true);
     };
@@ -28,8 +30,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
         setCurrentStepKey(_current_step_key);
     };
-
-    const wizard_root_el = document.getElementById('wizard_root');
 
     if (wizard_root_el) {
         return createPortal(

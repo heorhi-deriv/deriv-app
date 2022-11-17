@@ -328,8 +328,9 @@
         }
     }
 
-    .dc-vertical-tab__content-side-note-item {
+    .dc-vertical-tab__content-side-note {
         position: sticky;
+        height: fit-content;
         top: calc(2.4rem + 4.1rem);
     }
 }
