@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react-lite';
 import { Button, Icon, Text } from '@deriv/components';
 import getNote from './signup-side-note-provider';
