@@ -49,7 +49,8 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
     React.useEffect(() => {
         if (!residence_list) {
             WS.send();
-            setResidenceList(WS.data);
+            if (WS.error) setResidenceList([]);
+            if (WS.data) setResidenceList(WS.data);
         }
     }, [WS, residence_list]);
 
