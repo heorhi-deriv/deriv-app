@@ -9,6 +9,7 @@ import VerificationEmail from 'Components/verification-email';
 import PaymentAgentContainer from '../payment-agent-container';
 import PaymentAgentWithdrawalLocked from '../payment-agent-withdrawal-locked';
 import PaymentAgentDisclaimer from '../payment-agent-disclaimer';
+import { SignupSideNote as PaymentAgentSignupSideNote } from '../payment-agent-signup';
 import SideNote from 'Components/side-note';
 import './payment-agent-list.scss';
 
@@ -47,6 +48,9 @@ const PaymentAgentList = ({
                 side_notes.push(
                     <SideNote has_title={false} key={0}>
                         <PaymentAgentDisclaimer />
+                    </SideNote>,
+                    <SideNote has_title={false} key={1}>
+                        <PaymentAgentSignupSideNote />
                     </SideNote>
                 );
             }

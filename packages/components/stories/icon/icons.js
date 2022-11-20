@@ -181,6 +181,8 @@ export const icons =
         'IcCashierVisaDark',
         'IcCashierVisaLight',
         'IcCashierWallet',
+        'IcCashierWebMoneyDark',
+        'IcCashierWebMoneyLight',
         'IcCashierWechatpayDark',
         'IcCashierWechatpayLight',
         'IcCashierWithdrawWallet',
