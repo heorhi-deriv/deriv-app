@@ -18,6 +18,7 @@ type TValues = {
 
 const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
     const WS = useWS('residence_list');
+    const { data: residence_list, is_loading } = WS;
 
     const initial_form_values = {
         country_input: '',
@@ -31,7 +32,7 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
 
         if (!country_input) {
             errors.country_input = localize('Please select the country of document issuance.');
-        } else if (!WS.data?.find(c => c.text === country_input)) {
+        } else if (!residence_list?.find(c => c.text === country_input)) {
             errors.country_input = localize('Please select a valid country of document issuance.');
         }
 
@@ -39,24 +40,24 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
     };
 
     const submitCountry = (values: TValues) => {
-        const matching_country = WS.data?.find(c => c.text === values.country_input);
+        const matching_country = residence_list?.find(c => c.text === values.country_input);
         if (matching_country) {
             onSelect(matching_country);
         }
     };
 
     React.useEffect(() => {
-        if (!WS.data) {
+        if (!residence_list) {
             WS.send();
         }
-    }, [WS]);
+    }, [WS, residence_list]);
 
     return (
         <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={submitCountry}>
             {({ errors, handleBlur, handleChange, setFieldValue, touched, values }) => (
                 <div className={className}>
-                    {!WS.data && WS.is_loading && <Loading is_fullscreen={false} />}
-                    {WS.data && WS.data.length && (
+                    {!residence_list && is_loading && <Loading is_fullscreen={false} />}
+                    {residence_list && residence_list.length && (
                         <fieldset>
                             <Field name='country_input'>
                                 {({ field }: FieldProps<string>) => (
@@ -70,12 +71,12 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
                                                 autoComplete='off'
                                                 type='text'
                                                 label={localize('Country')}
-                                                list_items={WS.data}
+                                                list_items={residence_list}
                                                 value={values.country_input}
                                                 onBlur={(e: TReactChangeEvent) => {
                                                     handleBlur(e);
                                                     const current_input = e.target.value;
-                                                    if (!WS.data?.find(c => c.text === current_input)) {
+                                                    if (!residence_list?.find(c => c.text === current_input)) {
                                                         setFieldValue('country_input', '', true);
                                                         submitCountry({ country_input: '' });
                                                     }
@@ -98,7 +99,7 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
                                                 error={touched.country_input && errors.country_input}
                                                 label={localize('Country')}
                                                 placeholder={localize('Please select')}
-                                                list_items={WS.data}
+                                                list_items={residence_list}
                                                 value={values.country_input}
                                                 onChange={(e: TReactChangeEvent) => {
                                                     handleChange(e);
