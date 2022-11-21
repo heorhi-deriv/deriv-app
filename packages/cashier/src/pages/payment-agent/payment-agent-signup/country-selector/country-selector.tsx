@@ -57,7 +57,7 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
                 <div className={className}>
                     {!WS.data && WS.is_loading && <Loading is_fullscreen={false} />}
                     {WS.data && WS.data.length && (
-                        <fieldset className='proof-of-identity__fieldset'>
+                        <fieldset>
                             <Field name='country_input'>
                                 {({ field }: FieldProps<string>) => (
                                     <React.Fragment>
@@ -91,24 +91,22 @@ const CountrySelector = ({ onSelect, className }: TCountrySelectorProps) => {
                                             />
                                         </DesktopWrapper>
                                         <MobileWrapper>
-                                            <div className='proof-of-identity__dropdown-container'>
-                                                <SelectNative
-                                                    {...field}
-                                                    name='country_input'
-                                                    className='is-mobile'
-                                                    error={touched.country_input && errors.country_input}
-                                                    label={localize('Country')}
-                                                    placeholder={localize('Please select')}
-                                                    list_items={WS.data}
-                                                    value={values.country_input}
-                                                    onChange={(e: TReactChangeEvent) => {
-                                                        handleChange(e);
-                                                        submitCountry({ country_input: e.target.value });
-                                                    }}
-                                                    use_text={true}
-                                                    required
-                                                />
-                                            </div>
+                                            <SelectNative
+                                                {...field}
+                                                name='country_input'
+                                                className='is-mobile'
+                                                error={touched.country_input && errors.country_input}
+                                                label={localize('Country')}
+                                                placeholder={localize('Please select')}
+                                                list_items={WS.data}
+                                                value={values.country_input}
+                                                onChange={(e: TReactChangeEvent) => {
+                                                    handleChange(e);
+                                                    submitCountry({ country_input: e.target.value });
+                                                }}
+                                                use_text={true}
+                                                required
+                                            />
                                         </MobileWrapper>
                                     </React.Fragment>
                                 )}
