@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, screen, render } from '@testing-library/react';
 import PaymentAgentContainer from '../payment-agent-container';
 import { isMobile } from '@deriv/shared';
+import { StoreProvider } from '../../../../hooks';
 
 jest.mock('Stores/connect.js', () => ({
     __esModule: true,
@@ -28,6 +29,19 @@ jest.mock('Pages/payment-agent/payment-agent-disclaimer', () => () => <div>Payme
 jest.mock('Pages/payment-agent/payment-agent-search-box', () => () => <div>PaymentAgentSearchBox</div>);
 
 describe('<PaymentAgentContainer />', () => {
+    const mockRootStore = {
+        client: {
+            website_status: {
+                payment_agents: {
+                    initial_deposit_per_country: {},
+                },
+            },
+            account_settings: {
+                country_code: '',
+            },
+        },
+    };
+
     const props = {
         app_contents_scroll_ref: {
             current: {},
@@ -126,13 +140,23 @@ describe('<PaymentAgentContainer />', () => {
 
     it('should show PaymentAgentDisclaimer in mobile view', () => {
         isMobile.mockReturnValue(true);
-        render(<PaymentAgentContainer {...props} />);
+        render(
+            <StoreProvider store={mockRootStore}>
+                <PaymentAgentContainer {...props} />
+            </StoreProvider>
+        );
+
+        screen.debug();
 
         expect(screen.getByText('PaymentAgentDisclaimer')).toBeInTheDocument();
     });
 
     it('should show search loader when is_search_loading equal to true', () => {
-        render(<PaymentAgentContainer {...props} is_search_loading />);
+        render(
+            <StoreProvider store={mockRootStore}>
+                <PaymentAgentContainer {...props} is_search_loading />
+            </StoreProvider>
+        );
 
         expect(screen.getByText('Loading')).toBeInTheDocument();
     });

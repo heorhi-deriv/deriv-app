@@ -9,6 +9,10 @@
         margin: 0.8rem 0;
     }
 
+    &__link--blue {
+        color: var(--text-info-blue);
+    }
+
     .dc-btn {
         display: block;
         margin-top: 1.2rem;
