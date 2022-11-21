@@ -143,7 +143,9 @@ const getNote = ({
         description: (
             <Localize
                 i18n_default_text='Learn more about the <0>payment agent programme on {{website_name}}</0> and sign up to be one.'
-                components={[<StaticUrl key={0} className='link' href='partners/payment-agent' />]}
+                components={[
+                    <StaticUrl key={0} className='signup-side-note__link--blue' href='partners/payment-agent' />,
+                ]}
                 values={{ website_name }}
             />
         ),
