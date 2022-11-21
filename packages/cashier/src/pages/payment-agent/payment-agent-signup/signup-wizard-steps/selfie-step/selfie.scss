@@ -61,18 +61,20 @@
             pointer-events: all;
         }
     }
+    //new css
     &__uploader {
         position: relative;
         width: 100%;
-        max-width: 32.4rem;
+        max-width: 42.4rem;
         height: 25rem;
-        margin: 3.2rem 18rem 1.6rem;
+        margin: 3.2rem auto 1.6rem;
 
-        .manual-poi-details--mobile & {
-            max-width: none;
+        //new css
+        .dc-file-dropzone {
+            border: 2px dashed var(--border-normal);
         }
 
-        &--full {
+        .manual-poi-details--mobile & {
             max-width: none;
         }
     }
@@ -175,6 +177,11 @@
         svg {
             height: 4.8rem;
         }
+    }
+    //new css
+    &__notice {
+        max-width: 42.4rem;
+        margin: 0 auto;
     }
     &__btns {
         height: 15.2rem;

@@ -13,7 +13,7 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
     const [formik_values, setFormikValues] = React.useState({});
 
     React.useEffect(() => {
-        setIsSelfieStepEnabled(formik_values[SELFIE_DOCUMENT.name]);
+        if (typeof setIsSelfieStepEnabled === 'function') setIsSelfieStepEnabled(formik_values[SELFIE_DOCUMENT.name]);
     }, [formik_values, setIsSelfieStepEnabled]);
 
     return (
