@@ -11,6 +11,7 @@ import PaymentAgentReceipt from '../payment-agent-receipt';
 import PaymentAgentSearchBox from '../payment-agent-search-box';
 import PaymentAgentUnlistedWithdrawForm from '../payment-agent-unlisted-withdraw-form';
 import PaymentAgentWithdrawConfirm from '../payment-agent-withdraw-confirm';
+import { SignupSideNote as PaymentAgentSignupSideNote } from '../payment-agent-signup';
 
 const PaymentAgentSearchWarning = () => {
     return (
@@ -87,9 +88,14 @@ const PaymentAgentContainer = ({
     return (
         <React.Fragment>
             {!has_payment_agent_search_warning && (
-                <SideNote className='payment-agent-list__side-note' has_title={false} is_mobile>
-                    <PaymentAgentDisclaimer />
-                </SideNote>
+                <>
+                    <SideNote has_title={false} is_mobile>
+                        <PaymentAgentDisclaimer />
+                    </SideNote>
+                    <SideNote has_title={false} is_mobile>
+                        <PaymentAgentSignupSideNote />
+                    </SideNote>
+                </>
             )}
             <div className='payment-agent-list__list-header'>
                 {is_deposit ? (
