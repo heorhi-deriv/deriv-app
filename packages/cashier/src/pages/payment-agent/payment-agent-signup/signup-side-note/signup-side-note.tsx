@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react-lite';
 import { Button, Icon, Text } from '@deriv/components';
 import getNote from './signup-side-note-provider';
@@ -34,7 +33,7 @@ const Note = ({ note }: { note: TNote }) => {
                 {note.description}
             </Text>
             {note.tip && (
-                <Text as='p' className='signup-side-note__tip' size='xxxs' line-height='s' color='less-prominent'>
+                <Text as='p' className='signup-side-note__tip' size='xxxs' line-height='s'>
                     {note.tip}
                 </Text>
             )}
