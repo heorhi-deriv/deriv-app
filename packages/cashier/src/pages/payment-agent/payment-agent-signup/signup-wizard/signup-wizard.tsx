@@ -5,6 +5,7 @@ import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
+import SelectCountryStep from '../signup-wizard-steps/select-country-step';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -14,6 +15,7 @@ type TSignupWizardProps = {
 const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
+    const [is_country_selected, setIsCountrySelected] = React.useState(false);
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
@@ -25,6 +27,12 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onComplete = () => {
         //handle some logic
         closeWizard();
+    };
+
+    const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
+        if (country) {
+            setIsCountrySelected(true);
+        }
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -54,18 +62,12 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         secondary_button_label={localize('Back')}
                         onChangeStep={onChangeStep}
                     >
-                        <Wizard.Step title='Step 1' is_fullwidth>
-                            <>
-                                <Text as='p' size='m' line-height='m' weight='bold'>
-                                    <Localize i18n_default_text='Step 1: Identity verification' />
-                                </Text>
-                                <Text as='p' size='xs' line-height='m'>
-                                    <Localize i18n_default_text="First, we'll need to verify your identity. Choose your preferred document for submission" />
-                                </Text>
-                                <Text as='p' size='xs' line-height='m'>
-                                    <Localize i18n_default_text='Note: Please ensure all your personal details are up-to-date before uploading the photo of your document.' />
-                                </Text>
-                            </>
+                        <Wizard.Step
+                            title={localize('Country of issue')}
+                            is_fullwidth
+                            is_submit_disabled={!is_country_selected}
+                        >
+                            <SelectCountryStep onSelect={onCountrySelect} />
                         </Wizard.Step>
                         <Wizard.Step title='Step 2' is_fullwidth>
                             <>
