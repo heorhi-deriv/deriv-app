@@ -6,7 +6,7 @@ import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
 import SelectCountryStep from '../signup-wizard-steps/select-country-step';
-import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
+import SelfieStep, { TSelfie } from '../signup-wizard-steps/selfie-step/selfie-step';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -17,9 +17,10 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const [is_country_selected, setIsCountrySelected] = React.useState(false);
-    const is_final_step = current_step_key === 'complete_step';
-
+    const [selfie, setSelfie] = React.useState<{ selfie_with_id: TSelfie }>();
     const [is_selfie_step_enabled, setIsSelfieStepEnabled] = React.useState(false);
+
+    const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
 
@@ -77,9 +78,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_submit_disabled={!is_selfie_step_enabled}
                             is_fullwidth
                         >
-                            <>
-                                <SelfieStep setIsSelfieStepEnabled={setIsSelfieStepEnabled} />
-                            </>
+                            <SelfieStep
+                                selfie={selfie}
+                                setSelfie={setSelfie}
+                                setIsSelfieStepEnabled={setIsSelfieStepEnabled}
+                            />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

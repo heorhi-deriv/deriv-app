@@ -2,15 +2,41 @@ import React from 'react';
 import { SelfieUpload } from '@deriv/account';
 import './selfie.scss';
 
-type TSelfieStep = {
-    setIsSelfieStepEnabled: (value: boolean) => void;
+type TSelfieError = {
+    code: string;
+    message: string;
 };
 
-const SelfieStep = ({ setIsSelfieStepEnabled }: TSelfieStep) => {
-    const [selfie, setSelfie] = React.useState();
+type TSelfieFile = {
+    lastModified: number;
+    lastModifiedDate: Date;
+    name: string;
+    path: string;
+    size: number;
+    type: string;
+    webkitRelativePath: string;
+};
 
-    const onFileDrop = value => setSelfie({ selfie_with_id: value });
+export type TSelfie = {
+    document_type: string;
+    errors: TSelfieError[] | [];
+    file: TSelfieFile;
+    icon: string;
+    info: string;
+    name: string;
+    pageType: string;
+};
 
+type TSelfieStep = {
+    selfie?: { selfie_with_id: TSelfie };
+    setIsSelfieStepEnabled: (value: boolean) => void;
+    setSelfie: (value: { selfie_with_id: TSelfie }) => void;
+};
+
+const SelfieStep = ({ selfie, setIsSelfieStepEnabled, setSelfie }: TSelfieStep) => {
+    const onFileDrop = (value: TSelfie) => setSelfie({ selfie_with_id: value });
+
+    //TODO: change the description for the selfie depending on the step number
     return (
         <>
             <SelfieUpload
