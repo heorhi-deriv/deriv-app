@@ -1,4 +1,4 @@
-import { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid } from '@deriv/api-types';
+import { GetAccountStatus, Authorize, CountriesListResponse, DetailsOfEachMT5Loginid } from '@deriv/api-types';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
 
@@ -20,6 +20,7 @@ export type TClientStore = {
     currency: string;
     current_currency_type?: string;
     current_fiat_currency?: string;
+    fetchResidenceList: () => Promise<CountriesListResponse>;
     getLimits: () => void;
     is_account_setting_loaded: boolean;
     is_eu: boolean;
@@ -41,6 +42,7 @@ export type TClientStore = {
         decimal_places?: number;
     };
     loginid?: string;
+    mt5_login_list: DetailsOfEachMT5Loginid[];
     residence: string;
     standpoint: {
         iom: string;
@@ -59,7 +61,6 @@ export type TClientStore = {
     email: string;
     setVerificationCode: (code: string, action: string) => void;
     updateAccountStatus: () => Promise<void>;
-    mt5_login_list: DetailsOfEachMT5Loginid[];
     is_authentication_needed: boolean;
     authentication_status: TAuthenticationStatus;
 };

@@ -1,0 +1,21 @@
+.signup-side-note {
+    &__header {
+        display: flex;
+        align-items: center;
+        column-gap: 0.8rem;
+    }
+
+    &__description {
+        margin: 0.8rem 0;
+    }
+
+    &__link--blue {
+        color: var(--text-info-blue);
+    }
+
+    .dc-btn {
+        display: block;
+        margin-top: 1.2rem;
+        padding: 0 0.8rem;
+    }
+}

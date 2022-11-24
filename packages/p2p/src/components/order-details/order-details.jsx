@@ -93,6 +93,7 @@ const OrderDetails = observer(() => {
             disposeReactions();
             order_store.setOrderPaymentMethodDetails(undefined);
             order_store.setOrderId(null);
+            order_store.setActiveOrder(null);
             general_store.props.setP2POrderProps({
                 order_id: order_store.order_id,
                 redirectToOrderDetails: general_store.redirectToOrderDetails,
@@ -306,7 +307,7 @@ const OrderDetails = observer(() => {
                                 )}
                                 <MyProfileSeparatorContainer.Line className='order-details-card--line' />
                                 <OrderInfoBlock
-                                    className='order-details-card--padding'
+                                    className='order-details-card--padding order-details-card__textbox'
                                     label={labels.contact_details}
                                     size='xs'
                                     weight='bold'
@@ -314,7 +315,7 @@ const OrderDetails = observer(() => {
                                 />
                                 <MyProfileSeparatorContainer.Line className='order-details-card--line' />
                                 <OrderInfoBlock
-                                    className='order-details-card--padding'
+                                    className='order-details-card--padding order-details-card__textbox'
                                     label={labels.instructions}
                                     size='xs'
                                     weight='bold'
