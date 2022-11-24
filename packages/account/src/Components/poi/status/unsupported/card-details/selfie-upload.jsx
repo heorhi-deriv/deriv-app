@@ -9,14 +9,8 @@ import Uploader from './uploader.jsx';
 import { setInitialValues, validateFields } from './utils';
 import { ROOT_CLASS, SELFIE_DOCUMENT } from '../constants';
 
-const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileDrop, setIsSelfieStepEnabled }) => {
-    const [formik_values, setFormikValues] = React.useState({});
-
-    React.useEffect(() => {
-        if (typeof setIsSelfieStepEnabled === 'function') setIsSelfieStepEnabled(formik_values[SELFIE_DOCUMENT.name]);
-    }, [formik_values, setIsSelfieStepEnabled]);
-
-    const selfie_header_for_pa_signup = (
+const PaymentAgentSignupSelfieHeader = React.memo(() => {
+    return (
         <>
             {!isMobile() ? (
                 <Text as='h2' size='m' weight='bold' color='prominent'>
@@ -28,6 +22,22 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
             </Text>
         </>
     );
+});
+
+const SelfieUpload = ({
+    dispatch,
+    initial_values,
+    is_pa_signup,
+    goBack,
+    onConfirm,
+    onFileDrop,
+    setSelfieStepEnabled,
+}) => {
+    const [formik_values, setFormikValues] = React.useState({});
+
+    React.useEffect(() => {
+        dispatch?.(setSelfieStepEnabled(!!formik_values[SELFIE_DOCUMENT.name]));
+    }, [formik_values, dispatch, setSelfieStepEnabled]);
 
     return (
         <div
@@ -39,9 +49,7 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
                 initialValues={initial_values || setInitialValues([SELFIE_DOCUMENT])}
                 validate={values => validateFields(values, undefined, [SELFIE_DOCUMENT])}
                 onSubmit={onConfirm}
-                innerRef={formik_actions =>
-                    formik_actions ? setFormikValues(formik_actions.values) : setFormikValues({})
-                }
+                innerRef={formik_actions => is_pa_signup && setFormikValues(formik_actions?.values || {})}
             >
                 {({ values, isValid, isSubmitting, touched }) => {
                     const is_form_touched = Object.keys(touched).length > 0;
@@ -51,7 +59,7 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
                         <Form className={`${ROOT_CLASS}__form`}>
                             <div className={`${ROOT_CLASS}__fields-content`}>
                                 {is_pa_signup ? (
-                                    selfie_header_for_pa_signup
+                                    <PaymentAgentSignupSelfieHeader />
                                 ) : (
                                     <Text as='h3' size='s' weight='bold' color='prominent'>
                                         {localize('Upload your selfie')}
@@ -109,11 +117,15 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
 };
 
 SelfieUpload.propTypes = {
+    dispatch: PropTypes.func,
     initial_values: PropTypes.object,
     is_pa_signup: PropTypes.bool,
     goBack: PropTypes.func,
+    onFileDrop: PropTypes.func,
     onConfirm: PropTypes.func,
-    setIsSelfieStepEnabled: PropTypes.func,
+    setSelfieStepEnabled: PropTypes.func,
 };
+
+PaymentAgentSignupSelfieHeader.displayName = 'PaymentAgentSignupSelfieHeader';
 
 export default SelfieUpload;
