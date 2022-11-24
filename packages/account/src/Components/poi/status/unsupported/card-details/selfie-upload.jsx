@@ -16,6 +16,19 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
         if (typeof setIsSelfieStepEnabled === 'function') setIsSelfieStepEnabled(formik_values[SELFIE_DOCUMENT.name]);
     }, [formik_values, setIsSelfieStepEnabled]);
 
+    const selfie_header_for_pa_signup = (
+        <>
+            {!isMobile() ? (
+                <Text as='h2' size='m' weight='bold' color='prominent'>
+                    {localize('Selfie verification')}
+                </Text>
+            ) : null}
+            <Text as='p' size='xs' color='prominent'>
+                {localize("First, we'll need to verify your identity. Please upload your selfie here.")}
+            </Text>
+        </>
+    );
+
     return (
         <div
             className={classNames(ROOT_CLASS, {
@@ -38,19 +51,10 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
                         <Form className={`${ROOT_CLASS}__form`}>
                             <div className={`${ROOT_CLASS}__fields-content`}>
                                 {is_pa_signup ? (
-                                    <Text as='h2' size='m' weight='bold' color='prominent'>
-                                        {localize('Selfie verification')}
-                                    </Text>
+                                    selfie_header_for_pa_signup
                                 ) : (
                                     <Text as='h3' size='s' weight='bold' color='prominent'>
                                         {localize('Upload your selfie')}
-                                    </Text>
-                                )}
-                                {is_pa_signup && (
-                                    <Text as='p' size='xs' color='prominent'>
-                                        {localize(
-                                            "First, we'll need to verify your identity. Please upload your selfie here."
-                                        )}
                                     </Text>
                                 )}
                                 <div className={`${ROOT_CLASS}__uploaders-wrap`}>
