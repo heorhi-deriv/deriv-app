@@ -1,10 +1,10 @@
-.manual-poi-details {
+.pa-signup-selfie {
     max-width: 67.2rem;
     height: 100%;
     display: flex;
 
     &--mobile {
-        padding: 2.4rem 1.6rem;
+        padding: 0;
     }
 
     h3 {
@@ -26,7 +26,7 @@
         display: flex;
         margin-bottom: 0.7rem;
 
-        .manual-poi-details--mobile & {
+        .pa-signup-selfie--mobile & {
             flex-wrap: wrap;
         }
     }
@@ -36,7 +36,7 @@
         &:first-of-type {
             margin-right: 2.4rem;
 
-            .manual-poi-details--mobile & {
+            .pa-signup-selfie--mobile & {
                 margin-right: 0;
             }
         }
@@ -66,15 +66,19 @@
         position: relative;
         width: 100%;
         max-width: 42.4rem;
-        height: 25rem;
+        height: 25.8rem;
         margin: 3.2rem auto 1.6rem;
+
+        @include mobile {
+            margin-top: 2.4rem;
+        }
 
         //new css
         .dc-file-dropzone {
             border: 2px dashed var(--border-normal);
         }
 
-        .manual-poi-details--mobile & {
+        .pa-signup-selfie--mobile & {
             max-width: none;
         }
     }
@@ -95,7 +99,7 @@
         p {
             margin-bottom: 2.4rem;
 
-            @at-root .manual-poi-details__uploader-details--preview p {
+            @at-root .pa-signup-selfie__uploader-details--preview p {
                 margin-bottom: 0;
             }
         }
@@ -119,7 +123,7 @@
             background-size: contain;
         }
 
-        .manual-poi-details--mobile & {
+        .pa-signup-selfie--mobile & {
             height: 13.4rem;
         }
     }
@@ -160,7 +164,7 @@
         padding: 0 1rem;
         min-height: 9.2rem;
 
-        .manual-poi-details--mobile & {
+        .pa-signup-selfie--mobile & {
             flex: none;
             width: 50%;
             min-height: 7.6rem;
@@ -169,7 +173,7 @@
         p {
             max-width: 12.4rem;
 
-            .manual-poi-details--mobile & {
+            .pa-signup-selfie--mobile & {
                 max-width: 13.2rem;
             }
         }
