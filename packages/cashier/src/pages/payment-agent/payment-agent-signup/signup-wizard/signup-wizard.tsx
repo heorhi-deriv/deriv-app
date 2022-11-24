@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
+import { ResidenceList } from '@deriv/api-types';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
@@ -16,6 +17,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const [is_country_selected, setIsCountrySelected] = React.useState(false);
+    const [selected_country, setSelectedCountry] = React.useState<ResidenceList[number]>();
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
@@ -30,9 +32,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     };
 
     const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
-        if (country) {
-            setIsCountrySelected(true);
-        }
+        setSelectedCountry(country);
+        setIsCountrySelected(!!country);
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -67,7 +68,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_fullwidth
                             is_submit_disabled={!is_country_selected}
                         >
-                            <SelectCountryStep onSelect={onCountrySelect} />
+                            <SelectCountryStep selected_country={selected_country} onSelect={onCountrySelect} />
                         </Wizard.Step>
                         <Wizard.Step title='Step 2' is_fullwidth>
                             <>
