@@ -50,62 +50,59 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
         <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={submitCountry}>
             {({ errors, handleBlur, handleChange, setFieldValue, touched, values }) => (
                 <div className={className}>
-                    {residence_list && residence_list.length && (
-                        <fieldset>
-                            <Field name='country_input'>
-                                {({ field }: FieldProps<string>) => (
-                                    <React.Fragment>
-                                        <DesktopWrapper>
-                                            <Autocomplete
-                                                {...field}
-                                                name='country_input'
-                                                className='is-desktop'
-                                                error={touched.country_input && errors.country_input}
-                                                autoComplete='off'
-                                                type='text'
-                                                label={localize('Country')}
-                                                list_items={residence_list}
-                                                value={values.country_input}
-                                                onBlur={(e: TReactChangeEvent) => {
-                                                    handleBlur(e);
-                                                    const current_input = e.target.value;
-                                                    if (!residence_list?.find(c => c.text === current_input)) {
-                                                        submitCountry({ country_input: '' });
-                                                    }
-                                                }}
-                                                onChange={handleChange}
-                                                onItemSelection={({ text }: { text: string }) => {
-                                                    const select_value =
-                                                        text === 'No results found' || !text ? '' : text;
-                                                    setFieldValue('country_input', select_value, true);
-                                                    submitCountry({ country_input: select_value });
-                                                }}
-                                                required
-                                            />
-                                        </DesktopWrapper>
-                                        <MobileWrapper>
-                                            <SelectNative
-                                                {...field}
-                                                name='country_input'
-                                                className='is-mobile'
-                                                error={touched.country_input && errors.country_input}
-                                                label={localize('Country')}
-                                                placeholder={localize('Please select')}
-                                                list_items={residence_list}
-                                                value={values.country_input}
-                                                onChange={(e: TReactChangeEvent) => {
-                                                    handleChange(e);
-                                                    submitCountry({ country_input: e.target.value });
-                                                }}
-                                                use_text={true}
-                                                required
-                                            />
-                                        </MobileWrapper>
-                                    </React.Fragment>
-                                )}
-                            </Field>
-                        </fieldset>
-                    )}
+                    <fieldset>
+                        <Field name='country_input'>
+                            {({ field }: FieldProps<string>) => (
+                                <React.Fragment>
+                                    <DesktopWrapper>
+                                        <Autocomplete
+                                            {...field}
+                                            name='country_input'
+                                            className='is-desktop'
+                                            error={touched.country_input && errors.country_input}
+                                            autoComplete='off'
+                                            type='text'
+                                            label={localize('Country')}
+                                            list_items={residence_list}
+                                            value={values.country_input}
+                                            onBlur={(e: TReactChangeEvent) => {
+                                                handleBlur(e);
+                                                const current_input = e.target.value;
+                                                if (!residence_list?.find(c => c.text === current_input)) {
+                                                    submitCountry({ country_input: '' });
+                                                }
+                                            }}
+                                            onChange={handleChange}
+                                            onItemSelection={({ text }: { text: string }) => {
+                                                const select_value = text === 'No results found' || !text ? '' : text;
+                                                setFieldValue('country_input', select_value, true);
+                                                submitCountry({ country_input: select_value });
+                                            }}
+                                            required
+                                        />
+                                    </DesktopWrapper>
+                                    <MobileWrapper>
+                                        <SelectNative
+                                            {...field}
+                                            name='country_input'
+                                            className='is-mobile'
+                                            error={touched.country_input && errors.country_input}
+                                            label={localize('Country')}
+                                            placeholder={localize('Please select')}
+                                            list_items={residence_list}
+                                            value={values.country_input}
+                                            onChange={(e: TReactChangeEvent) => {
+                                                handleChange(e);
+                                                submitCountry({ country_input: e.target.value });
+                                            }}
+                                            use_text={true}
+                                            required
+                                        />
+                                    </MobileWrapper>
+                                </React.Fragment>
+                            )}
+                        </Field>
+                    </fieldset>
                 </div>
             )}
         </Formik>

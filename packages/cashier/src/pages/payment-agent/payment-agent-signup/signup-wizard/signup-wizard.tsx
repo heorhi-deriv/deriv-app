@@ -16,7 +16,6 @@ type TSignupWizardProps = {
 const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
-    const [is_country_selected, setIsCountrySelected] = React.useState(false);
     const [selected_country, setSelectedCountry] = React.useState<ResidenceList[number]>();
     const is_final_step = current_step_key === 'complete_step';
 
@@ -33,7 +32,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
 
     const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
         setSelectedCountry(country);
-        setIsCountrySelected(!!country);
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -66,7 +64,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         <Wizard.Step
                             title={localize('Country of issue')}
                             is_fullwidth
-                            is_submit_disabled={!is_country_selected}
+                            is_submit_disabled={!selected_country}
                         >
                             <SelectCountryStep selected_country={selected_country} onSelect={onCountrySelect} />
                         </Wizard.Step>
