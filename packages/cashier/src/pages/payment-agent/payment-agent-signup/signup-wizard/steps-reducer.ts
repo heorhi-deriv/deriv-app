@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 
 import { TSelfie } from '../signup-wizard-steps/selfie-step/selfie-step';
 
@@ -47,8 +47,8 @@ const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => 
 export const usePaymentAgentSignupReducer = () => {
     const [steps_state, dispatch] = useReducer(stepReducer, initial_state);
 
-    const setSelfie = (value: { selfie_with_id: TSelfie }) => dispatch(setSelfieAC(value));
-    const setSelfieStepEnabled = (value: boolean) => dispatch(setSelfieStepEnabledAC(value));
+    const setSelfie = useCallback((value: { selfie_with_id: TSelfie }) => dispatch(setSelfieAC(value)), []);
+    const setSelfieStepEnabled = useCallback((value: boolean) => dispatch(setSelfieStepEnabledAC(value)), []);
 
     return { steps_state, setSelfie, setSelfieStepEnabled };
 };
