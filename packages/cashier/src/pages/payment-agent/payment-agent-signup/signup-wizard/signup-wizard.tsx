@@ -7,6 +7,8 @@ import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
 import SelectCountryStep from '../signup-wizard-steps/select-country-step';
+import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
+import { stepReducer, initial_state } from './steps-reducer';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -17,6 +19,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const [selected_country, setSelectedCountry] = React.useState<ResidenceList[number]>();
+    const [steps_state, dispatch] = React.useReducer(stepReducer, initial_state);
+    
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
@@ -68,15 +72,12 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         >
                             <SelectCountryStep selected_country={selected_country} onSelect={onCountrySelect} />
                         </Wizard.Step>
-                        <Wizard.Step title='Step 2' is_fullwidth>
-                            <>
-                                <Text as='p' size='m' line-height='m' weight='bold'>
-                                    <Localize i18n_default_text='Step 2: Address verification' />
-                                </Text>
-                                <Text as='p' size='xs' line-height='m'>
-                                    <Localize i18n_default_text="Next, we'll need to verify your address. Fill in your complete and correct address details. An accurate and complete address helps to speed up your verification process." />
-                                </Text>
-                            </>
+                        <Wizard.Step
+                            title='Selfie verification'
+                            is_submit_disabled={!steps_state.is_selfie_step_enabled}
+                            is_fullwidth
+                        >
+                            <SelfieStep selfie={steps_state.selfie} dispatch={dispatch} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

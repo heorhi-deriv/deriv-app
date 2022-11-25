@@ -50,6 +50,7 @@ module.exports = function (env) {
             'proof-of-address-container': 'Sections/Verification/ProofOfAddress/proof-of-address-container.jsx',
             'reset-trading-password-modal': 'Components/reset-trading-password-modal',
             'self-exclusion': 'Components/self-exclusion',
+            'selfie-upload': 'Components/poi/status/unsupported/card-details/selfie-upload.jsx',
             'scrollbars-container': 'Components/scrollbars-container',
             'sent-email-modal': 'Components/sent-email-modal',
             'terms-of-use': 'Components/terms-of-use',
