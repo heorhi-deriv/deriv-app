@@ -1,3 +1,5 @@
+import { useReducer } from 'react';
+
 import { TSelfie } from '../signup-wizard-steps/selfie-step/selfie-step';
 
 type TStepsState = {
@@ -13,14 +15,14 @@ const ACTION_TYPES = {
 } as const;
 
 // Action creators
-export const setSelfie = (value: { selfie_with_id: TSelfie }) => {
+const setSelfieAC = (value: { selfie_with_id: TSelfie }) => {
     return {
         type: ACTION_TYPES.SET_SELFIE,
         value,
     };
 };
 
-export const setSelfieStepEnabled = (value: boolean) => {
+const setSelfieStepEnabledAC = (value: boolean) => {
     return {
         type: ACTION_TYPES.SET_SELFIE_STEP_ENABLED,
         value,
@@ -28,10 +30,10 @@ export const setSelfieStepEnabled = (value: boolean) => {
 };
 
 // Initial state
-export const initial_state = { selfie: null, is_selfie_step_enabled: false };
+const initial_state = { selfie: null, is_selfie_step_enabled: false };
 
 // Reducer
-export const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
+const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
     switch (action.type) {
         case ACTION_TYPES.SET_SELFIE:
             return { ...state, selfie: action.value };
@@ -42,4 +44,13 @@ export const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsSt
     }
 };
 
-export type TActionsTypes = ReturnType<typeof setSelfie | typeof setSelfieStepEnabled>;
+export const usePaymentAgentSignupReducer = () => {
+    const [steps_state, dispatch] = useReducer(stepReducer, initial_state);
+
+    const setSelfie = (value: { selfie_with_id: TSelfie }) => dispatch(setSelfieAC(value));
+    const setSelfieStepEnabled = (value: boolean) => dispatch(setSelfieStepEnabledAC(value));
+
+    return { steps_state, setSelfie, setSelfieStepEnabled };
+};
+
+type TActionsTypes = ReturnType<typeof setSelfieAC | typeof setSelfieStepEnabledAC>;

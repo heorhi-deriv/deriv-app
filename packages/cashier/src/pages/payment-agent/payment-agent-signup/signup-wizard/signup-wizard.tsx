@@ -7,7 +7,7 @@ import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
 import SelectCountryStep from '../signup-wizard-steps/select-country-step';
 import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
-import { stepReducer, initial_state } from './steps-reducer';
+import { usePaymentAgentSignupReducer } from './steps-reducer';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -19,7 +19,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
     const [is_country_selected, setIsCountrySelected] = React.useState(false);
 
-    const [steps_state, dispatch] = React.useReducer(stepReducer, initial_state);
+    const { steps_state, setSelfie, setSelfieStepEnabled } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -79,7 +79,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_submit_disabled={!steps_state.is_selfie_step_enabled}
                             is_fullwidth
                         >
-                            <SelfieStep selfie={steps_state.selfie} dispatch={dispatch} />
+                            <SelfieStep
+                                selfie={steps_state.selfie}
+                                setSelfie={setSelfie}
+                                setSelfieStepEnabled={setSelfieStepEnabled}
+                            />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

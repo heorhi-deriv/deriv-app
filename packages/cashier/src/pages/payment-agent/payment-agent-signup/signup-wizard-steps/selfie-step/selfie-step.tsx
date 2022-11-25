@@ -1,6 +1,5 @@
 import React from 'react';
 import { SelfieUpload } from '@deriv/account';
-import { setSelfie, setSelfieStepEnabled, TActionsTypes } from '../../signup-wizard/steps-reducer';
 import './selfie.scss';
 
 type TSelfieError = {
@@ -30,11 +29,12 @@ export type TSelfie = {
 
 type TSelfieStep = {
     selfie: { selfie_with_id: TSelfie } | null;
-    dispatch: React.Dispatch<TActionsTypes>;
+    setSelfie: (value: { selfie_with_id: TSelfie }) => void;
+    setSelfieStepEnabled: (value: boolean) => void;
 };
 
-const SelfieStep = ({ selfie, dispatch }: TSelfieStep) => {
-    const onFileDrop = (value: TSelfie) => dispatch(setSelfie({ selfie_with_id: value }));
+const SelfieStep = ({ selfie, setSelfie, setSelfieStepEnabled }: TSelfieStep) => {
+    const onFileDrop = (value: TSelfie) => setSelfie({ selfie_with_id: value });
 
     //TODO: change the description for the selfie depending on the step number
     return (
@@ -42,7 +42,6 @@ const SelfieStep = ({ selfie, dispatch }: TSelfieStep) => {
             initial_values={selfie}
             is_pa_signup
             onFileDrop={onFileDrop}
-            dispatch={dispatch}
             setSelfieStepEnabled={setSelfieStepEnabled}
         />
     );

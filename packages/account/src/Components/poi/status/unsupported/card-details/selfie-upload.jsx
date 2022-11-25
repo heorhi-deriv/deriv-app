@@ -24,20 +24,12 @@ const PaymentAgentSignupSelfieHeader = () => {
     );
 };
 
-const SelfieUpload = ({
-    dispatch,
-    initial_values,
-    is_pa_signup,
-    goBack,
-    onConfirm,
-    onFileDrop,
-    setSelfieStepEnabled,
-}) => {
+const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileDrop, setSelfieStepEnabled }) => {
     const [formik_values, setFormikValues] = React.useState({});
 
     React.useEffect(() => {
-        dispatch?.(setSelfieStepEnabled(!!formik_values[SELFIE_DOCUMENT.name]));
-    }, [formik_values, dispatch, setSelfieStepEnabled]);
+        setSelfieStepEnabled?.(!!formik_values[SELFIE_DOCUMENT.name]);
+    }, [formik_values, setSelfieStepEnabled]);
 
     return (
         <div
