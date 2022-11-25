@@ -1,10 +1,4 @@
-import {
-    GetAccountStatus,
-    Authorize,
-    ResidenceList,
-    CountriesListResponse,
-    DetailsOfEachMT5Loginid,
-} from '@deriv/api-types';
+import { GetAccountStatus, Authorize, CountriesListResponse, DetailsOfEachMT5Loginid } from '@deriv/api-types';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
 
@@ -49,7 +43,6 @@ export type TClientStore = {
     };
     loginid?: string;
     residence: string;
-    residence_list: ResidenceList;
     standpoint: {
         iom: string;
     };
