@@ -32,4 +32,4 @@ const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps
     );
 };
 
-export default SelectCountryStep;
+export default React.memo(SelectCountryStep);

@@ -48,4 +48,4 @@ const SelfieStep = ({ selfie, dispatch }: TSelfieStep) => {
     );
 };
 
-export default SelfieStep;
+export default React.memo(SelfieStep);
