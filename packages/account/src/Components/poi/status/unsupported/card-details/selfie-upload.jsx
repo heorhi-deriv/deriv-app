@@ -9,7 +9,7 @@ import Uploader from './uploader.jsx';
 import { setInitialValues, validateFields } from './utils';
 import { ROOT_CLASS, SELFIE_DOCUMENT } from '../constants';
 
-const PaymentAgentSignupSelfieHeader = React.memo(() => {
+const PaymentAgentSignupSelfieHeader = () => {
     return (
         <>
             {!isMobile() ? (
@@ -22,7 +22,7 @@ const PaymentAgentSignupSelfieHeader = React.memo(() => {
             </Text>
         </>
     );
-});
+};
 
 const SelfieUpload = ({
     dispatch,
