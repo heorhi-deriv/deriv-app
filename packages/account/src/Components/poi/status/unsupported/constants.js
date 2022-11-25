@@ -1,6 +1,6 @@
 import { localize } from '@deriv/translations';
 
-export const ROOT_CLASS = 'manual-poi-details';
+export const ROOT_CLASS = window.location.pathname.includes('cashier') ? 'pa-signup-selfie' : 'manual-poi-details';
 
 export const DOCUMENT_TYPES = {
     NATIONAL_IDENTITY_CARD: 'national_identity_card',
