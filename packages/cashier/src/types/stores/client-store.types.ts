@@ -48,7 +48,6 @@ export type TClientStore = {
         decimal_places?: number;
     };
     loginid?: string;
-    mt5_login_list: DetailsOfEachMT5Loginid[];
     residence: string;
     residence_list: ResidenceList;
     standpoint: {
