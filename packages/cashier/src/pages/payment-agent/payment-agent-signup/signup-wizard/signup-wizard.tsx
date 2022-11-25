@@ -18,7 +18,7 @@ type TSignupWizardProps = {
 const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
-    const [is_country_selected, setIsCountrySelected] = React.useState(false);
+    const [selected_country, setSelectedCountry] = React.useState<ResidenceList[number]>();
 
     const [steps_state, dispatch] = React.useReducer(stepReducer, initial_state);
 
