@@ -23,11 +23,7 @@ const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps
             <Text as='p' size='xs' color='less-prominent' line-height='m' className='pa-signup-wizard__step-hint'>
                 <Localize i18n_default_text='Note: This helps with determining which documents are to be requested from you.' />
             </Text>
-            <CountrySelector
-                className='pa-signup-wizard__step-country-dropdown'
-                selected_country={selected_country}
-                onSelect={onSelect}
-            />
+            <CountrySelector selected_country={selected_country} onSelect={onSelect} />
         </>
     );
 };
