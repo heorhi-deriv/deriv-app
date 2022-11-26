@@ -37,4 +37,4 @@ const SelfieStep = ({ selfie, onSelect }: TSelfieStep) => {
     return <SelfieUpload initial_values={selfie} is_pa_signup onFileDrop={onSelect} />;
 };
 
-export default SelfieStep;
+export default React.memo(SelfieStep);
