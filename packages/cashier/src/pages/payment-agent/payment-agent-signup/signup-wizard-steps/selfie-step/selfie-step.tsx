@@ -29,7 +29,7 @@ export type TSelfie = {
 
 type TSelfieStep = {
     selfie: { selfie_with_id: TSelfie } | null;
-    onSelect: (value: { selfie_with_id: TSelfie }) => void;
+    onSelect: (value: TSelfie) => void;
 };
 
 const SelfieStep = ({ selfie, onSelect }: TSelfieStep) => {

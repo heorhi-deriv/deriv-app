@@ -38,7 +38,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     };
 
     const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
-        setSelfie(selfie);
+        setSelfie({ selfie_with_id: selfie });
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -78,7 +78,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 onSelect={onCountrySelect}
                             />
                         </Wizard.Step>
-                        <Wizard.Step title='Selfie verification' is_submit_disabled={!steps_state.selfie} is_fullwidth>
+                        <Wizard.Step
+                            title='Selfie verification'
+                            is_submit_disabled={!steps_state.selfie?.selfie_with_id}
+                            is_fullwidth
+                        >
                             <SelfieStep selfie={steps_state.selfie} onSelect={onSelfieSelect} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
