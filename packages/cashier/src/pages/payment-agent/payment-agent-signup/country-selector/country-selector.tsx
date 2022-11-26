@@ -10,13 +10,14 @@ import { observer } from 'mobx-react';
 type TCountrySelectorProps = {
     onSelect: (country?: ResidenceList[number]) => void;
     selected_country?: ResidenceList[number];
+    className: string;
 };
 
 type TValues = {
     country_input: string;
 };
 
-const CountrySelector = ({ onSelect, selected_country }: TCountrySelectorProps) => {
+const CountrySelector = ({ onSelect, className, selected_country }: TCountrySelectorProps) => {
     const {
         client: { residence_list },
     } = useStore();
@@ -48,7 +49,7 @@ const CountrySelector = ({ onSelect, selected_country }: TCountrySelectorProps) 
     return (
         <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={submitCountry}>
             {({ errors, handleBlur, handleChange, setFieldValue, touched, values }) => (
-                <div className='pa-signup-wizard__step-country-dropdown'>
+                <div className={className}>
                     <fieldset>
                         <Field name='country_input'>
                             {({ field }: FieldProps<string>) => (
