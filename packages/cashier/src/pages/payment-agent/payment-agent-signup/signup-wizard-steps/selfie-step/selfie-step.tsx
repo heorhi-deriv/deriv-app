@@ -29,22 +29,12 @@ export type TSelfie = {
 
 type TSelfieStep = {
     selfie: { selfie_with_id: TSelfie } | null;
-    setSelfie: (value: { selfie_with_id: TSelfie }) => void;
-    setSelfieStepEnabled: (value: boolean) => void;
+    onSelect: (value: { selfie_with_id: TSelfie }) => void;
 };
 
-const SelfieStep = ({ selfie, setSelfie, setSelfieStepEnabled }: TSelfieStep) => {
-    const onFileDrop = (value: TSelfie) => setSelfie({ selfie_with_id: value });
-
+const SelfieStep = ({ selfie, onSelect }: TSelfieStep) => {
     //TODO: change the description for the selfie depending on the step number
-    return (
-        <SelfieUpload
-            initial_values={selfie}
-            is_pa_signup
-            onFileDrop={onFileDrop}
-            setSelfieStepEnabled={setSelfieStepEnabled}
-        />
-    );
+    return <SelfieUpload initial_values={selfie} is_pa_signup onFileDrop={onSelect} />;
 };
 
 export default SelfieStep;

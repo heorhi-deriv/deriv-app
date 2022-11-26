@@ -18,7 +18,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const { steps_state, setSelectedCountry, setSelfie, setSelfieStepEnabled } = usePaymentAgentSignupReducer();
+    const { steps_state, setSelectedCountry, setSelfie } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -35,6 +35,10 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
 
     const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
         setSelectedCountry(country);
+    };
+
+    const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
+        setSelfie(selfie);
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -74,16 +78,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 onSelect={onCountrySelect}
                             />
                         </Wizard.Step>
-                        <Wizard.Step
-                            title='Selfie verification'
-                            is_submit_disabled={!steps_state.is_selfie_step_enabled}
-                            is_fullwidth
-                        >
-                            <SelfieStep
-                                selfie={steps_state.selfie}
-                                setSelfie={setSelfie}
-                                setSelfieStepEnabled={setSelfieStepEnabled}
-                            />
+                        <Wizard.Step title='Selfie verification' is_submit_disabled={!steps_state.selfie} is_fullwidth>
+                            <SelfieStep selfie={steps_state.selfie} onSelect={onSelfieSelect} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

@@ -6,13 +6,11 @@ type TStepsState = {
     selfie: {
         selfie_with_id: TSelfie;
     } | null;
-    is_selfie_step_enabled: boolean;
     selected_country?: ResidenceList[number];
 };
 
 const ACTION_TYPES = {
     SET_SELFIE: 'SET_SELFIE',
-    SET_SELFIE_STEP_ENABLED: 'SET_SELFIE_STEP_ENABLED',
     SET_SELECTED_COUNTRY: 'SET_SELECTED_COUNTRY',
 } as const;
 
@@ -20,13 +18,6 @@ const ACTION_TYPES = {
 const setSelfieAC = (value: { selfie_with_id: TSelfie }) => {
     return {
         type: ACTION_TYPES.SET_SELFIE,
-        value,
-    };
-};
-
-const setSelfieStepEnabledAC = (value: boolean) => {
-    return {
-        type: ACTION_TYPES.SET_SELFIE_STEP_ENABLED,
         value,
     };
 };
@@ -46,8 +37,6 @@ const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => 
     switch (action.type) {
         case ACTION_TYPES.SET_SELFIE:
             return { ...state, selfie: action.value };
-        case ACTION_TYPES.SET_SELFIE_STEP_ENABLED:
-            return { ...state, is_selfie_step_enabled: action.value };
         case ACTION_TYPES.SET_SELECTED_COUNTRY:
             return { ...state, selected_country: action.value };
         default:
@@ -59,13 +48,12 @@ export const usePaymentAgentSignupReducer = () => {
     const [steps_state, dispatch] = useReducer(stepReducer, initial_state);
 
     const setSelfie = useCallback((value: { selfie_with_id: TSelfie }) => dispatch(setSelfieAC(value)), []);
-    const setSelfieStepEnabled = useCallback((value: boolean) => dispatch(setSelfieStepEnabledAC(value)), []);
     const setSelectedCountry = useCallback(
         (value?: ResidenceList[number]) => dispatch(setSelectedCountryAC(value)),
         []
     );
 
-    return { steps_state, setSelectedCountry, setSelfie, setSelfieStepEnabled };
+    return { steps_state, setSelectedCountry, setSelfie };
 };
 
-type TActionsTypes = ReturnType<typeof setSelfieAC | typeof setSelfieStepEnabledAC | typeof setSelectedCountryAC>;
+type TActionsTypes = ReturnType<typeof setSelfieAC | typeof setSelectedCountryAC>;
