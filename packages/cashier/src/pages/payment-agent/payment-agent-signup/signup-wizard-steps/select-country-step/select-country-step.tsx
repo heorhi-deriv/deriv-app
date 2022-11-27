@@ -3,13 +3,14 @@ import { Text, DesktopWrapper } from '@deriv/components';
 import { ResidenceList } from '@deriv/api-types';
 import { Localize } from '@deriv/translations';
 import CountrySelector from '../../country-selector';
+import { TActionsTypes } from '../../signup-wizard/steps-reducer';
 
 type TCountrySelectorProps = {
-    onSelect: React.ComponentProps<typeof CountrySelector>['onSelect'];
+    dispatch: React.Dispatch<TActionsTypes>;
     selected_country?: ResidenceList[number];
 };
 
-const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps) => {
+const SelectCountryStep = ({ dispatch, selected_country }: TCountrySelectorProps) => {
     return (
         <>
             <DesktopWrapper>
@@ -26,7 +27,7 @@ const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps
             <CountrySelector
                 className='pa-signup-wizard__step-country-dropdown'
                 selected_country={selected_country}
-                onSelect={onSelect}
+                dispatch={dispatch}
             />
         </>
     );

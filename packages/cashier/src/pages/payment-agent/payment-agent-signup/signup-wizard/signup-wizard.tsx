@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
-import { ResidenceList } from '@deriv/api-types';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
@@ -18,7 +17,6 @@ type TSignupWizardProps = {
 const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
-    const [selected_country, setSelectedCountry] = React.useState<ResidenceList[number]>();
 
     const [steps_state, dispatch] = React.useReducer(stepReducer, initial_state);
 
@@ -33,10 +31,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onComplete = () => {
         //handle some logic
         closeWizard();
-    };
-
-    const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
-        setSelectedCountry(country);
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -68,10 +62,13 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
+                            is_submit_disabled={!steps_state.country.selected_country.value}
                             is_fullwidth
-                            is_submit_disabled={!selected_country}
                         >
-                            <SelectCountryStep selected_country={selected_country} onSelect={onCountrySelect} />
+                            <SelectCountryStep
+                                selected_country={steps_state.country.selected_country}
+                                dispatch={dispatch}
+                            />
                         </Wizard.Step>
                         <Wizard.Step
                             title='Selfie verification'
