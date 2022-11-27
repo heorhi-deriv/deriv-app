@@ -6,9 +6,7 @@ type TStepsState = {
         selfie_with_id: TSelfie;
     } | null;
     is_selfie_step_enabled: boolean;
-    country: {
-        selected_country: ResidenceList[number];
-    };
+    selected_country: ResidenceList[number];
 };
 
 const ACTION_TYPES = {
@@ -18,7 +16,7 @@ const ACTION_TYPES = {
 } as const;
 
 // Action creators
-export const setCountry = (value: { selected_country: ResidenceList[number] }) => {
+export const setSelectedCountry = (value: ResidenceList[number]) => {
     return {
         type: ACTION_TYPES.SET_COUNTRY,
         value,
@@ -40,13 +38,13 @@ export const setSelfieStepEnabled = (value: boolean) => {
 };
 
 // Initial state
-export const initial_state = { selfie: null, is_selfie_step_enabled: false, country: { selected_country: {} } };
+export const initial_state = { selfie: null, is_selfie_step_enabled: false, selected_country: {} };
 
 // Reducer
 export const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
     switch (action.type) {
         case ACTION_TYPES.SET_COUNTRY:
-            return { ...state, country: action.value };
+            return { ...state, selected_country: action.value };
         case ACTION_TYPES.SET_SELFIE:
             return { ...state, selfie: action.value };
         case ACTION_TYPES.SET_SELFIE_STEP_ENABLED:
@@ -56,4 +54,4 @@ export const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsSt
     }
 };
 
-export type TActionsTypes = ReturnType<typeof setSelfie | typeof setSelfieStepEnabled | typeof setCountry>;
+export type TActionsTypes = ReturnType<typeof setSelfie | typeof setSelfieStepEnabled | typeof setSelectedCountry>;

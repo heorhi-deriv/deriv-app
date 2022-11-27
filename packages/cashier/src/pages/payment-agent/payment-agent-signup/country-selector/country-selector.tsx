@@ -6,7 +6,7 @@ import { localize } from '@deriv/translations';
 import { useStore } from '../../../../hooks';
 import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
-import { setCountry, TActionsTypes } from '../signup-wizard/steps-reducer';
+import { setSelectedCountry, TActionsTypes } from '../signup-wizard/steps-reducer';
 
 type TCountrySelectorProps = {
     dispatch: React.Dispatch<TActionsTypes>;
@@ -44,7 +44,7 @@ const CountrySelector = ({ dispatch, className, selected_country }: TCountrySele
 
     const onSubmitCountry = (values: TValues) => {
         const matching_country = residence_list?.find(c => c.text === values.country_input);
-        dispatch(setCountry({ selected_country: matching_country || {} }));
+        dispatch(setSelectedCountry(matching_country || {}));
     };
 
     return (

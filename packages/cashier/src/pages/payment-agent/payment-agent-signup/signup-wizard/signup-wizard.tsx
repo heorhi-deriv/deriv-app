@@ -62,13 +62,10 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
-                            is_submit_disabled={!steps_state.country.selected_country.value}
+                            is_submit_disabled={!steps_state.selected_country.value}
                             is_fullwidth
                         >
-                            <SelectCountryStep
-                                selected_country={steps_state.country.selected_country}
-                                dispatch={dispatch}
-                            />
+                            <SelectCountryStep selected_country={steps_state.selected_country} dispatch={dispatch} />
                         </Wizard.Step>
                         <Wizard.Step
                             title='Selfie verification'
