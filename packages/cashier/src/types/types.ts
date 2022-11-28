@@ -27,6 +27,8 @@ import {
     TransferBetweenAccountsResponse,
     BalanceRequest,
     BalanceResponse,
+    CountriesListRequest,
+    CountriesListResponse,
 } from '@deriv/api-types';
 import { KeysMatching } from './utils';
 
@@ -86,6 +88,10 @@ export type TSocketEndpoints = {
     balance: {
         request: BalanceRequest;
         response: BalanceResponse;
+    };
+    residence_list: {
+        request: CountriesListRequest;
+        response: CountriesListResponse;
     };
 };
 
