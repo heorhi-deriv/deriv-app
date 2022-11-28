@@ -15,10 +15,10 @@ type TFormValues = {
 };
 
 type TProofOfAddressProps = {
-    account_settings: any;
-    fetchResidenceList: any;
-    fetchStatesList: any;
-    is_eu: boolean;
+    account_settings?: any;
+    fetchResidenceList?: any;
+    fetchStatesList?: any;
+    is_eu?: boolean;
 };
 
 const validate = (errors, values) => (fn, arr, err_msg) => {

@@ -7,6 +7,7 @@ import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
 import SelectCountryStep from '../signup-wizard-steps/select-country-step';
+import ProofOfAddress from '../signup-wizard-steps/proof-of-address-step';
 import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
 import { stepReducer, initial_state } from './steps-reducer';
 import './signup-wizard.scss';
@@ -79,6 +80,9 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_fullwidth
                         >
                             <SelfieStep selfie={steps_state.selfie} dispatch={dispatch} />
+                        </Wizard.Step>
+                        <Wizard.Step title='Address verification' is_fullwidth>
+                            <ProofOfAddress />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>
