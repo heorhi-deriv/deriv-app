@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import { Text } from '@deriv/components';
+import { isEmptyObject } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
@@ -71,7 +72,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         <Wizard.Step
                             title={localize('Country of issue')}
                             is_fullwidth
-                            is_submit_disabled={!steps_state.selected_country}
+                            is_submit_disabled={isEmptyObject(steps_state.selected_country)}
                         >
                             <SelectCountryStep
                                 selected_country={steps_state.selected_country}
@@ -79,7 +80,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             />
                         </Wizard.Step>
                         <Wizard.Step
-                            title='Selfie verification'
+                            title={localize('Selfie verification')}
                             is_submit_disabled={!steps_state.selfie?.selfie_with_id}
                             is_fullwidth
                         >
