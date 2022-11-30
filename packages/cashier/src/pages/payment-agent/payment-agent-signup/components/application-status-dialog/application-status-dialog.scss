@@ -1,0 +1,27 @@
+.pa-application-status-dialog {
+    text-align: center;
+
+    .dc-dialog__header-wrapper {
+        margin-top: 0;
+    }
+
+    &__icon {
+        margin-bottom: 1.6rem;
+    }
+
+    &__title {
+        margin-bottom: 0.8rem;
+    }
+
+    &__text {
+        margin-bottom: 1.6rem;
+    }
+
+    &__note {
+        color: $color-red-1;
+    }
+
+    &__hint {
+        color: $color-grey-1;
+    }
+}
