@@ -11,7 +11,7 @@ import PaymentAgentReceipt from '../payment-agent-receipt';
 import PaymentAgentSearchBox from '../payment-agent-search-box';
 import PaymentAgentUnlistedWithdrawForm from '../payment-agent-unlisted-withdraw-form';
 import PaymentAgentWithdrawConfirm from '../payment-agent-withdraw-confirm';
-import { SignupSideNote as PaymentAgentSignupSideNote } from '../payment-agent-signup';
+import { PaymentAgentSignupSideNote } from '../payment-agent-signup/components/signup-side-note';
 
 const PaymentAgentSearchWarning = () => {
     return (

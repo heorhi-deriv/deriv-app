@@ -32,9 +32,9 @@ type TSelfieStep = {
     onSelect: (value: TSelfie) => void;
 };
 
-const SelfieStep = ({ selfie, onSelect }: TSelfieStep) => {
+const Selfie = ({ selfie, onSelect }: TSelfieStep) => {
     //TODO: change the description for the selfie depending on the step number
     return <SelfieUpload initial_values={selfie} is_pa_signup onFileDrop={onSelect} />;
 };
 
-export default React.memo(SelfieStep);
+export default React.memo(Selfie);

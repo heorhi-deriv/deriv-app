@@ -2,14 +2,14 @@ import React from 'react';
 import { Text, DesktopWrapper } from '@deriv/components';
 import { ResidenceList } from '@deriv/api-types';
 import { Localize } from '@deriv/translations';
-import CountrySelector from '../../country-selector';
+import CountrySelector from './country-selector';
 
 type TCountrySelectorProps = {
     onSelect: React.ComponentProps<typeof CountrySelector>['onSelect'];
     selected_country?: ResidenceList[number];
 };
 
-const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps) => {
+const CountryOfIssue = ({ onSelect, selected_country }: TCountrySelectorProps) => {
     return (
         <>
             <DesktopWrapper>
@@ -32,4 +32,4 @@ const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps
     );
 };
 
-export default React.memo(SelectCountryStep);
+export default React.memo(CountryOfIssue);

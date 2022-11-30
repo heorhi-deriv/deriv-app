@@ -1,3 +1,3 @@
-import SignupSideNote from './signup-side-note';
+import SignupWizard from './signup-wizard';
 
-export { SignupSideNote };
+export { SignupWizard };
