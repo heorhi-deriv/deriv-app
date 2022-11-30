@@ -3,7 +3,7 @@ import { ResidenceList } from '@deriv/api-types';
 import { Formik, Field, FieldProps } from 'formik';
 import { Autocomplete, DesktopWrapper, MobileWrapper, SelectNative } from '@deriv/components';
 import { localize } from '@deriv/translations';
-import { useStore } from '../../../../hooks';
+import { useStore } from '../../../../../../hooks';
 import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 

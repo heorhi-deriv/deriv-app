@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react';
 import { ResidenceList } from '@deriv/api-types';
-import { TSelfie } from '../signup-wizard-steps/selfie-step/selfie-step';
+import { TSelfie } from './selfie/selfie';
 
 type TStepsState = {
     selfie: {
@@ -15,7 +15,7 @@ const ACTION_TYPES = {
 } as const;
 
 // Action creators
-const setSelfieAC = (value: { selfie_with_id: TSelfie }) => {
+const setSelfieAC = (value: TSelfie) => {
     return {
         type: ACTION_TYPES.SET_SELFIE,
         value,
@@ -30,13 +30,13 @@ const setSelectedCountryAC = (value?: ResidenceList[number]) => {
 };
 
 // Initial state
-const initial_state = { selfie: null, is_selfie_step_enabled: false, selected_country: {} };
+const initial_state = { selected_country: {}, selfie: null };
 
 // Reducer
-const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
+const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
     switch (action.type) {
         case ACTION_TYPES.SET_SELFIE:
-            return { ...state, selfie: action.value };
+            return { ...state, selfie: { selfie_with_id: action.value } };
         case ACTION_TYPES.SET_SELECTED_COUNTRY:
             return { ...state, selected_country: action.value };
         default:
@@ -45,9 +45,9 @@ const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => 
 };
 
 export const usePaymentAgentSignupReducer = () => {
-    const [steps_state, dispatch] = useReducer(stepReducer, initial_state);
+    const [steps_state, dispatch] = useReducer(stepsReducer, initial_state);
 
-    const setSelfie = useCallback((value: { selfie_with_id: TSelfie }) => dispatch(setSelfieAC(value)), []);
+    const setSelfie = useCallback((value: TSelfie) => dispatch(setSelfieAC(value)), []);
     const setSelectedCountry = useCallback(
         (value?: ResidenceList[number]) => dispatch(setSelectedCountryAC(value)),
         []

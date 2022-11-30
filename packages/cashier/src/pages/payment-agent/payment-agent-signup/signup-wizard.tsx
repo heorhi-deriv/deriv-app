@@ -4,10 +4,10 @@ import { createPortal } from 'react-dom';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
-import CancelWizardDialog from '../cancel-wizard-dialog';
-import SelectCountryStep from '../signup-wizard-steps/select-country-step';
-import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
-import { usePaymentAgentSignupReducer } from './steps-reducer';
+import CancelWizardDialog from './components/cancel-wizard-dialog';
+import CountryOfIssue from './steps/country-of-issue';
+import Selfie from './steps/selfie';
+import { usePaymentAgentSignupReducer } from './steps/steps-reducer';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -31,10 +31,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onComplete = () => {
         //handle some logic
         closeWizard();
-    };
-
-    const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
-        setSelfie({ selfie_with_id: selfie });
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -69,7 +65,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_submit_disabled={!steps_state.selected_country?.value}
                             is_fullwidth
                         >
-                            <SelectCountryStep
+                            <CountryOfIssue
                                 selected_country={steps_state.selected_country}
                                 onSelect={setSelectedCountry}
                             />
@@ -79,7 +75,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             is_submit_disabled={!steps_state.selfie?.selfie_with_id}
                             is_fullwidth
                         >
-                            <SelfieStep selfie={steps_state.selfie} onSelect={onSelfieSelect} />
+                            <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>
