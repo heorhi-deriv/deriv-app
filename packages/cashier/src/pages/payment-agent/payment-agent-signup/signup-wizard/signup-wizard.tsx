@@ -33,10 +33,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
         closeWizard();
     };
 
-    // const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
-    //     setSelectedCountry(country);
-    // };
-
     const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
         setSelfie({ selfie_with_id: selfie });
     };

@@ -3,10 +3,9 @@ import { Text, DesktopWrapper } from '@deriv/components';
 import { ResidenceList } from '@deriv/api-types';
 import { Localize } from '@deriv/translations';
 import CountrySelector from '../../country-selector';
-import { TActionsTypes } from '../../signup-wizard/steps-reducer';
 
 type TCountrySelectorProps = {
-    dispatch: React.Dispatch<TActionsTypes>;
+    dispatch: React.ComponentProps<typeof CountrySelector>['dispatch'];
     selected_country?: ResidenceList[number];
 };
 
