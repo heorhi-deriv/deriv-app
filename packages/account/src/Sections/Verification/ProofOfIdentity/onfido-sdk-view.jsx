@@ -9,7 +9,14 @@ import ErrorMessage from 'Components/error-component';
 import getOnfidoPhrases from 'Constants/onfido-phrases';
 import MissingPersonalDetails from 'Components/poi/missing-personal-details';
 
-const OnfidoSdkView = ({ country_code, documents_supported, handleViewComplete, height, is_from_external }) => {
+const OnfidoSdkView = ({
+    country_code,
+    documents_supported,
+    handleViewComplete,
+    height,
+    is_from_external,
+    setIsOnfidoLoading,
+}) => {
     const [api_error, setAPIError] = React.useState();
     const [onfido_service_token, setOnfidoToken] = React.useState();
     const [missing_personal_details, setMissingPersonalDetails] = React.useState(false);
@@ -151,6 +158,7 @@ const OnfidoSdkView = ({ country_code, documents_supported, handleViewComplete, 
             if (response_token.error) {
                 handleError(response_token.error);
                 setStatusLoading(false);
+                setIsOnfidoLoading?.(false);
                 setRetryCount(retry_count + 1);
             } else {
                 setOnfidoToken(response_token);

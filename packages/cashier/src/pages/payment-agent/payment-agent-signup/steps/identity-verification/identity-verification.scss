@@ -1,0 +1,17 @@
+.payment-agent-poi {
+    &__onfido-container {
+        &--hidden {
+            display: none;
+        }
+    }
+
+    &__onfido-instruction {
+        &__header {
+            margin-bottom: 2.4rem;
+        }
+
+        &__instruction {
+            margin-bottom: 3.2rem;
+        }
+    }
+}

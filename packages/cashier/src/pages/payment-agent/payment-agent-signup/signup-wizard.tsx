@@ -6,6 +6,7 @@ import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from './components/cancel-wizard-dialog';
 import CountryOfIssue from './steps/country-of-issue';
+import IdentityVerification from './steps/identity-verification';
 import Selfie from './steps/selfie';
 import { usePaymentAgentSignupReducer } from './steps/steps-reducer';
 import './signup-wizard.scss';
@@ -69,6 +70,13 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 selected_country={steps_state.selected_country}
                                 onSelect={setSelectedCountry}
                             />
+                        </Wizard.Step>
+                        <Wizard.Step
+                            title={localize('Identity verification')}
+                            // is_submit_disabled={!steps_state.selected_country}
+                            is_fullwidth
+                        >
+                            <IdentityVerification selected_country={steps_state.selected_country} />
                         </Wizard.Step>
                         <Wizard.Step
                             title={localize('Selfie verification')}
