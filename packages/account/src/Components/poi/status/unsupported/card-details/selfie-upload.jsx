@@ -24,21 +24,7 @@ const PaymentAgentSignupSelfieHeader = () => {
     );
 };
 
-const SelfieUpload = ({
-    dispatch,
-    initial_values,
-    is_pa_signup,
-    goBack,
-    onConfirm,
-    onFileDrop,
-    setSelfieStepEnabled,
-}) => {
-    const [formik_values, setFormikValues] = React.useState({});
-
-    React.useEffect(() => {
-        dispatch?.(setSelfieStepEnabled(!!formik_values[SELFIE_DOCUMENT.name]));
-    }, [formik_values, dispatch, setSelfieStepEnabled]);
-
+const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileDrop }) => {
     return (
         <div
             className={classNames(ROOT_CLASS, {
@@ -49,7 +35,6 @@ const SelfieUpload = ({
                 initialValues={initial_values || setInitialValues([SELFIE_DOCUMENT])}
                 validate={values => validateFields(values, undefined, [SELFIE_DOCUMENT])}
                 onSubmit={onConfirm}
-                innerRef={formik_actions => is_pa_signup && setFormikValues(formik_actions?.values || {})}
             >
                 {({ values, isValid, isSubmitting, touched }) => {
                     const is_form_touched = Object.keys(touched).length > 0;
@@ -117,13 +102,11 @@ const SelfieUpload = ({
 };
 
 SelfieUpload.propTypes = {
-    dispatch: PropTypes.func,
     initial_values: PropTypes.object,
     is_pa_signup: PropTypes.bool,
     goBack: PropTypes.func,
     onFileDrop: PropTypes.func,
     onConfirm: PropTypes.func,
-    setSelfieStepEnabled: PropTypes.func,
 };
 
 PaymentAgentSignupSelfieHeader.displayName = 'PaymentAgentSignupSelfieHeader';
