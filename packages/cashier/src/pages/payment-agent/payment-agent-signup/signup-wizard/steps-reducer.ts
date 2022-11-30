@@ -30,7 +30,7 @@ const setSelectedCountryAC = (value?: ResidenceList[number]) => {
 };
 
 // Initial state
-const initial_state = { selected_country: {}, selfie: null, is_selfie_step_enabled: false };
+const initial_state = { selfie: null, is_selfie_step_enabled: false, selected_country: {} };
 
 // Reducer
 const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {

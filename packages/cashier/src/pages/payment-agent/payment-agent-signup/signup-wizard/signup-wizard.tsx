@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import { Text } from '@deriv/components';
-import { isEmptyObject } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
@@ -32,10 +31,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onComplete = () => {
         //handle some logic
         closeWizard();
-    };
-
-    const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
-        setSelectedCountry(country);
     };
 
     const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
@@ -71,12 +66,12 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
+                            is_submit_disabled={!steps_state.selected_country?.value}
                             is_fullwidth
-                            is_submit_disabled={isEmptyObject(steps_state.selected_country)}
                         >
                             <SelectCountryStep
                                 selected_country={steps_state.selected_country}
-                                onSelect={onCountrySelect}
+                                onSelect={setSelectedCountry}
                             />
                         </Wizard.Step>
                         <Wizard.Step

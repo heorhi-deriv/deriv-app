@@ -8,7 +8,7 @@ import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 
 type TCountrySelectorProps = {
-    onSelect: (country?: ResidenceList[number]) => void;
+    onSelect: (value?: ResidenceList[number]) => void;
     selected_country?: ResidenceList[number];
     className: string;
 };
@@ -41,13 +41,13 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
         return errors;
     };
 
-    const submitCountry = (values: TValues) => {
+    const onSubmitCountry = (values: TValues) => {
         const matching_country = residence_list?.find(c => c.text === values.country_input);
-        onSelect(matching_country);
+        onSelect(matching_country || {});
     };
 
     return (
-        <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={submitCountry}>
+        <Formik initialValues={initial_form_values} validate={validateFields} onSubmit={onSubmitCountry}>
             {({ errors, handleBlur, handleChange, setFieldValue, touched, values }) => (
                 <div className={className}>
                     <fieldset>
@@ -69,14 +69,14 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
                                                 handleBlur(e);
                                                 const current_input = e.target.value;
                                                 if (!residence_list?.find(c => c.text === current_input)) {
-                                                    submitCountry({ country_input: '' });
+                                                    onSubmitCountry({ country_input: '' });
                                                 }
                                             }}
                                             onChange={handleChange}
                                             onItemSelection={({ text }: { text: string }) => {
                                                 const select_value = text === 'No results found' || !text ? '' : text;
                                                 setFieldValue('country_input', select_value, true);
-                                                submitCountry({ country_input: select_value });
+                                                onSubmitCountry({ country_input: select_value });
                                             }}
                                             required
                                         />
@@ -93,7 +93,7 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
                                             value={values.country_input}
                                             onChange={(e: TReactChangeEvent) => {
                                                 handleChange(e);
-                                                submitCountry({ country_input: e.target.value });
+                                                onSubmitCountry({ country_input: e.target.value });
                                             }}
                                             use_text={true}
                                             required
