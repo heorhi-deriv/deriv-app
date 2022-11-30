@@ -7,7 +7,7 @@ import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from '../cancel-wizard-dialog';
 import SelectCountryStep from '../signup-wizard-steps/select-country-step';
 import SelfieStep from '../signup-wizard-steps/selfie-step/selfie-step';
-import { stepReducer, initial_state } from './steps-reducer';
+import { usePaymentAgentSignupReducer } from './steps-reducer';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
@@ -18,7 +18,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const [steps_state, dispatch] = React.useReducer(stepReducer, initial_state);
+    const { steps_state, setSelectedCountry, setSelfie } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -31,6 +31,14 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const onComplete = () => {
         //handle some logic
         closeWizard();
+    };
+
+    // const onCountrySelect: React.ComponentProps<typeof SelectCountryStep>['onSelect'] = country => {
+    //     setSelectedCountry(country);
+    // };
+
+    const onSelfieSelect: React.ComponentProps<typeof SelfieStep>['onSelect'] = selfie => {
+        setSelfie({ selfie_with_id: selfie });
     };
 
     const onChangeStep = (_current_step: number, _current_step_key?: string) => {
@@ -62,17 +70,20 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
-                            is_submit_disabled={!steps_state.selected_country.value}
+                            is_submit_disabled={!steps_state.selected_country}
                             is_fullwidth
                         >
-                            <SelectCountryStep selected_country={steps_state.selected_country} dispatch={dispatch} />
+                            <SelectCountryStep
+                                selected_country={steps_state.selected_country}
+                                dispatch={setSelectedCountry}
+                            />
                         </Wizard.Step>
                         <Wizard.Step
-                            title='Selfie verification'
-                            is_submit_disabled={!steps_state.is_selfie_step_enabled}
+                            title={localize('Selfie verification')}
+                            is_submit_disabled={!steps_state.selfie?.selfie_with_id}
                             is_fullwidth
                         >
-                            <SelfieStep selfie={steps_state.selfie} dispatch={dispatch} />
+                            <SelfieStep selfie={steps_state.selfie} onSelect={onSelfieSelect} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>
