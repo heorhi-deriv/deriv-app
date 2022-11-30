@@ -5,11 +5,11 @@ import { Localize } from '@deriv/translations';
 import CountrySelector from '../../country-selector';
 
 type TCountrySelectorProps = {
-    dispatch: React.ComponentProps<typeof CountrySelector>['dispatch'];
+    onSelect: React.ComponentProps<typeof CountrySelector>['onSelect'];
     selected_country?: ResidenceList[number];
 };
 
-const SelectCountryStep = ({ dispatch, selected_country }: TCountrySelectorProps) => {
+const SelectCountryStep = ({ onSelect, selected_country }: TCountrySelectorProps) => {
     return (
         <>
             <DesktopWrapper>
@@ -26,7 +26,7 @@ const SelectCountryStep = ({ dispatch, selected_country }: TCountrySelectorProps
             <CountrySelector
                 className='pa-signup-wizard__step-country-dropdown'
                 selected_country={selected_country}
-                dispatch={dispatch}
+                onSelect={onSelect}
             />
         </>
     );

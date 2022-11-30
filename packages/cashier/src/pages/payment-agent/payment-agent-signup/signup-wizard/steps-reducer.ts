@@ -6,7 +6,6 @@ type TStepsState = {
     selfie: {
         selfie_with_id: TSelfie;
     } | null;
-    is_selfie_step_enabled: boolean;
     selected_country?: ResidenceList[number];
 };
 
@@ -31,7 +30,7 @@ const setSelectedCountryAC = (value?: ResidenceList[number]) => {
 };
 
 // Initial state
-export const initial_state = { selfie: null, is_selfie_step_enabled: false, selected_country: {} };
+const initial_state = { selfie: null, is_selfie_step_enabled: false, selected_country: {} };
 
 // Reducer
 const stepReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {

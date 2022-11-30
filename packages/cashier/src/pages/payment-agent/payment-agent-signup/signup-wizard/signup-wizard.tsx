@@ -71,7 +71,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         >
                             <SelectCountryStep
                                 selected_country={steps_state.selected_country}
-                                dispatch={setSelectedCountry}
+                                onSelect={setSelectedCountry}
                             />
                         </Wizard.Step>
                         <Wizard.Step

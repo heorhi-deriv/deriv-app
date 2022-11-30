@@ -8,7 +8,7 @@ import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 
 type TCountrySelectorProps = {
-    dispatch: (value?: ResidenceList[number]) => void;
+    onSelect: (value?: ResidenceList[number]) => void;
     selected_country?: ResidenceList[number];
     className: string;
 };
@@ -17,7 +17,7 @@ type TValues = {
     country_input: string;
 };
 
-const CountrySelector = ({ dispatch, className, selected_country }: TCountrySelectorProps) => {
+const CountrySelector = ({ onSelect, className, selected_country }: TCountrySelectorProps) => {
     const {
         client: { residence_list },
     } = useStore();
@@ -43,7 +43,7 @@ const CountrySelector = ({ dispatch, className, selected_country }: TCountrySele
 
     const onSubmitCountry = (values: TValues) => {
         const matching_country = residence_list?.find(c => c.text === values.country_input);
-        dispatch(matching_country || {});
+        onSelect(matching_country || {});
     };
 
     return (
