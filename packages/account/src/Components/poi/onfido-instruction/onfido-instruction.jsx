@@ -88,7 +88,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
                     ]);
                     passport_btn_ref.current?.addEventListener('click', () => setDocumentType('passport'));
                     driving_licence_btn_ref.current?.addEventListener('click', () =>
-                        setDocumentType("driver's license")
+                        setDocumentType('driver’s license')
                     );
                     national_identity_card_ref.current?.addEventListener('click', () =>
                         setDocumentType('identity card')

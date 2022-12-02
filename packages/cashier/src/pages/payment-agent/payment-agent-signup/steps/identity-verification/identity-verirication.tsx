@@ -1,21 +1,40 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ResidenceList } from '@deriv/api-types';
+import { ProofOfIdentityContainerForPaymentAgent } from '@deriv/account';
 import { Text, DesktopWrapper } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import { useStore } from '../../../../../hooks';
-import { ProofOfIdentityContainerForPaymentAgent } from '@deriv/account';
+import { TStepsState } from '../steps-reducer';
 import './identity-verification.scss';
 
 type TIdentityVerification = {
-    selected_country: ResidenceList[number];
+    selected_country: TStepsState['selected_country'];
+    setIDVValues: (value: TStepsState['idv_values']) => void;
+    setIsIdentitySubmissionDisabled: (value: boolean) => void;
 };
 
-const IdentityVerification = ({ selected_country }: TIdentityVerification) => {
+const IdentityVerification = ({
+    selected_country,
+    setIDVValues,
+    setIsIdentitySubmissionDisabled,
+}: TIdentityVerification) => {
     const { client, notifications } = useStore();
 
     const { account_status } = client;
+    const {
+        authentication: {
+            identity: {
+                services: {
+                    onfido: { status: onfido_status },
+                },
+            },
+        },
+    } = account_status;
     const { refreshNotifications } = notifications;
+
+    React.useEffect(() => {
+        if (onfido_status !== 'none') setIsIdentitySubmissionDisabled(false);
+    }, [onfido_status, setIsIdentitySubmissionDisabled]);
 
     return (
         <>
@@ -36,6 +55,7 @@ const IdentityVerification = ({ selected_country }: TIdentityVerification) => {
                 is_from_external
                 refreshNotifications={refreshNotifications}
                 selected_country={selected_country}
+                setIDVValues={setIDVValues}
             />
         </>
     );

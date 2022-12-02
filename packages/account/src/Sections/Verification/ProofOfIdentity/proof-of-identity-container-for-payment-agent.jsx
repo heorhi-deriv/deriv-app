@@ -10,6 +10,7 @@ const ProofOfIdentityContainerForPaymentAgent = ({
     // onStateChange,
     refreshNotifications,
     selected_country,
+    setIDVValues,
 }) => {
     const verification_status = populateVerificationStatus(account_status);
     const { idv, has_attempted_idv, identity_last_attempt, is_idv_disallowed, manual, needs_poa, onfido } =
@@ -23,6 +24,7 @@ const ProofOfIdentityContainerForPaymentAgent = ({
     return (
         <POISubmissionForPaymentAgent
             has_attempted_idv={has_attempted_idv}
+            has_idv_error={has_idv_error}
             height={height ?? null}
             identity_last_attempt={identity_last_attempt}
             idv={idv}
@@ -34,7 +36,7 @@ const ProofOfIdentityContainerForPaymentAgent = ({
             onStateChange={() => {}}
             refreshNotifications={refreshNotifications}
             selected_country={selected_country}
-            has_idv_error={has_idv_error}
+            setIDVValues={setIDVValues}
         />
     );
 };

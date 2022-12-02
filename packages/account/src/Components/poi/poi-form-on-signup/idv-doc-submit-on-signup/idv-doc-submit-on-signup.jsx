@@ -13,11 +13,20 @@ import {
     Text,
     ThemedScrollbars,
 } from '@deriv/components';
-import { isDesktop, formatInput, isMobile } from '@deriv/shared';
+import { isDesktop, formatInput, isMobile, isEmptyObject } from '@deriv/shared';
 import { getDocumentData, getRegex } from '../../idv-document-submit/utils';
 import DocumentSubmitLogo from 'Assets/ic-document-submit-icon.svg';
 
-export const IdvDocSubmitOnSignup = ({ citizen_data, has_previous, onPrevious, onNext, value, has_idv_error }) => {
+export const IdvDocSubmitOnSignup = ({
+    citizen_data,
+    has_idv_error,
+    has_previous,
+    is_pa_signup,
+    onPrevious,
+    onNext,
+    setIDVValues,
+    value,
+}) => {
     const [document_list, setDocumentList] = React.useState([]);
     const [document_image, setDocumentImage] = React.useState(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
@@ -89,6 +98,21 @@ export const IdvDocSubmitOnSignup = ({ citizen_data, has_previous, onPrevious, o
             }
         }
 
+        // eslint-disable-next-line no-unused-expressions
+        setIDVValues && isEmptyObject(errors)
+            ? setIDVValues(values)
+            : setIDVValues({
+                  document_type: {
+                      id: '',
+                      text: '',
+                      value: '',
+                      example_format: '',
+                      sample_image: '',
+                  },
+
+                  document_number: '',
+              });
+
         return errors;
     };
 
@@ -129,17 +153,35 @@ export const IdvDocSubmitOnSignup = ({ citizen_data, has_previous, onPrevious, o
             {({ errors, handleBlur, handleChange, handleSubmit, isValid, setFieldValue, touched, values }) => (
                 <AutoHeightWrapper default_height={450} height_offset={isDesktop() ? 81 : null}>
                     {({ setRef }) => (
-                        <form ref={setRef} className='poi-form-on-signup' onSubmit={handleSubmit} noValidate>
-                            <ThemedScrollbars height='calc(100vh - 80px'>
+                        <form
+                            ref={setRef}
+                            className={is_pa_signup ? 'pa-poi-form-on-signup' : 'poi-form-on-signup'}
+                            onSubmit={handleSubmit}
+                            noValidate
+                        >
+                            <ThemedScrollbars is_bypassed={is_pa_signup} height='calc(100vh - 80px'>
                                 <div className='details-form'>
+                                    {is_pa_signup && (
+                                        <Text as='p' size='xs' color='prominent'>
+                                            {localize(
+                                                "First, we'll need to verify your identity. Choose your preferred document type from the drop-down arrow and enter the ID number."
+                                            )}
+                                        </Text>
+                                    )}
                                     <div className='poi-form-on-signup__fields'>
                                         <div className='proof-of-identity__container'>
                                             <DocumentSubmitLogo className='icon' />
-                                            <Text className='proof-of-identity btm-spacer' align='center' weight='bold'>
-                                                {has_idv_error
-                                                    ? localize('Verify your identity')
-                                                    : localize('Identity information')}
-                                            </Text>
+                                            {!is_pa_signup && (
+                                                <Text
+                                                    className='proof-of-identity btm-spacer'
+                                                    align='center'
+                                                    weight='bold'
+                                                >
+                                                    {has_idv_error
+                                                        ? localize('Verify your identity')
+                                                        : localize('Identity information')}
+                                                </Text>
+                                            )}
                                             <Text className='proof-of-identity__text btm-spacer' size='xs'>
                                                 {localize('Please select the document type and enter the ID number.')}
                                             </Text>
@@ -341,16 +383,18 @@ export const IdvDocSubmitOnSignup = ({ citizen_data, has_previous, onPrevious, o
                                 </div>
                             </ThemedScrollbars>
 
-                            <Modal.Footer has_separator is_bypassed={isMobile()}>
-                                <FormSubmitButton
-                                    is_disabled={(!values.document_number && !values.document_type) || !isValid}
-                                    label={localize('Next')}
-                                    is_absolute={isMobile()}
-                                    has_cancel={has_previous}
-                                    cancel_label={localize('Previous')}
-                                    onCancel={() => onPrevious(values)}
-                                />
-                            </Modal.Footer>
+                            {!is_pa_signup && (
+                                <Modal.Footer has_separator is_bypassed={isMobile()}>
+                                    <FormSubmitButton
+                                        is_disabled={(!values.document_number && !values.document_type) || !isValid}
+                                        label={localize('Next')}
+                                        is_absolute={isMobile()}
+                                        has_cancel={has_previous}
+                                        cancel_label={localize('Previous')}
+                                        onCancel={() => onPrevious(values)}
+                                    />
+                                </Modal.Footer>
+                            )}
                         </form>
                     )}
                 </AutoHeightWrapper>

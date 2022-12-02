@@ -19,7 +19,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const { steps_state, setSelectedCountry, setSelfie } = usePaymentAgentSignupReducer();
+    const { steps_state, setSelectedCountry, setSelfie, setIDVValues, setIsIdentitySubmissionDisabled } =
+        usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -73,10 +74,14 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         </Wizard.Step>
                         <Wizard.Step
                             title={localize('Identity verification')}
-                            // is_submit_disabled={!steps_state.selected_country}
+                            is_submit_disabled={steps_state.is_identity_submission_disabled}
                             is_fullwidth
                         >
-                            <IdentityVerification selected_country={steps_state.selected_country} />
+                            <IdentityVerification
+                                selected_country={steps_state.selected_country}
+                                setIDVValues={setIDVValues}
+                                setIsIdentitySubmissionDisabled={setIsIdentitySubmissionDisabled}
+                            />
                         </Wizard.Step>
                         <Wizard.Step
                             title={localize('Selfie verification')}

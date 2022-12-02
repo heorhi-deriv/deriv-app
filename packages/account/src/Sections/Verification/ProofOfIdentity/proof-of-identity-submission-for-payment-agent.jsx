@@ -6,10 +6,12 @@ import { WS } from '@deriv/shared';
 import Unsupported from 'Components/poi/status/unsupported';
 import OnfidoUpload from './onfido-sdk-view.jsx';
 import OnfidoInstruction from 'Components/poi/onfido-instruction';
+import Submitted from 'Components/poa/status/submitted';
 import { identity_status_codes, submission_status_code, service_code } from './proof-of-identity-utils';
 import { IdvDocSubmitOnSignup } from '../../../Components/poi/poi-form-on-signup/idv-doc-submit-on-signup/idv-doc-submit-on-signup.jsx';
 
 const POISubmissionForPaymentAgent = ({
+    has_idv_error,
     idv,
     is_from_external,
     is_idv_disallowed,
@@ -17,7 +19,7 @@ const POISubmissionForPaymentAgent = ({
     onStateChange,
     refreshNotifications,
     selected_country,
-    has_idv_error,
+    setIDVValues,
 }) => {
     const [is_onfido_loading, setIsOnfidoLoading] = React.useState(true);
     const [submission_status, setSubmissionStatus] = React.useState(); // submitting
@@ -61,14 +63,24 @@ const POISubmissionForPaymentAgent = ({
         });
     };
 
+    //TODO: change onfido.status === identity_status_codes.pending and remove identity_status_codes.verified
+    if (
+        submission_service === service_code.onfido &&
+        [identity_status_codes.pending, identity_status_codes.verified].includes(onfido.status)
+    ) {
+        return <Submitted is_pa_signup />;
+    }
+
     if (submission_status === submission_status_code.submitting) {
         switch (submission_service) {
             case service_code.idv:
                 return (
                     <IdvDocSubmitOnSignup
+                        is_pa_signup
                         citizen_data={selected_country}
                         onNext={handleIdvSubmit}
                         has_idv_error={has_idv_error}
+                        setIDVValues={setIDVValues}
                     />
                 );
             case service_code.onfido: {
