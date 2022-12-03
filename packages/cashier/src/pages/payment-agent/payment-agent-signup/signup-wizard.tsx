@@ -7,6 +7,7 @@ import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from './components/cancel-wizard-dialog';
 import CountryOfIssue from './steps/country-of-issue';
 import Selfie from './steps/selfie';
+import AddressVerification from './steps/address-verification';
 import { usePaymentAgentSignupReducer } from './steps/steps-reducer';
 import './signup-wizard.scss';
 
@@ -18,7 +19,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const { steps_state, setSelectedCountry, setSelfie } = usePaymentAgentSignupReducer();
+    const { steps_state, setSelectedCountry, setSelfie, setAddress } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -78,7 +79,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
                         <Wizard.Step title='Address verification' is_fullwidth>
-                            {/* <ProofOfAddress /> */}
+                            <AddressVerification
+                                selected_country_id={steps_state.selected_country?.value || ''}
+                                address={steps_state.address}
+                                onSelect={setAddress}
+                            />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

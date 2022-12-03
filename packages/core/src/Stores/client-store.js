@@ -2200,11 +2200,11 @@ export default class ClientStore extends BaseStore {
         this.residence_list = residence_list_response.residence_list || [];
     }
 
-    fetchStatesList() {
+    fetchStatesList(resident_id) {
         return new Promise((resolve, reject) => {
             WS.authorized.storage
                 .statesList({
-                    states_list: this.accounts[this.loginid].residence,
+                    states_list: resident_id || this.accounts[this.loginid].residence,
                 })
                 .then(response => {
                     if (response.error) {

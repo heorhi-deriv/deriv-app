@@ -1,12 +1,24 @@
 import React from 'react';
-import { Autocomplete, Input, DesktopWrapper, MobileWrapper, SelectNative, useStateCallback } from '@deriv/components';
-import { Formik, Field } from 'formik';
-import { localize } from '@deriv/translations';
+import { StatesList, StatesListResponse } from '@deriv/api-types';
+import {
+    Autocomplete,
+    Input,
+    DesktopWrapper,
+    MobileWrapper,
+    SelectNative,
+    useStateCallback,
+    Text,
+    Loading,
+} from '@deriv/components';
+import { Formik, Field, FieldProps } from 'formik';
+import { localize, Localize } from '@deriv/translations';
 import { WS, validAddress, validPostCode, validLetterSymbol, validLength } from '@deriv/shared';
-import { useStore } from '../../../../hooks';
+import { useStore } from '../../../../../../hooks';
 import { FileUploaderContainer } from '@deriv/account';
+import { TReactChangeEvent } from 'Types';
+import './proof-of-address-form.scss';
 
-type TFormValues = {
+export type TPOAFormValues = {
     address_line_1: string;
     address_line_2: string;
     address_city: string;
@@ -14,11 +26,15 @@ type TFormValues = {
     address_postcode: string | number;
 };
 
-type TProofOfAddressProps = {
-    account_settings?: any;
-    fetchResidenceList?: any;
-    fetchStatesList?: any;
-    is_eu?: boolean;
+type TDropedFiles = {
+    files: File[];
+    error_message: string | null;
+};
+
+type TProofOfAddressFormProps = {
+    address?: TPOAFormValues;
+    onSelect: (value: TPOAFormValues) => void;
+    selected_country_id?: string;
 };
 
 const validate = (errors, values) => (fn, arr, err_msg) => {
@@ -30,28 +46,22 @@ const validate = (errors, values) => (fn, arr, err_msg) => {
 
 let file_uploader_ref = null;
 
-const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAddressProps) => {
-    const [form_values, setFormValues] = useStateCallback({});
+const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOfAddressFormProps) => {
+    const [form_values, setFormValues] = useStateCallback(address || {});
     const [form_state, setFormState] = useStateCallback({ should_show_form: true });
-    const [document_file, setDocumentFile] = React.useState({ files: [], error_message: null });
+    const [document_file, setDocumentFile] = React.useState<TDropedFiles>({ files: [], error_message: null });
     const [is_loading, setIsLoading] = React.useState(true);
-    const { client } = useStore();
-    const { states_list, fetchResidenceList } = client;
+    const {
+        client: { fetchStatesList },
+    } = useStore();
+    const [states_list, setStatesList] = React.useState<StatesList>();
 
     React.useEffect(() => {
-        fetchResidenceList().then(() => {
-            Promise.all([fetchStatesList(), WS.wait('get_settings')]).then(() => {
-                const { citizen, tax_identification_number, tax_residence } = account_settings;
-                setFormValues(
-                    {
-                        ...account_settings,
-                        ...(is_eu ? { citizen, tax_identification_number, tax_residence } : {}),
-                    },
-                    () => setIsLoading(false)
-                );
-            });
+        fetchStatesList(selected_country_id).then((response: StatesListResponse) => {
+            setStatesList(response.states_list);
+            setIsLoading(false);
         });
-    }, [account_settings, fetchResidenceList, fetchStatesList, is_eu, setFormValues]);
+    }, [selected_country_id, fetchStatesList]);
 
     const { address_line_1, address_line_2, address_city, address_state, address_postcode } = form_values;
 
@@ -63,9 +73,9 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
         address_postcode,
     };
 
-    const validateFields = (values: TFormValues) => {
+    const validateFields = (values: TPOAFormValues) => {
         setFormState({ ...form_state, ...{ should_allow_submit: false } });
-        const errors: Partial<TFormValues> = {};
+        const errors: Partial<TPOAFormValues> = {};
         const validateValues = validate(errors, values);
 
         const required_fields = ['address_line_1', 'address_city'];
@@ -96,7 +106,7 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
         }
 
         // only add state/province validation for countries that don't have states list fetched from API
-        if (values.address_state && !validLetterSymbol(values.address_state) && states_list?.length < 1) {
+        if (values.address_state && !validLetterSymbol(values.address_state) && states_list.length < 1) {
             errors.address_state = validation_letter_symbol_message;
         }
 
@@ -115,23 +125,25 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
         return errors;
     };
 
-    const onSubmitValues = (values: TFormValues) => {
-        // console.log('🚀 ~ file: proof-of-address.tsx ~ line 22 ~ values', values);
+    const onSubmitValues = (values: TPOAFormValues) => {
+        onSelect(values);
     };
+
+    if (is_loading) return <Loading is_fullscreen />;
 
     return (
         <Formik initialValues={form_initial_values} onSubmit={onSubmitValues} validate={validateFields}>
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
-                <form noValidate className='account-form' onSubmit={handleSubmit}>
-                    <div className='account-poa__details-fields'>
-                        <fieldset className='account-form__fieldset'>
+                <form className='pa-signup-wizard__step-address' noValidate onSubmit={handleSubmit}>
+                    <div className='pa-signup-wizard__step-form-container'>
+                        <fieldset>
                             <Input
                                 data-lpignore='true'
                                 autoComplete='off' // prevent chrome autocomplete
                                 type='text'
                                 maxLength={70}
                                 name='address_line_1'
-                                label={localize('First line of address')}
+                                label={localize('First line of address*')}
                                 value={values.address_line_1}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -139,7 +151,7 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
                                 required
                             />
                         </fieldset>
-                        <fieldset className='account-form__fieldset'>
+                        <fieldset>
                             <Input
                                 data-lpignore='true'
                                 autoComplete='off' // prevent chrome autocomplete
@@ -153,13 +165,13 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
                                 onBlur={handleBlur}
                             />
                         </fieldset>
-                        <fieldset className='account-form__fieldset'>
+                        <fieldset>
                             <Input
                                 data-lpignore='true'
                                 autoComplete='off' // prevent chrome autocomplete
                                 type='text'
                                 name='address_city'
-                                label={localize('Town/City')}
+                                label={localize('Town/City*')}
                                 value={values.address_city}
                                 error={touched.address_city && errors.address_city}
                                 onChange={handleChange}
@@ -167,18 +179,18 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
                                 required
                             />
                         </fieldset>
-                        <fieldset className='account-form__fieldset'>
-                            {states_list.length ? (
+                        <fieldset>
+                            {states_list && states_list.length ? (
                                 <React.Fragment>
                                     <DesktopWrapper>
                                         <Field name='address_state'>
-                                            {({ field }) => (
+                                            {({ field }: FieldProps<string>) => (
                                                 <Autocomplete
                                                     {...field}
                                                     data-lpignore='true'
                                                     autoComplete='new-password' // prevent chrome autocomplete
                                                     type='text'
-                                                    label={localize('State/Province')}
+                                                    label={localize('State/Province*')}
                                                     error={touched.address_state && errors.address_state}
                                                     list_items={states_list}
                                                     onItemSelection={({ value, text }) =>
@@ -190,13 +202,15 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
                                     </DesktopWrapper>
                                     <MobileWrapper>
                                         <SelectNative
-                                            placeholder={localize('Please select')}
-                                            label={localize('State/Province')}
+                                            placeholder={localize('Please select*')}
+                                            label={localize('State/Province*')}
                                             value={values.address_state}
                                             list_items={states_list}
                                             error={touched.address_state && errors.address_state}
                                             use_text={true}
-                                            onChange={e => setFieldValue('address_state', e.target.value, true)}
+                                            onChange={(e: TReactChangeEvent) =>
+                                                setFieldValue('address_state', e.target.value, true)
+                                            }
                                         />
                                     </MobileWrapper>
                                 </React.Fragment>
@@ -206,38 +220,61 @@ const ProofOfAddress = ({ account_settings, fetchStatesList, is_eu }: TProofOfAd
                                     autoComplete='off' // prevent chrome autocomplete
                                     type='text'
                                     name='address_state'
-                                    label={localize('State/Province')}
+                                    label={localize('State/Province*')}
                                     value={values.address_state}
                                     error={touched.address_state && errors.address_state}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    required
                                 />
                             )}
                         </fieldset>
-                        <fieldset className='account-form__fieldset'>
+                        <fieldset>
                             <Input
                                 data-lpignore='true'
                                 autoComplete='off' // prevent chrome autocomplete
                                 type='text'
                                 name='address_postcode'
-                                label={localize('Postal/ZIP code')}
+                                label={localize('Postal/ZIP code*')}
                                 value={values.address_postcode}
                                 error={touched.address_postcode && errors.address_postcode}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                required
                             />
                         </fieldset>
                     </div>
 
-                    <FileUploaderContainer
-                        onRef={ref => (file_uploader_ref = ref)}
-                        onFileDrop={df => setDocumentFile({ files: df.files, error_message: df.error_message })}
-                        getSocket={WS.getSocket}
-                    />
+                    <div className='pa-signup-wizard__step-address-upload-section'>
+                        <Text as='p' weight='bold' size='xs' color='prominent' line-height='m'>
+                            <Localize i18n_default_text='Please upload one of the following:' />
+                        </Text>
+                        <ul className='pa-signup-wizard__step-address-upload-section-list'>
+                            <li>
+                                <Text as='p' size='xs' color='less-prominent' line-height='m'>
+                                    <Localize i18n_default_text='A recent utility bill (e.g. electricity, water, gas, phone or internet).' />
+                                </Text>
+                            </li>
+                            <li>
+                                <Text as='p' size='xs' color='less-prominent' line-height='m'>
+                                    <Localize i18n_default_text='A recent bank statement or government-issued letter with your name and address.' />
+                                </Text>
+                            </li>
+                        </ul>
+                        <div className='pa-signup-wizard__step-form-container'>
+                            <FileUploaderContainer
+                                onRef={(ref: unknown) => (file_uploader_ref = ref)}
+                                onFileDrop={(df: TDropedFiles) =>
+                                    setDocumentFile({ files: df.files, error_message: df.error_message })
+                                }
+                                getSocket={WS.getSocket}
+                            />
+                        </div>
+                    </div>
                 </form>
             )}
         </Formik>
     );
 };
 
-export default ProofOfAddress;
+export default ProofOfAddressForm;
