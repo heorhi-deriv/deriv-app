@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { Button, Icon, Text } from '@deriv/components';
 import getNote from './signup-side-note-provider';
 import { useHistory } from 'react-router';
-import { useStore } from '../../../../hooks';
-import SignupWizard from '../signup-wizard';
+import { useStore } from '../../../../../hooks';
+import SignupWizard from '../../signup-wizard';
 import './signup-side-note.scss';
 
 export type TNote = {
