@@ -77,26 +77,26 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
     const [instruction, setInstruction] = React.useState(null);
     const [document_type, setDocumentType] = React.useState('document');
 
-    const passport_btn_ref = React.useRef(null);
-    const driving_licence_btn_ref = React.useRef(null);
-    const national_identity_card_ref = React.useRef(null);
-
     const changeInstruction = React.useCallback(
         event => {
-            // console.log('event.detail.eventName', event.detail.eventName);
-
             switch (event.detail.eventName) {
                 case 'DOCUMENT_TYPE_SELECT': {
                     setInstruction(<DocumentTypeSelect />);
                     setIsOnfidoLoading(false);
-                    passport_btn_ref.current = document.querySelector(['[data-onfido-qa="passport"]']);
-                    driving_licence_btn_ref.current = document.querySelector(['[data-onfido-qa="driving_licence"]']);
-                    national_identity_card_ref.current = document.querySelector([
+                    const passport_btn = document.querySelector(['[data-onfido-qa="passport"]']);
+                    const driving_licence_btn = document.querySelector(['[data-onfido-qa="driving_licence"]']);
+                    const national_identity_card = document.querySelector([
                         '[data-onfido-qa="national_identity_card"]',
                     ]);
-                    passport_btn_ref.current?.addEventListener('click', () => setDocumentType(documents[0]));
-                    driving_licence_btn_ref.current?.addEventListener('click', () => setDocumentType(documents[1]));
-                    national_identity_card_ref.current?.addEventListener('click', () => setDocumentType(documents[2]));
+                    passport_btn?.addEventListener('click', () => setDocumentType(documents[0]), {
+                        once: true,
+                    });
+                    driving_licence_btn?.addEventListener('click', () => setDocumentType(documents[1]), {
+                        once: true,
+                    });
+                    national_identity_card?.addEventListener('click', () => setDocumentType(documents[2]), {
+                        once: true,
+                    });
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_FRONT': {
@@ -107,6 +107,18 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT': {
+                    const onfido_back_btn = document.querySelector('.onfido-sdk-ui-NavigationBar-back');
+                    onfido_back_btn?.addEventListener(
+                        'click',
+                        () => {
+                            setInstruction(
+                                <DocumentCaptureFront
+                                    document_type={documents[selected_document_index] || document_type}
+                                />
+                            );
+                        },
+                        { once: true }
+                    );
                     setInstruction(
                         <DocumentCaptureConfirmationFront
                             document_type={documents[selected_document_index] || document_type}
@@ -144,11 +156,10 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
 
         return () => {
             window.removeEventListener('userAnalyticsEvent', changeInstruction);
-            passport_btn_ref.current?.removeEventListener('click', () => setDocumentType('passport'));
-            driving_licence_btn_ref.current?.removeEventListener('click', () => setDocumentType("driver's license"));
-            national_identity_card_ref.current?.removeEventListener('click', () => setDocumentType('identity card'));
         };
     }, [changeInstruction]);
+
+    React.useEffect(() => {}, []);
 
     return <div className='payment-agent-poi__onfido-instruction__instruction'>{instruction}</div>;
 };
