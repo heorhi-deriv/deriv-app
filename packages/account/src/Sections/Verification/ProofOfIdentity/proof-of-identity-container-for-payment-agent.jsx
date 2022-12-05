@@ -10,7 +10,8 @@ const ProofOfIdentityContainerForPaymentAgent = ({
     // onStateChange,
     refreshNotifications,
     selected_country,
-    setIDVValues,
+    setIDVData,
+    setManualData,
 }) => {
     const verification_status = populateVerificationStatus(account_status);
     const { idv, has_attempted_idv, identity_last_attempt, is_idv_disallowed, manual, needs_poa, onfido } =
@@ -36,7 +37,8 @@ const ProofOfIdentityContainerForPaymentAgent = ({
             onStateChange={() => {}}
             refreshNotifications={refreshNotifications}
             selected_country={selected_country}
-            setIDVValues={setIDVValues}
+            setIDVData={setIDVData}
+            setManualData={setManualData}
         />
     );
 };

@@ -13,7 +13,7 @@ import {
     Text,
     ThemedScrollbars,
 } from '@deriv/components';
-import { isDesktop, formatInput, isMobile, isEmptyObject } from '@deriv/shared';
+import { isDesktop, formatInput, isMobile } from '@deriv/shared';
 import { getDocumentData, getRegex } from '../../idv-document-submit/utils';
 import DocumentSubmitLogo from 'Assets/ic-document-submit-icon.svg';
 
@@ -24,7 +24,7 @@ export const IdvDocSubmitOnSignup = ({
     is_pa_signup,
     onPrevious,
     onNext,
-    setIDVValues,
+    setIDVData,
     value,
 }) => {
     const [document_list, setDocumentList] = React.useState([]);
@@ -98,20 +98,7 @@ export const IdvDocSubmitOnSignup = ({
             }
         }
 
-        // eslint-disable-next-line no-unused-expressions
-        setIDVValues && isEmptyObject(errors)
-            ? setIDVValues(values)
-            : setIDVValues({
-                  document_type: {
-                      id: '',
-                      text: '',
-                      value: '',
-                      example_format: '',
-                      sample_image: '',
-                  },
-
-                  document_number: '',
-              });
+        setIDVData?.({ values, errors });
 
         return errors;
     };

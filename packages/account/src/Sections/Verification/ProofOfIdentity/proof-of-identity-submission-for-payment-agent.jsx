@@ -3,11 +3,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { Loading } from '@deriv/components';
 import { WS } from '@deriv/shared';
-import Unsupported from 'Components/poi/status/unsupported';
 import OnfidoUpload from './onfido-sdk-view.jsx';
 import OnfidoInstruction from 'Components/poi/onfido-instruction';
 import Submitted from 'Components/poa/status/submitted';
 import { identity_status_codes, submission_status_code, service_code } from './proof-of-identity-utils';
+import { UnsupportedForPA } from '../../../Components/poi/status/unsupported/unsupported-for-pa.jsx';
 import { IdvDocSubmitOnSignup } from '../../../Components/poi/poi-form-on-signup/idv-doc-submit-on-signup/idv-doc-submit-on-signup.jsx';
 
 const POISubmissionForPaymentAgent = ({
@@ -19,7 +19,8 @@ const POISubmissionForPaymentAgent = ({
     onStateChange,
     refreshNotifications,
     selected_country,
-    setIDVValues,
+    setIDVData,
+    setManualData,
 }) => {
     const [is_onfido_loading, setIsOnfidoLoading] = React.useState(true);
     const [submission_status, setSubmissionStatus] = React.useState(); // submitting
@@ -29,7 +30,8 @@ const POISubmissionForPaymentAgent = ({
             const { submissions_left: idv_submissions_left } = idv;
             const { submissions_left: onfido_submissions_left } = onfido;
             const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
-            const is_onfido_supported = selected_country.identity.services.onfido.is_country_supported;
+            const is_onfido_supported =
+                selected_country.identity.services.onfido.is_country_supported && selected_country.value !== 'ng';
             if (is_idv_supported && Number(idv_submissions_left) > 0 && !is_idv_disallowed) {
                 setSubmissionService(service_code.idv);
             } else if (onfido_submissions_left && is_onfido_supported) {
@@ -49,6 +51,7 @@ const POISubmissionForPaymentAgent = ({
             refreshNotifications();
         });
     };
+
     const handleIdvSubmit = values => {
         const { document_number, document_type } = values;
         const submit_data = {
@@ -76,11 +79,10 @@ const POISubmissionForPaymentAgent = ({
             case service_code.idv:
                 return (
                     <IdvDocSubmitOnSignup
-                        is_pa_signup
                         citizen_data={selected_country}
-                        onNext={handleIdvSubmit}
                         has_idv_error={has_idv_error}
-                        setIDVValues={setIDVValues}
+                        is_pa_signup
+                        setIDVData={setIDVData}
                     />
                 );
             case service_code.onfido: {
@@ -110,7 +112,17 @@ const POISubmissionForPaymentAgent = ({
                 );
             }
             case service_code.manual:
-                return <Unsupported is_mt5 handlePOIforMT5Complete={handlePOIComplete} />;
+                return (
+                    <UnsupportedForPA
+                        country_code={selected_country.value}
+                        handlePOIforMT5Complete={handlePOIComplete}
+                        is_onfido_loading={is_onfido_loading}
+                        is_pa_signup
+                        is_from_external={is_from_external}
+                        setIsOnfidoLoading={setIsOnfidoLoading}
+                        setManualData={setManualData}
+                    />
+                );
             default:
                 return null;
         }

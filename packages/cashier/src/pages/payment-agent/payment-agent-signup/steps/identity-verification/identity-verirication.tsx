@@ -9,13 +9,15 @@ import './identity-verification.scss';
 
 type TIdentityVerification = {
     selected_country: TStepsState['selected_country'];
-    setIDVValues: (value: TStepsState['idv_values']) => void;
+    setIDVData: (value: TStepsState['idv_data']) => void;
+    setManualData: (value: TStepsState['manual_data']) => void;
     setIsIdentitySubmissionDisabled: (value: boolean) => void;
 };
 
 const IdentityVerification = ({
     selected_country,
-    setIDVValues,
+    setIDVData,
+    setManualData,
     setIsIdentitySubmissionDisabled,
 }: TIdentityVerification) => {
     const { client, notifications } = useStore();
@@ -55,7 +57,8 @@ const IdentityVerification = ({
                 is_from_external
                 refreshNotifications={refreshNotifications}
                 selected_country={selected_country}
-                setIDVValues={setIDVValues}
+                setIDVData={setIDVData}
+                setManualData={setManualData}
             />
         </>
     );

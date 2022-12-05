@@ -12,7 +12,7 @@ export const checkIsEmpty = value => {
     return typeof value === 'string' ? !value.trim() : !value;
 };
 
-export const validateFields = (values, fields = [], documents = []) => {
+export const validateFields = (values, fields = [], documents = [], setManualData) => {
     const errors = {};
 
     fields.forEach(field => {
@@ -42,6 +42,8 @@ export const validateFields = (values, fields = [], documents = []) => {
             errors[name] = value.errors[0];
         }
     });
+
+    setManualData?.({ values, errors });
 
     return errors;
 };

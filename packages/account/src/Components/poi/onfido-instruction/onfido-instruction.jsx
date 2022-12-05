@@ -67,7 +67,13 @@ const FacialCaptureConfirmation = () => {
     );
 };
 
-const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
+const documents = {
+    0: 'passport',
+    1: 'driver’s license',
+    2: 'identity card',
+};
+
+const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
     const [instruction, setInstruction] = React.useState(null);
     const [document_type, setDocumentType] = React.useState('document');
 
@@ -77,6 +83,8 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
 
     const changeInstruction = React.useCallback(
         event => {
+            // console.log('event.detail.eventName', event.detail.eventName);
+
             switch (event.detail.eventName) {
                 case 'DOCUMENT_TYPE_SELECT': {
                     setInstruction(<DocumentTypeSelect />);
@@ -86,27 +94,33 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
                     national_identity_card_ref.current = document.querySelector([
                         '[data-onfido-qa="national_identity_card"]',
                     ]);
-                    passport_btn_ref.current?.addEventListener('click', () => setDocumentType('passport'));
-                    driving_licence_btn_ref.current?.addEventListener('click', () =>
-                        setDocumentType('driver’s license')
-                    );
-                    national_identity_card_ref.current?.addEventListener('click', () =>
-                        setDocumentType('identity card')
-                    );
+                    passport_btn_ref.current?.addEventListener('click', () => setDocumentType(documents[0]));
+                    driving_licence_btn_ref.current?.addEventListener('click', () => setDocumentType(documents[1]));
+                    national_identity_card_ref.current?.addEventListener('click', () => setDocumentType(documents[2]));
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_FRONT': {
-                    setInstruction(<DocumentCaptureFront document_type={document_type} />);
+                    setInstruction(
+                        <DocumentCaptureFront document_type={documents[selected_document_index] || document_type} />
+                    );
                     setIsOnfidoLoading(false);
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT': {
-                    setInstruction(<DocumentCaptureConfirmationFront document_type={document_type} />);
+                    setInstruction(
+                        <DocumentCaptureConfirmationFront
+                            document_type={documents[selected_document_index] || document_type}
+                        />
+                    );
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_BACK':
                 case 'DOCUMENT_CAPTURE_CONFIRMATION_BACK': {
-                    setInstruction(<DocumentCaptureConfirmationBack document_type={document_type} />);
+                    setInstruction(
+                        <DocumentCaptureConfirmationBack
+                            document_type={documents[selected_document_index] || document_type}
+                        />
+                    );
                     break;
                 }
                 case 'FACIAL_CAPTURE': {
@@ -122,7 +136,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
                     setIsOnfidoLoading(false);
             }
         },
-        [document_type, setIsOnfidoLoading]
+        [document_type, setIsOnfidoLoading, selected_document_index]
     );
 
     React.useEffect(() => {

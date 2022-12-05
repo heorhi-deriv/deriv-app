@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Loading, Icon, Text } from '@deriv/components';
 import { localize } from '@deriv/translations';
@@ -6,6 +7,7 @@ import { WS } from '@deriv/shared';
 import { UploadComplete } from '../upload-complete/upload-complete';
 import PoiUnsupportedFailed from 'Components/poi-unsupported-failed';
 import uploadFile from 'Components/file-uploader-container/upload-file';
+import OnfidoInstruction from 'Components/poi/onfido-instruction';
 import OnfidoUpload from '../../../../Sections/Verification/ProofOfIdentity/onfido-sdk-view';
 
 import CardDetails from './card-details';
@@ -18,19 +20,24 @@ const STATUS = {
 };
 
 const DetailComponent = ({
-    document,
-    onClickBack,
-    root_class,
     country_code_key,
+    document,
     documents_supported,
-    onfido_service_token,
-    height,
     handleComplete,
-    is_onfido_supported,
-    is_from_external,
-    setIsCfdPoiCompleted,
-    is_mt5,
     handlePOIforMT5Complete,
+    height,
+    is_from_external,
+    is_mt5,
+    is_onfido_loading,
+    is_onfido_supported,
+    is_pa_signup,
+    onClickBack,
+    onfido_service_token,
+    root_class,
+    selected_document_index,
+    setIsCfdPoiCompleted,
+    setManualData,
+    setIsOnfidoLoading,
     ...props
 }) => {
     const [status, setStatus] = React.useState();
@@ -108,34 +115,51 @@ const DetailComponent = ({
                 <React.Fragment>
                     {is_onfido_supported ? (
                         <React.Fragment>
-                            <div className={`${root_class}__detail-header`} onClick={onClickBack}>
-                                <Icon icon='IcArrowLeftBold' />
-                                <Text
-                                    as='p'
-                                    size='xs'
-                                    weight='bold'
-                                    color='prominent'
-                                    className={`${root_class}__back-title`}
-                                >
-                                    {localize('Back')}
-                                </Text>
+                            {is_pa_signup ? (
+                                <OnfidoInstruction
+                                    selected_document_index={selected_document_index}
+                                    setIsOnfidoLoading={setIsOnfidoLoading}
+                                />
+                            ) : (
+                                <div className={`${root_class}__detail-header`} onClick={onClickBack}>
+                                    <Icon icon='IcArrowLeftBold' />
+                                    <Text
+                                        as='p'
+                                        size='xs'
+                                        weight='bold'
+                                        color='prominent'
+                                        className={`${root_class}__back-title`}
+                                    >
+                                        {localize('Back')}
+                                    </Text>
+                                </div>
+                            )}
+                            {is_onfido_loading && <Loading is_fullscreen={false} />}
+                            <div
+                                className={classNames({
+                                    'payment-agent-poi__onfido-container--hidden': is_onfido_loading,
+                                })}
+                            >
+                                <OnfidoUpload
+                                    country_code={country_code_key}
+                                    documents_supported={[document.onfido_name]}
+                                    handleComplete={is_mt5 ? handlePOIforMT5Complete : handleComplete}
+                                    height='auto'
+                                    is_from_external={is_from_external}
+                                    {...props}
+                                />
                             </div>
-                            <OnfidoUpload
-                                country_code={country_code_key}
-                                documents_supported={[document.onfido_name]}
-                                height={height ?? null}
-                                handleComplete={is_mt5 ? handlePOIforMT5Complete : handleComplete}
-                                is_from_external={false}
-                                {...props}
-                            />
                         </React.Fragment>
                     ) : (
                         <CardDetails
                             data={document.details}
-                            onComplete={onComplete}
                             goToCards={onClickBack}
                             is_from_external={is_from_external}
+                            is_pa_signup={is_pa_signup}
+                            onComplete={onComplete}
+                            selected_document_index={selected_document_index}
                             setIsCfdPoiCompleted={setIsCfdPoiCompleted}
+                            setManualData={setManualData}
                         />
                     )}
                 </React.Fragment>
@@ -144,13 +168,21 @@ const DetailComponent = ({
 };
 
 DetailComponent.propTypes = {
-    handleComplete: PropTypes.func,
-    has_poa: PropTypes.bool,
-    onfido_service_token: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     country_code_key: PropTypes.number,
-    height: PropTypes.number,
+    handleComplete: PropTypes.func,
     handlePOIforMT5Complete: PropTypes.func,
+    has_poa: PropTypes.bool,
+    height: PropTypes.number,
+    is_from_external: PropTypes.bool,
     is_mt5: PropTypes.bool,
+    is_onfido_loading: PropTypes.bool,
+    is_pa_signup: PropTypes.bool,
+    onClickBack: PropTypes.func,
+    onfido_service_token: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    root_class: PropTypes.string,
+    selected_document_index: PropTypes.string,
+    setManualData: PropTypes.func,
+    setIsOnfidoLoading: PropTypes.func,
 };
 
 export default DetailComponent;
