@@ -45,20 +45,21 @@ const DocumentsUpload = ({
     data,
     goToCards,
     onSubmit,
-    selected_document_index,
+    document_index,
     setManualData,
 }) => {
     const formik_ref = React.useRef();
 
-    const { fields, documents_title, documents } = data;
+    const { fields, documents_title, documents } = React.useMemo(() => data, [data]);
 
     const fields_title = localize('First, enter your {{label}} and the expiry date.', {
         label: fields[0].label,
     });
 
     React.useEffect(() => {
+        console.log('rerun');
         if (is_pa_signup) formik_ref?.current.resetForm({ values: setInitialValues([...fields, ...documents]) });
-    }, [selected_document_index, is_pa_signup, fields, documents]);
+    }, [document_index, is_pa_signup, fields, documents]);
 
     return (
         <div
@@ -144,6 +145,7 @@ DocumentsUpload.propTypes = {
     initial_values: PropTypes.object,
     goToCards: PropTypes.func,
     onSubmit: PropTypes.func,
-    selected_document_index: PropTypes.string,
+    document_index: PropTypes.string,
+    setManualData: PropTypes.func,
 };
 export default DocumentsUpload;

@@ -18,6 +18,7 @@ export type TStepsState = {
         errors: { document_number: string; document_type: string };
     };
     manual_data: { values: any; errors: any };
+    selected_manual_document_index: string;
     is_identity_submission_disabled: boolean;
     selected_country?: ResidenceList[number];
     selfie: {
@@ -31,6 +32,7 @@ const ACTION_TYPES = {
     SET_MANUAL_DATA: 'SET_MANUAL_DATA',
     SET_SELFIE: 'SET_SELFIE',
     SET_SELECTED_COUNTRY: 'SET_SELECTED_COUNTRY',
+    SET_SELECTED_MANUAL_DOCUMENT_INDEX: 'SET_SELECTED_MANUAL_DOCUMENT_INDEX',
 } as const;
 
 // Action creators
@@ -69,6 +71,13 @@ const setManualDataAC = (value: any) => {
     };
 };
 
+const setSelectedManualDocumentIndexAC = (value: string) => {
+    return {
+        type: ACTION_TYPES.SET_SELECTED_MANUAL_DOCUMENT_INDEX,
+        value,
+    };
+};
+
 // Initial state
 const initial_state = {
     idv_data: {
@@ -81,6 +90,7 @@ const initial_state = {
     is_identity_submission_disabled: true,
     manual_data: { values: {}, errors: {} },
     selected_country: {},
+    selected_manual_document_index: '',
     selfie: null,
 };
 
@@ -107,6 +117,8 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
                 is_identity_submission_disabled: !isEmptyObject(action.value.errors),
             };
         }
+        case ACTION_TYPES.SET_SELECTED_MANUAL_DOCUMENT_INDEX:
+            return { ...state, selected_manual_document_index: action.value };
         default:
             return state;
     }
@@ -118,6 +130,10 @@ export const usePaymentAgentSignupReducer = () => {
     const setSelfie = useCallback((value: TSelfie) => dispatch(setSelfieAC(value)), []);
     const setSelectedCountry = useCallback(
         (value?: ResidenceList[number]) => dispatch(setSelectedCountryAC(value)),
+        []
+    );
+    const setSelectedManualDocumentIndex = useCallback(
+        (value: string) => dispatch(setSelectedManualDocumentIndexAC(value)),
         []
     );
     const setIDVData = useCallback((value: TStepsState['idv_data']) => dispatch(setIDVDataAC(value)), []);
@@ -132,6 +148,7 @@ export const usePaymentAgentSignupReducer = () => {
         setIDVData,
         setManualData,
         setSelectedCountry,
+        setSelectedManualDocumentIndex,
         setSelfie,
         setIsIdentitySubmissionDisabled,
     };
@@ -140,6 +157,7 @@ export const usePaymentAgentSignupReducer = () => {
 type TActionsTypes = ReturnType<
     | typeof setSelfieAC
     | typeof setSelectedCountryAC
+    | typeof setSelectedManualDocumentIndexAC
     | typeof setIDVDataAC
     | typeof setManualDataAC
     | typeof setIsIdentitySubmissionDisabledAC

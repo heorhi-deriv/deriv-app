@@ -6,12 +6,16 @@ import { populateVerificationStatus } from '../Helpers/verification';
 const ProofOfIdentityContainerForPaymentAgent = ({
     account_status,
     height,
+    idv_values,
     is_from_external,
+    manual_values,
     // onStateChange,
     refreshNotifications,
     selected_country,
     setIDVData,
     setManualData,
+    setSelectedManualDocumentIndex,
+    selected_manual_document_index,
 }) => {
     const verification_status = populateVerificationStatus(account_status);
     const { idv, has_attempted_idv, identity_last_attempt, is_idv_disallowed, manual, needs_poa, onfido } =
@@ -29,9 +33,11 @@ const ProofOfIdentityContainerForPaymentAgent = ({
             height={height ?? null}
             identity_last_attempt={identity_last_attempt}
             idv={idv}
+            idv_values={idv_values}
             is_from_external={!!is_from_external}
             is_idv_disallowed={is_idv_disallowed}
             manual={manual}
+            manual_values={manual_values}
             needs_poa={needs_poa}
             onfido={onfido}
             onStateChange={() => {}}
@@ -39,6 +45,8 @@ const ProofOfIdentityContainerForPaymentAgent = ({
             selected_country={selected_country}
             setIDVData={setIDVData}
             setManualData={setManualData}
+            setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
+            selected_manual_document_index={selected_manual_document_index}
         />
     );
 };

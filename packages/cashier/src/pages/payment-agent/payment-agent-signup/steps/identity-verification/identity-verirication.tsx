@@ -8,17 +8,25 @@ import { TStepsState } from '../steps-reducer';
 import './identity-verification.scss';
 
 type TIdentityVerification = {
+    idv_values: TStepsState['idv_data']['values'];
+    manual_values: TStepsState['manual_data']['values'];
     selected_country: TStepsState['selected_country'];
+    selected_manual_document_index: string;
     setIDVData: (value: TStepsState['idv_data']) => void;
-    setManualData: (value: TStepsState['manual_data']) => void;
     setIsIdentitySubmissionDisabled: (value: boolean) => void;
+    setManualData: (value: TStepsState['manual_data']) => void;
+    setSelectedManualDocumentIndex: (value: string) => void;
 };
 
 const IdentityVerification = ({
+    idv_values,
+    manual_values,
     selected_country,
+    selected_manual_document_index,
     setIDVData,
-    setManualData,
     setIsIdentitySubmissionDisabled,
+    setManualData,
+    setSelectedManualDocumentIndex,
 }: TIdentityVerification) => {
     const { client, notifications } = useStore();
 
@@ -54,11 +62,15 @@ const IdentityVerification = ({
             <ProofOfIdentityContainerForPaymentAgent
                 account_status={account_status}
                 height='auto'
+                idv_values={idv_values}
                 is_from_external
+                manual_values={manual_values}
                 refreshNotifications={refreshNotifications}
                 selected_country={selected_country}
                 setIDVData={setIDVData}
                 setManualData={setManualData}
+                setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
+                selected_manual_document_index={selected_manual_document_index}
             />
         </>
     );

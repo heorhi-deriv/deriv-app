@@ -73,7 +73,7 @@ const documents = {
     2: 'identity card',
 };
 
-const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
+const OnfidoInstruction = ({ setIsOnfidoLoading, document_index }) => {
     const [instruction, setInstruction] = React.useState(null);
     const [document_type, setDocumentType] = React.useState('document');
 
@@ -100,9 +100,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_FRONT': {
-                    setInstruction(
-                        <DocumentCaptureFront document_type={documents[selected_document_index] || document_type} />
-                    );
+                    setInstruction(<DocumentCaptureFront document_type={documents[document_index] || document_type} />);
                     setIsOnfidoLoading(false);
                     break;
                 }
@@ -112,26 +110,20 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
                         'click',
                         () => {
                             setInstruction(
-                                <DocumentCaptureFront
-                                    document_type={documents[selected_document_index] || document_type}
-                                />
+                                <DocumentCaptureFront document_type={documents[document_index] || document_type} />
                             );
                         },
                         { once: true }
                     );
                     setInstruction(
-                        <DocumentCaptureConfirmationFront
-                            document_type={documents[selected_document_index] || document_type}
-                        />
+                        <DocumentCaptureConfirmationFront document_type={documents[document_index] || document_type} />
                     );
                     break;
                 }
                 case 'DOCUMENT_CAPTURE_BACK':
                 case 'DOCUMENT_CAPTURE_CONFIRMATION_BACK': {
                     setInstruction(
-                        <DocumentCaptureConfirmationBack
-                            document_type={documents[selected_document_index] || document_type}
-                        />
+                        <DocumentCaptureConfirmationBack document_type={documents[document_index] || document_type} />
                     );
                     break;
                 }
@@ -148,7 +140,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading, selected_document_index }) => {
                     setIsOnfidoLoading(false);
             }
         },
-        [document_type, setIsOnfidoLoading, selected_document_index]
+        [document_type, setIsOnfidoLoading, document_index]
     );
 
     React.useEffect(() => {

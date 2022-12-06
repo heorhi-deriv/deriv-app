@@ -2,7 +2,7 @@ import React from 'react';
 import { DesktopWrapper, Dropdown, MobileWrapper, SelectNative, Text } from '@deriv/components';
 import { localize } from '@deriv/translations';
 
-const DocumentSelector = ({ country_code, onChange, selected_document_index }) => {
+const DocumentSelector = ({ country_code, onChange, document_index }) => {
     const document_list = React.useMemo(
         () => [
             { text: localize('Passport'), value: '0' },
@@ -14,8 +14,8 @@ const DocumentSelector = ({ country_code, onChange, selected_document_index }) =
     );
 
     const selected_document = React.useMemo(
-        () => document_list.find(document => document.value === selected_document_index),
-        [document_list, selected_document_index]
+        () => document_list.find(document => document.value === document_index),
+        [document_list, document_index]
     );
 
     return (

@@ -64,19 +64,21 @@ export const IdvDocSubmitOnSignup = ({
         );
     }, [country_code, document_data]);
 
-    const initial_form_values = {
-        document_type: value
-            ? value.document_type
-            : {
-                  id: '',
-                  text: '',
-                  value: '',
-                  example_format: '',
-                  sample_image: '',
-              },
-
-        document_number: value ? value.document_number : '',
-    };
+    const initial_form_values = React.useMemo(() => {
+        return {
+            document_type: value
+                ? value.document_type
+                : {
+                      id: '',
+                      text: '',
+                      value: '',
+                      example_format: '',
+                      sample_image: '',
+                  },
+            document_number: value ? value.document_number : '',
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const validateFields = values => {
         const errors = {};

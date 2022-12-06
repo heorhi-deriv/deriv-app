@@ -13,14 +13,18 @@ import { IdvDocSubmitOnSignup } from '../../../Components/poi/poi-form-on-signup
 const POISubmissionForPaymentAgent = ({
     has_idv_error,
     idv,
+    idv_values,
     is_from_external,
     is_idv_disallowed,
+    manual_values,
     onfido,
     onStateChange,
     refreshNotifications,
     selected_country,
     setIDVData,
     setManualData,
+    setSelectedManualDocumentIndex,
+    selected_manual_document_index,
 }) => {
     const [is_onfido_loading, setIsOnfidoLoading] = React.useState(true);
     const [submission_status, setSubmissionStatus] = React.useState(); // submitting
@@ -83,6 +87,7 @@ const POISubmissionForPaymentAgent = ({
                         has_idv_error={has_idv_error}
                         is_pa_signup
                         setIDVData={setIDVData}
+                        value={idv_values}
                     />
                 );
             case service_code.onfido: {
@@ -119,8 +124,11 @@ const POISubmissionForPaymentAgent = ({
                         is_onfido_loading={is_onfido_loading}
                         is_pa_signup
                         is_from_external={is_from_external}
+                        manual_values={manual_values}
                         setIsOnfidoLoading={setIsOnfidoLoading}
                         setManualData={setManualData}
+                        setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
+                        selected_manual_document_index={selected_manual_document_index}
                     />
                 );
             default:

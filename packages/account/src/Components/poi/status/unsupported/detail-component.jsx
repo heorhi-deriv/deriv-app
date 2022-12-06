@@ -31,10 +31,11 @@ const DetailComponent = ({
     is_onfido_loading,
     is_onfido_supported,
     is_pa_signup,
+    manual_values,
     onClickBack,
     onfido_service_token,
     root_class,
-    selected_document_index,
+    document_index,
     setIsCfdPoiCompleted,
     setManualData,
     setIsOnfidoLoading,
@@ -117,7 +118,7 @@ const DetailComponent = ({
                         <React.Fragment>
                             {is_pa_signup ? (
                                 <OnfidoInstruction
-                                    selected_document_index={selected_document_index}
+                                    document_index={document_index}
                                     setIsOnfidoLoading={setIsOnfidoLoading}
                                 />
                             ) : (
@@ -156,8 +157,9 @@ const DetailComponent = ({
                             goToCards={onClickBack}
                             is_from_external={is_from_external}
                             is_pa_signup={is_pa_signup}
+                            manual_values={manual_values}
                             onComplete={onComplete}
-                            selected_document_index={selected_document_index}
+                            document_index={document_index}
                             setIsCfdPoiCompleted={setIsCfdPoiCompleted}
                             setManualData={setManualData}
                         />
@@ -180,7 +182,7 @@ DetailComponent.propTypes = {
     onClickBack: PropTypes.func,
     onfido_service_token: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     root_class: PropTypes.string,
-    selected_document_index: PropTypes.string,
+    document_index: PropTypes.string,
     setManualData: PropTypes.func,
     setIsOnfidoLoading: PropTypes.func,
 };
