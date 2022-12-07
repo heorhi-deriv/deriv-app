@@ -2,6 +2,39 @@ import { useCallback, useReducer } from 'react';
 import { isEmptyObject } from '@deriv/shared';
 import { ResidenceList } from '@deriv/api-types';
 import { TSelfie } from './selfie/selfie';
+import { Moment } from 'moment';
+
+//TODO: refactor TSelfie type into TUploadedDocumentType
+
+type TManualPassportValues = {
+    document_id: string;
+    expiry_date: Moment | string;
+    passport: TSelfie | string | null;
+};
+
+type TManualDrivingLicense = {
+    document_id: string;
+    driving_licence_back: TSelfie | string | null;
+    driving_licence_front: TSelfie | string | null;
+    expiry_date: Moment | string;
+};
+
+//TODO: add NIMC type
+
+type TManualIdentityCard = {
+    document_id: string;
+    identity_card_back: TSelfie | string | null;
+    identity_card_front: TSelfie | string | null;
+    expiry_date: Moment | string;
+};
+
+type TManualValues = Partial<TManualPassportValues | TManualDrivingLicense | TManualIdentityCard>;
+
+type TManualErrors = Partial<
+    | Record<keyof TManualPassportValues, string>
+    | Record<keyof TManualDrivingLicense, string>
+    | Record<keyof TManualIdentityCard, string>
+>;
 
 export type TStepsState = {
     idv_data: {
@@ -15,9 +48,12 @@ export type TStepsState = {
                 value: string;
             };
         };
-        errors: { document_number: string; document_type: string };
+        errors: { document_number?: string; document_type?: string };
     };
-    manual_data: { values: any; errors: any };
+    manual_data: {
+        values: TManualValues;
+        errors: TManualErrors;
+    };
     selected_manual_document_index: string;
     is_identity_submission_disabled: boolean;
     selected_country?: ResidenceList[number];
@@ -64,7 +100,7 @@ const setIsIdentitySubmissionDisabledAC = (value: boolean) => {
     };
 };
 
-const setManualDataAC = (value: any) => {
+const setManualDataAC = (value: TStepsState['manual_data']) => {
     return {
         type: ACTION_TYPES.SET_MANUAL_DATA,
         value,
@@ -107,14 +143,16 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
             return {
                 ...state,
                 idv_data: { values: { ...action.value.values }, errors: { ...action.value.errors } },
-                is_identity_submission_disabled: !isEmptyObject(action.value.errors),
+                is_identity_submission_disabled:
+                    !isEmptyObject(action.value.errors) || isEmptyObject(action.value.values),
             };
         }
         case ACTION_TYPES.SET_MANUAL_DATA: {
             return {
                 ...state,
                 manual_data: { values: { ...action.value.values }, errors: { ...action.value.errors } },
-                is_identity_submission_disabled: !isEmptyObject(action.value.errors),
+                is_identity_submission_disabled:
+                    !isEmptyObject(action.value.errors) || isEmptyObject(action.value.values),
             };
         }
         case ACTION_TYPES.SET_SELECTED_MANUAL_DOCUMENT_INDEX:

@@ -18,6 +18,7 @@ export const UnsupportedForPA = ({
     handlePOIforMT5Complete,
     setSelectedManualDocumentIndex,
     selected_manual_document_index,
+    setManualData,
     ...props
 }) => {
     const [document_index, setDocumentIndex] = React.useState(selected_manual_document_index);
@@ -25,10 +26,11 @@ export const UnsupportedForPA = ({
 
     const changeDocument = React.useCallback(
         e => {
+            setManualData({ values: {}, errors: {} });
             setDocumentIndex(e.target.value);
             setSelectedManualDocumentIndex(e.target.value);
         },
-        [setSelectedManualDocumentIndex]
+        [setSelectedManualDocumentIndex, setManualData]
     );
 
     return (
@@ -43,7 +45,7 @@ export const UnsupportedForPA = ({
                     document={documents[document_index]}
                     root_class='manual-poi'
                     handlePOIforMT5Complete={handlePOIforMT5Complete}
-                    document_index={document_index}
+                    setManualData={setManualData}
                     {...props}
                 />
             )}

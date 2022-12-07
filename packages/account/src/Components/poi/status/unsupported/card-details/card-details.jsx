@@ -9,8 +9,8 @@ const CardDetails = ({
     goToCards,
     is_from_external,
     is_pa_signup,
+    manual_values,
     onComplete,
-    document_index,
     setIsCfdPoiCompleted,
     setManualData,
 }) => {
@@ -37,8 +37,8 @@ const CardDetails = ({
                     is_from_external={is_from_external}
                     is_pa_signup={is_pa_signup}
                     goToCards={goToCards}
+                    manual_values={manual_values}
                     onSubmit={onSubmitDocuments}
-                    document_index={document_index}
                     setManualData={setManualData}
                 />
             ) : (

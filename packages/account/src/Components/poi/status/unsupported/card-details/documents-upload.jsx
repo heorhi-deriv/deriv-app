@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { localize } from '@deriv/translations';
-import { isMobile } from '@deriv/shared';
+import { isMobile, isEmptyObject } from '@deriv/shared';
 import { Button, Icon, Text } from '@deriv/components';
 import InputField from './input-field.jsx';
 import Uploader from './uploader.jsx';
@@ -45,21 +45,29 @@ const DocumentsUpload = ({
     data,
     goToCards,
     onSubmit,
-    document_index,
+    manual_values,
     setManualData,
 }) => {
     const formik_ref = React.useRef();
 
-    const { fields, documents_title, documents } = React.useMemo(() => data, [data]);
+    const { fields, documents_title, documents } = data;
 
     const fields_title = localize('First, enter your {{label}} and the expiry date.', {
         label: fields[0].label,
     });
 
+    // eslint-disable-next-line no-nested-ternary
+    const formik_initial_values = !is_pa_signup
+        ? initial_values || setInitialValues([...fields, ...documents])
+        : !isEmptyObject(manual_values)
+        ? manual_values
+        : setInitialValues([...fields, ...documents]);
+
     React.useEffect(() => {
-        console.log('rerun');
-        if (is_pa_signup) formik_ref?.current.resetForm({ values: setInitialValues([...fields, ...documents]) });
-    }, [document_index, is_pa_signup, fields, documents]);
+        if (is_pa_signup && isEmptyObject(manual_values))
+            formik_ref?.current.resetForm({ values: setInitialValues([...fields, ...documents]) });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [is_pa_signup, fields, documents]);
 
     return (
         <div
@@ -68,7 +76,7 @@ const DocumentsUpload = ({
             })}
         >
             <Formik
-                initialValues={initial_values || setInitialValues([...fields, ...documents])}
+                initialValues={formik_initial_values}
                 validate={values => validateFields(values, fields, documents, setManualData)}
                 onSubmit={onSubmit}
                 innerRef={formik_ref}
@@ -140,9 +148,10 @@ const DocumentsUpload = ({
 
 DocumentsUpload.propTypes = {
     data: PropTypes.object,
+    initial_values: PropTypes.object,
     is_from_external: PropTypes.bool,
     is_pa_signup: PropTypes.bool,
-    initial_values: PropTypes.object,
+    manual_values: PropTypes.object,
     goToCards: PropTypes.func,
     onSubmit: PropTypes.func,
     document_index: PropTypes.string,

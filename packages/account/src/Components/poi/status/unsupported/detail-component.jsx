@@ -159,7 +159,6 @@ const DetailComponent = ({
                             is_pa_signup={is_pa_signup}
                             manual_values={manual_values}
                             onComplete={onComplete}
-                            document_index={document_index}
                             setIsCfdPoiCompleted={setIsCfdPoiCompleted}
                             setManualData={setManualData}
                         />
