@@ -56,6 +56,7 @@ const DocumentsUpload = ({
         label: fields[0].label,
     });
 
+    // TODO: refactor nested ternary
     // eslint-disable-next-line no-nested-ternary
     const formik_initial_values = !is_pa_signup
         ? initial_values || setInitialValues([...fields, ...documents])

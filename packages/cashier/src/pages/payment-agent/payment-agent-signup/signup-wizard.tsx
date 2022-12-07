@@ -29,6 +29,24 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
         setIsIdentitySubmissionDisabled,
     } = usePaymentAgentSignupReducer();
 
+    React.useEffect(() => {
+        if (steps_state.selected_country) {
+            setIDVData({
+                values: {
+                    document_type: {
+                        id: '',
+                        text: '',
+                        value: '',
+                        example_format: '',
+                        sample_image: '',
+                    },
+                    document_number: '',
+                },
+                errors: {},
+            });
+        }
+    }, [steps_state.selected_country, setIDVData]);
+
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
