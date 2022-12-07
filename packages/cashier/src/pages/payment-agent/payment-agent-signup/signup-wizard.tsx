@@ -71,9 +71,10 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 onSelect={setSelectedCountry}
                             />
                         </Wizard.Step>
+                        {/* TODO */}
                         <Wizard.Step
                             title={localize('Selfie verification')}
-                            is_submit_disabled={!steps_state.selfie?.selfie_with_id}
+                            is_submit_disabled={steps_state.selfie?.selfie_with_id}
                             is_fullwidth
                         >
                             <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />

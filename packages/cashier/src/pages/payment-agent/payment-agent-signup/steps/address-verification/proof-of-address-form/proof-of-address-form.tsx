@@ -37,12 +37,15 @@ type TProofOfAddressFormProps = {
     selected_country_id?: string;
 };
 
-const validate = (errors, values) => (fn, arr, err_msg) => {
-    arr.forEach(field => {
-        const value = values[field];
-        if (!fn(value) && !errors[field] && err_msg !== true) errors[field] = err_msg;
-    });
-};
+const validate =
+    (errors: Partial<TPOAFormValues>, values: TPOAFormValues) =>
+    (fn: (value: string) => string, arr: string[], err_msg: string) => {
+        arr.forEach(field => {
+            const value = values[field as keyof TPOAFormValues];
+            if (!fn(value as string) && !errors[field as keyof TPOAFormValues] && !!err_msg !== true)
+                errors[field as keyof TPOAFormValues] = err_msg;
+        });
+    };
 
 let file_uploader_ref = null;
 
@@ -50,11 +53,11 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
     const [form_values, setFormValues] = useStateCallback(address || {});
     const [form_state, setFormState] = useStateCallback({ should_show_form: true });
     const [document_file, setDocumentFile] = React.useState<TDropedFiles>({ files: [], error_message: null });
+    const [states_list, setStatesList] = React.useState<StatesList>();
     const [is_loading, setIsLoading] = React.useState(true);
     const {
         client: { fetchStatesList },
     } = useStore();
-    const [states_list, setStatesList] = React.useState<StatesList>();
 
     React.useEffect(() => {
         fetchStatesList(selected_country_id).then((response: StatesListResponse) => {
@@ -106,7 +109,7 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
         }
 
         // only add state/province validation for countries that don't have states list fetched from API
-        if (values.address_state && !validLetterSymbol(values.address_state) && states_list.length < 1) {
+        if (values.address_state && !validLetterSymbol(values.address_state) && states_list && states_list.length < 1) {
             errors.address_state = validation_letter_symbol_message;
         }
 
@@ -193,9 +196,13 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
                                                     label={localize('State/Province*')}
                                                     error={touched.address_state && errors.address_state}
                                                     list_items={states_list}
-                                                    onItemSelection={({ value, text }) =>
-                                                        setFieldValue('address_state', value ? text : '', true)
-                                                    }
+                                                    onItemSelection={({
+                                                        value,
+                                                        text,
+                                                    }: {
+                                                        value: string;
+                                                        text: string;
+                                                    }) => setFieldValue('address_state', value ? text : '', true)}
                                                 />
                                             )}
                                         </Field>

@@ -5,12 +5,12 @@ import ProofOfAddressForm from './proof-of-address-form';
 import type { TPOAFormValues } from './proof-of-address-form/proof-of-address-form';
 
 type TAddressVerificationProps = {
+    address?: TPOAFormValues;
     onSelect: React.ComponentProps<typeof ProofOfAddressForm>['onSelect'];
     selected_country_id: string;
-    address?: TPOAFormValues;
 };
 
-const AddressVerification = ({ onSelect, address, selected_country_id }: TAddressVerificationProps) => {
+const AddressVerification = ({ address, onSelect, selected_country_id }: TAddressVerificationProps) => {
     return (
         <React.Fragment>
             <DesktopWrapper>
