@@ -8,7 +8,7 @@ type TStepsState = {
         selfie_with_id: TSelfie;
     } | null;
     selected_country?: ResidenceList[number];
-    address?: TPOAFormValues;
+    address: TPOAFormValues;
 };
 
 const ACTION_TYPES = {
@@ -60,7 +60,7 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
         case ACTION_TYPES.SET_SELECTED_COUNTRY:
             return { ...state, selected_country: action.value };
         case ACTION_TYPES.SET_ADDRESS:
-            return { ...state, address: action.value };
+            return { ...state, address: action.value! };
         default:
             return state;
     }

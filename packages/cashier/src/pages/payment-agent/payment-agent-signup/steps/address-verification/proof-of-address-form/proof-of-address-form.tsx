@@ -1,15 +1,6 @@
 import React from 'react';
 import { StatesList, StatesListResponse } from '@deriv/api-types';
-import {
-    Autocomplete,
-    Input,
-    DesktopWrapper,
-    MobileWrapper,
-    SelectNative,
-    useStateCallback,
-    Text,
-    Loading,
-} from '@deriv/components';
+import { Autocomplete, Input, DesktopWrapper, MobileWrapper, SelectNative, Text, Loading } from '@deriv/components';
 import { Formik, Field, FieldProps } from 'formik';
 import { localize, Localize } from '@deriv/translations';
 import { WS, validAddress, validPostCode, validLetterSymbol, validLength } from '@deriv/shared';
@@ -32,7 +23,7 @@ type TDropedFiles = {
 };
 
 type TProofOfAddressFormProps = {
-    address?: TPOAFormValues;
+    address: TPOAFormValues;
     onSelect: (value: TPOAFormValues) => void;
     selected_country_id?: string;
 };
@@ -50,8 +41,6 @@ const validate =
 let file_uploader_ref = null;
 
 const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOfAddressFormProps) => {
-    const [form_values, setFormValues] = useStateCallback(address || {});
-    const [form_state, setFormState] = useStateCallback({ should_show_form: true });
     const [document_file, setDocumentFile] = React.useState<TDropedFiles>({ files: [], error_message: null });
     const [states_list, setStatesList] = React.useState<StatesList>();
     const [is_loading, setIsLoading] = React.useState(true);
@@ -66,7 +55,7 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
         });
     }, [selected_country_id, fetchStatesList]);
 
-    const { address_line_1, address_line_2, address_city, address_state, address_postcode } = form_values;
+    const { address_line_1, address_line_2, address_city, address_state, address_postcode } = address;
 
     const form_initial_values = {
         address_line_1,
@@ -77,51 +66,53 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
     };
 
     const validateFields = (values: TPOAFormValues) => {
-        setFormState({ ...form_state, ...{ should_allow_submit: false } });
         const errors: Partial<TPOAFormValues> = {};
         const validateValues = validate(errors, values);
-
-        const required_fields = ['address_line_1', 'address_city'];
-        validateValues(val => val, required_fields, localize('This field is required'));
-
         const permitted_characters = ". , ' : ; ( ) @ # / -";
-        const address_validation_message = localize(
-            'Use only the following special characters: {{ permitted_characters }}',
-            {
-                permitted_characters,
+        const required_fields = ['address_line_1', 'address_city'];
+        const error_msg = {
+            required: localize('This field is required'),
+            validation_letter_symbol_message: localize(
+                'Only letters, space, hyphen, period, and apostrophe are allowed.'
+            ),
+            address_validation_message: localize(
+                'Use only the following special characters: {{ permitted_characters }}',
+                {
+                    permitted_characters,
+                    interpolation: { escapeValue: false },
+                }
+            ),
+            address_postcode: localize('Only letters, numbers, space, and hyphen are allowed.'),
+            address_postcode_length: localize('Please enter a {{field_name}} under {{max_number}} characters.', {
+                field_name: localize('Postal/ZIP code'),
+                max_number: 20,
                 interpolation: { escapeValue: false },
-            }
-        );
+            }),
+        };
+
+        validateValues(val => val, required_fields, error_msg.required);
 
         if (values.address_line_1 && !validAddress(values.address_line_1)) {
-            errors.address_line_1 = address_validation_message;
+            errors.address_line_1 = error_msg.address_validation_message;
         }
         if (values.address_line_2 && !validAddress(values.address_line_2)) {
-            errors.address_line_2 = address_validation_message;
+            errors.address_line_2 = error_msg.address_validation_message;
         }
 
-        const validation_letter_symbol_message = localize(
-            'Only letters, space, hyphen, period, and apostrophe are allowed.'
-        );
-
         if (values.address_city && !validLetterSymbol(values.address_city)) {
-            errors.address_city = validation_letter_symbol_message;
+            errors.address_city = error_msg.validation_letter_symbol_message;
         }
 
         // only add state/province validation for countries that don't have states list fetched from API
         if (values.address_state && !validLetterSymbol(values.address_state) && states_list && states_list.length < 1) {
-            errors.address_state = validation_letter_symbol_message;
+            errors.address_state = error_msg.validation_letter_symbol_message;
         }
 
         if (values.address_postcode) {
             if (!validLength(values.address_postcode, { min: 0, max: 20 })) {
-                errors.address_postcode = localize('Please enter a {{field_name}} under {{max_number}} characters.', {
-                    field_name: localize('Postal/ZIP code'),
-                    max_number: 20,
-                    interpolation: { escapeValue: false },
-                });
+                errors.address_postcode = error_msg.address_postcode_length;
             } else if (!validPostCode(values.address_postcode)) {
-                errors.address_postcode = localize('Only letters, numbers, space, and hyphen are allowed.');
+                errors.address_postcode = error_msg.address_postcode;
             }
         }
 

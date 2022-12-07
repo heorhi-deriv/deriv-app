@@ -5,7 +5,7 @@ import ProofOfAddressForm from './proof-of-address-form';
 import type { TPOAFormValues } from './proof-of-address-form/proof-of-address-form';
 
 type TAddressVerificationProps = {
-    address?: TPOAFormValues;
+    address: TPOAFormValues;
     onSelect: React.ComponentProps<typeof ProofOfAddressForm>['onSelect'];
     selected_country_id: string;
 };
