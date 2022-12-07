@@ -8,8 +8,8 @@ import { TStepsState } from '../steps-reducer';
 import './identity-verification.scss';
 
 type TIdentityVerification = {
-    idv_values: TStepsState['idv_data']['values'];
-    manual_values: TStepsState['manual_data']['values'];
+    idv_data: TStepsState['idv_data'];
+    manual_data: TStepsState['manual_data'];
     selected_country: TStepsState['selected_country'];
     selected_manual_document_index: string;
     setIDVData: (value: TStepsState['idv_data']) => void;
@@ -19,8 +19,8 @@ type TIdentityVerification = {
 };
 
 const IdentityVerification = ({
-    idv_values,
-    manual_values,
+    idv_data,
+    manual_data,
     selected_country,
     selected_manual_document_index,
     setIDVData,
@@ -28,7 +28,10 @@ const IdentityVerification = ({
     setManualData,
     setSelectedManualDocumentIndex,
 }: TIdentityVerification) => {
-    const { client, notifications } = useStore();
+    const {
+        client,
+        notifications: { refreshNotifications },
+    } = useStore();
 
     const { account_status } = client;
     const {
@@ -40,7 +43,33 @@ const IdentityVerification = ({
             },
         },
     } = account_status;
-    const { refreshNotifications } = notifications;
+
+    const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
+
+    // reset IDV form if the user selects another country with IDV verification, if not we store IDV data for previous selected country
+    React.useEffect(() => {
+        if (is_idv_supported) {
+            // eslint-disable-next-line no-unused-expressions
+            selected_country?.value !== idv_data.country_code &&
+                setIDVData({
+                    values: {
+                        document_type: {
+                            id: '',
+                            text: '',
+                            value: '',
+                            example_format: '',
+                            sample_image: '',
+                        },
+                        document_number: '',
+                    },
+                    errors: {},
+                });
+        }
+    }, [selected_country, idv_data.country_code, is_idv_supported, setIDVData]);
+
+    React.useEffect(() => {
+        return () => setIsIdentitySubmissionDisabled(true);
+    }, [setIsIdentitySubmissionDisabled]);
 
     React.useEffect(() => {
         if (onfido_status !== 'none') setIsIdentitySubmissionDisabled(false);
@@ -62,9 +91,9 @@ const IdentityVerification = ({
             <ProofOfIdentityContainerForPaymentAgent
                 account_status={account_status}
                 height='auto'
-                idv_values={idv_values}
+                idv_data={idv_data}
                 is_from_external
-                manual_values={manual_values}
+                manual_data={manual_data}
                 refreshNotifications={refreshNotifications}
                 selected_country={selected_country}
                 setIDVData={setIDVData}

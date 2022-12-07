@@ -1,17 +1,7 @@
 import React from 'react';
 import DetailComponent from './detail-component.jsx';
-import { getDocumentIndex, DOCUMENT_TYPES } from './constants';
+import { getDocumentIndex } from './constants';
 import DocumentSelector from './document-selector';
-
-const checkNimcStep = documents => {
-    let has_nimc = false;
-    documents.forEach(document => {
-        if (document.document_type === DOCUMENT_TYPES.NIMC_SLIP) {
-            has_nimc = true;
-        }
-    });
-    return has_nimc;
-};
 
 export const UnsupportedForPA = ({
     country_code,
@@ -38,9 +28,7 @@ export const UnsupportedForPA = ({
             <DocumentSelector country_code={country_code} onChange={changeDocument} document_index={document_index} />
             {document_index && (
                 <DetailComponent
-                    is_onfido_supported={
-                        country_code === 'ng' && !checkNimcStep(documents[document_index].details.documents)
-                    }
+                    is_onfido_supported={false}
                     country_code={country_code}
                     document={documents[document_index]}
                     root_class='manual-poi'

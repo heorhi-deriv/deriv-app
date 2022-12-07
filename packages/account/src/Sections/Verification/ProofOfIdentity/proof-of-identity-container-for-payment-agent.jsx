@@ -6,9 +6,9 @@ import { populateVerificationStatus } from '../Helpers/verification';
 const ProofOfIdentityContainerForPaymentAgent = ({
     account_status,
     height,
-    idv_values,
+    idv_data,
     is_from_external,
-    manual_values,
+    manual_data,
     // onStateChange,
     refreshNotifications,
     selected_country,
@@ -33,11 +33,11 @@ const ProofOfIdentityContainerForPaymentAgent = ({
             height={height ?? null}
             identity_last_attempt={identity_last_attempt}
             idv={idv}
-            idv_values={idv_values}
+            idv_data={idv_data}
             is_from_external={!!is_from_external}
             is_idv_disallowed={is_idv_disallowed}
             manual={manual}
-            manual_values={manual_values}
+            manual_data={manual_data}
             needs_poa={needs_poa}
             onfido={onfido}
             onStateChange={() => {}}

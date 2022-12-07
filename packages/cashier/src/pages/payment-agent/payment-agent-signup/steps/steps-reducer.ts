@@ -49,6 +49,7 @@ export type TStepsState = {
             };
         };
         errors: { document_number?: string; document_type?: string };
+        country_code?: string;
     };
     manual_data: {
         values: TManualValues;
@@ -122,6 +123,7 @@ const initial_state = {
             document_type: { example_format: '', id: '', sample_image: '', text: '', value: '' },
         },
         errors: { document_number: '', document_type: '' },
+        country_code: '',
     },
     is_identity_submission_disabled: true,
     manual_data: { values: {}, errors: {} },
@@ -142,15 +144,19 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
         case ACTION_TYPES.SET_IDV_DATA: {
             return {
                 ...state,
-                idv_data: { values: { ...action.value.values }, errors: { ...action.value.errors } },
+                idv_data: {
+                    values: action.value.values,
+                    errors: action.value.errors,
+                    country_code: action.value.country_code,
+                },
                 is_identity_submission_disabled:
-                    !isEmptyObject(action.value.errors) || isEmptyObject(action.value.values),
+                    !isEmptyObject(action.value.errors) || !action.value.values.document_type.id,
             };
         }
         case ACTION_TYPES.SET_MANUAL_DATA: {
             return {
                 ...state,
-                manual_data: { values: { ...action.value.values }, errors: { ...action.value.errors } },
+                manual_data: { values: action.value.values, errors: action.value.errors },
                 is_identity_submission_disabled:
                     !isEmptyObject(action.value.errors) || isEmptyObject(action.value.values),
             };

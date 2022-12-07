@@ -29,24 +29,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
         setIsIdentitySubmissionDisabled,
     } = usePaymentAgentSignupReducer();
 
-    React.useEffect(() => {
-        if (steps_state.selected_country) {
-            setIDVData({
-                values: {
-                    document_type: {
-                        id: '',
-                        text: '',
-                        value: '',
-                        example_format: '',
-                        sample_image: '',
-                    },
-                    document_number: '',
-                },
-                errors: {},
-            });
-        }
-    }, [steps_state.selected_country, setIDVData]);
-
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
@@ -91,6 +73,7 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             title={localize('Country of issue')}
                             is_submit_disabled={!steps_state.selected_country?.value}
                             is_fullwidth
+                            step_key='Country of issue'
                         >
                             <CountryOfIssue
                                 selected_country={steps_state.selected_country}
@@ -101,10 +84,11 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             title={localize('Identity verification')}
                             is_submit_disabled={steps_state.is_identity_submission_disabled}
                             is_fullwidth
+                            step_key='Identity verification'
                         >
                             <IdentityVerification
-                                idv_values={steps_state.idv_data.values}
-                                manual_values={steps_state.manual_data.values}
+                                idv_data={steps_state.idv_data}
+                                manual_data={steps_state.manual_data}
                                 selected_country={steps_state.selected_country}
                                 selected_manual_document_index={steps_state.selected_manual_document_index}
                                 setIDVData={setIDVData}

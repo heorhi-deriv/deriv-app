@@ -100,7 +100,7 @@ export const IdvDocSubmitOnSignup = ({
             }
         }
 
-        setIDVData?.({ values, errors });
+        setIDVData?.({ values, errors, country_code });
 
         return errors;
     };

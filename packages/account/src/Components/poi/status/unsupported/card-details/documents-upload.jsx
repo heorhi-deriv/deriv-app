@@ -57,18 +57,22 @@ const DocumentsUpload = ({
     });
 
     // TODO: refactor nested ternary
-    // eslint-disable-next-line no-nested-ternary
-    const formik_initial_values = !is_pa_signup
-        ? initial_values || setInitialValues([...fields, ...documents])
-        : !isEmptyObject(manual_values)
-        ? manual_values
-        : setInitialValues([...fields, ...documents]);
+    const formik_initial_values = React.useMemo(
+        () =>
+            // eslint-disable-next-line no-nested-ternary
+            !is_pa_signup
+                ? initial_values || setInitialValues([...fields, ...documents])
+                : !isEmptyObject(manual_values)
+                ? manual_values
+                : setInitialValues([...fields, ...documents]),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
     React.useEffect(() => {
         if (is_pa_signup && isEmptyObject(manual_values))
             formik_ref?.current.resetForm({ values: setInitialValues([...fields, ...documents]) });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [is_pa_signup, fields, documents]);
+    }, [is_pa_signup, fields, documents, manual_values]);
 
     return (
         <div
@@ -81,6 +85,7 @@ const DocumentsUpload = ({
                 validate={values => validateFields(values, fields, documents, setManualData)}
                 onSubmit={onSubmit}
                 innerRef={formik_ref}
+                validateOnMount={is_pa_signup}
             >
                 {({ values, isValid, touched }) => {
                     const is_form_touched = Object.keys(touched).length > 0;

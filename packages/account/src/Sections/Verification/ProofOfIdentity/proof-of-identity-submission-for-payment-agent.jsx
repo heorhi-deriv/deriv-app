@@ -13,10 +13,10 @@ import { IdvDocSubmitOnSignup } from '../../../Components/poi/poi-form-on-signup
 const POISubmissionForPaymentAgent = ({
     has_idv_error,
     idv,
-    idv_values,
+    idv_data,
     is_from_external,
     is_idv_disallowed,
-    manual_values,
+    manual_data,
     onfido,
     onStateChange,
     refreshNotifications,
@@ -29,13 +29,13 @@ const POISubmissionForPaymentAgent = ({
     const [is_onfido_loading, setIsOnfidoLoading] = React.useState(true);
     const [submission_status, setSubmissionStatus] = React.useState(); // submitting
     const [submission_service, setSubmissionService] = React.useState();
+
     React.useEffect(() => {
         if (selected_country) {
             const { submissions_left: idv_submissions_left } = idv;
             const { submissions_left: onfido_submissions_left } = onfido;
+            const is_onfido_supported = selected_country.identity.services.onfido.is_country_supported;
             const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
-            const is_onfido_supported =
-                selected_country.identity.services.onfido.is_country_supported && selected_country.value !== 'ng';
             if (is_idv_supported && Number(idv_submissions_left) > 0 && !is_idv_disallowed) {
                 setSubmissionService(service_code.idv);
             } else if (onfido_submissions_left && is_onfido_supported) {
@@ -72,7 +72,7 @@ const POISubmissionForPaymentAgent = ({
 
     //TODO: change onfido.status === identity_status_codes.pending and remove identity_status_codes.verified
     if (
-        submission_service === service_code.onfido &&
+        [service_code.onfido, service_code.idv].includes(submission_service) &&
         [identity_status_codes.pending, identity_status_codes.verified].includes(onfido.status)
     ) {
         return <Submitted is_pa_signup />;
@@ -87,7 +87,7 @@ const POISubmissionForPaymentAgent = ({
                         has_idv_error={has_idv_error}
                         is_pa_signup
                         setIDVData={setIDVData}
-                        value={idv_values}
+                        value={idv_data.values}
                     />
                 );
             case service_code.onfido: {
@@ -124,7 +124,7 @@ const POISubmissionForPaymentAgent = ({
                         is_onfido_loading={is_onfido_loading}
                         is_pa_signup
                         is_from_external={is_from_external}
-                        manual_values={manual_values}
+                        manual_values={manual_data.values}
                         setIsOnfidoLoading={setIsOnfidoLoading}
                         setManualData={setManualData}
                         setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
