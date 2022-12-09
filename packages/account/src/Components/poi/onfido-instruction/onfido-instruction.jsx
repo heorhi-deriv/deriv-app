@@ -74,6 +74,11 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
                     setIsOnfidoLoading(false);
                     break;
                 }
+                case 'CROSS_DEVICE_INTRO':
+                case 'CROSS_DEVICE_GET_LINK': {
+                    setInstruction(<DocumentCaptureFront />);
+                    break;
+                }
                 case 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT': {
                     const onfido_back_btn = document.querySelector('.onfido-sdk-ui-NavigationBar-back');
                     onfido_back_btn?.addEventListener(
