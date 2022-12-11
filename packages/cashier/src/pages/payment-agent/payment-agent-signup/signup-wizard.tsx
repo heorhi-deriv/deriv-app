@@ -19,7 +19,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const { steps_state, setSelectedCountry, setSelfie, setAddress } = usePaymentAgentSignupReducer();
+    const { steps_state, setSelectedCountry, setSelfie, setAddress, setIsAddressVerificationDisabled } =
+        usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
@@ -71,7 +72,6 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                                 onSelect={setSelectedCountry}
                             />
                         </Wizard.Step>
-                        {/* TODO */}
                         <Wizard.Step
                             title={localize('Selfie verification')}
                             is_submit_disabled={!steps_state.selfie?.selfie_with_id}
@@ -79,11 +79,16 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                         >
                             <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
-                        <Wizard.Step title='Address verification' is_fullwidth>
+                        <Wizard.Step
+                            title='Address verification'
+                            is_submit_disabled={steps_state.address_verification_disabled}
+                            is_fullwidth
+                        >
                             <AddressVerification
                                 selected_country_id={steps_state.selected_country?.value || ''}
                                 address={steps_state.address}
                                 onSelect={setAddress}
+                                setIsAddressVerificationDisabled={setIsAddressVerificationDisabled}
                             />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>

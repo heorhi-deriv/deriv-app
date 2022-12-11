@@ -1,9 +1,9 @@
 import React from 'react';
 import { StatesList, StatesListResponse } from '@deriv/api-types';
+import { isEmptyObject, WS, validAddress, validPostCode, validLetterSymbol, validLength } from '@deriv/shared';
 import { Autocomplete, Input, DesktopWrapper, MobileWrapper, SelectNative, Text, Loading } from '@deriv/components';
 import { Formik, Field, FieldProps } from 'formik';
 import { localize, Localize } from '@deriv/translations';
-import { WS, validAddress, validPostCode, validLetterSymbol, validLength } from '@deriv/shared';
 import { useStore } from '../../../../../../hooks';
 import { FileUploaderContainer } from '@deriv/account';
 import { TReactChangeEvent } from 'Types';
@@ -17,14 +17,19 @@ export type TPOAFormValues = {
     address_postcode: string | number;
 };
 
-type TDropedFiles = {
+export type TAddress = TPOAFormValues & {
+    proof_of_address: TProofFiles | null;
+};
+
+type TProofFiles = {
     files: File[];
     error_message: string | null;
 };
 
 type TProofOfAddressFormProps = {
-    address: TPOAFormValues;
-    onSelect: (value: TPOAFormValues) => void;
+    address?: TAddress;
+    onSelect: (value: TAddress) => void;
+    setIsAddressVerificationDisabled: (value: boolean) => void;
     selected_country_id?: string;
 };
 
@@ -40,10 +45,18 @@ const validate =
 
 let file_uploader_ref = null;
 
-const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOfAddressFormProps) => {
-    const [document_file, setDocumentFile] = React.useState<TDropedFiles>({ files: [], error_message: null });
+const ProofOfAddressForm = ({
+    address,
+    onSelect,
+    setIsAddressVerificationDisabled,
+    selected_country_id,
+}: TProofOfAddressFormProps) => {
+    const [document_file, setDocumentFile] = React.useState<TProofFiles>(
+        address?.proof_of_address || { files: [], error_message: null }
+    );
     const [states_list, setStatesList] = React.useState<StatesList>();
     const [is_loading, setIsLoading] = React.useState(true);
+    const [is_form_filled, setIsFormFilled] = React.useState(false);
     const {
         client: { fetchStatesList },
     } = useStore();
@@ -55,7 +68,12 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
         });
     }, [selected_country_id, fetchStatesList]);
 
-    const { address_line_1, address_line_2, address_city, address_state, address_postcode } = address;
+    React.useEffect(() => {
+        setIsAddressVerificationDisabled(!document_file.files.length || !is_form_filled);
+    }, [is_form_filled, document_file, setIsAddressVerificationDisabled]);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { address_line_1, address_line_2, address_city, address_state, address_postcode } = address!;
 
     const form_initial_values = {
         address_line_1,
@@ -69,7 +87,7 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
         const errors: Partial<TPOAFormValues> = {};
         const validateValues = validate(errors, values);
         const permitted_characters = ". , ' : ; ( ) @ # / -";
-        const required_fields = ['address_line_1', 'address_city'];
+        const required_fields = ['address_line_1', 'address_city', 'address_state', 'address_postcode'];
         const error_msg = {
             required: localize('This field is required'),
             validation_letter_symbol_message: localize(
@@ -116,11 +134,25 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
             }
         }
 
+        onSelect({
+            ...values,
+            proof_of_address: document_file,
+        });
+        setIsFormFilled(
+            isEmptyObject(errors) &&
+                !Object.keys(values).some(
+                    key => required_fields.includes(key) && values[key as keyof TPOAFormValues] === ''
+                )
+        );
+
         return errors;
     };
 
     const onSubmitValues = (values: TPOAFormValues) => {
-        onSelect(values);
+        onSelect({
+            ...values,
+            proof_of_address: document_file,
+        });
     };
 
     if (is_loading) return <Loading is_fullscreen />;
@@ -262,9 +294,9 @@ const ProofOfAddressForm = ({ address, onSelect, selected_country_id }: TProofOf
                         <div className='pa-signup-wizard__step-form-container'>
                             <FileUploaderContainer
                                 onRef={(ref: unknown) => (file_uploader_ref = ref)}
-                                onFileDrop={(df: TDropedFiles) =>
-                                    setDocumentFile({ files: df.files, error_message: df.error_message })
-                                }
+                                onFileDrop={(df: TProofFiles) => {
+                                    setDocumentFile({ files: df.files, error_message: df.error_message });
+                                }}
                                 getSocket={WS.getSocket}
                             />
                         </div>

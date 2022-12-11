@@ -1,20 +1,22 @@
 import { useCallback, useReducer } from 'react';
 import { ResidenceList } from '@deriv/api-types';
 import { TSelfie } from './selfie/selfie';
-import type { TPOAFormValues } from './address-verification/proof-of-address-form/proof-of-address-form';
+import type { TAddress } from './address-verification/proof-of-address-form/proof-of-address-form';
 
 type TStepsState = {
     selfie: {
         selfie_with_id: TSelfie;
     } | null;
     selected_country?: ResidenceList[number];
-    address: TPOAFormValues;
+    address?: TAddress;
+    address_verification_disabled?: boolean;
 };
 
 const ACTION_TYPES = {
     SET_SELFIE: 'SET_SELFIE',
     SET_SELECTED_COUNTRY: 'SET_SELECTED_COUNTRY',
     SET_ADDRESS: 'SET_ADDRESS',
+    SET_ADDRESS_VERIFICATION_DISABLED: 'SET_ADDRESS_VERIFICATION_DISABLED',
 } as const;
 
 // Action creators
@@ -32,9 +34,16 @@ const setSelectedCountryAC = (value?: ResidenceList[number]) => {
     };
 };
 
-const setAddressAC = (value?: TPOAFormValues) => {
+const setAddressAC = (value?: TAddress) => {
     return {
         type: ACTION_TYPES.SET_ADDRESS,
+        value,
+    };
+};
+
+const setIsAddressVerificationDisabledAC = (value?: boolean) => {
+    return {
+        type: ACTION_TYPES.SET_ADDRESS_VERIFICATION_DISABLED,
         value,
     };
 };
@@ -49,7 +58,9 @@ const initial_state = {
         address_city: '',
         address_state: '',
         address_postcode: '',
+        proof_of_address: null,
     },
+    address_verification_disabled: true,
 };
 
 // Reducer
@@ -60,7 +71,9 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
         case ACTION_TYPES.SET_SELECTED_COUNTRY:
             return { ...state, selected_country: action.value };
         case ACTION_TYPES.SET_ADDRESS:
-            return { ...state, address: action.value! };
+            return { ...state, address: action.value };
+        case ACTION_TYPES.SET_ADDRESS_VERIFICATION_DISABLED:
+            return { ...state, address_verification_disabled: action.value };
         default:
             return state;
     }
@@ -74,9 +87,15 @@ export const usePaymentAgentSignupReducer = () => {
         (value?: ResidenceList[number]) => dispatch(setSelectedCountryAC(value)),
         []
     );
-    const setAddress = useCallback((value: TPOAFormValues) => dispatch(setAddressAC(value)), []);
+    const setAddress = useCallback((value: TAddress) => dispatch(setAddressAC(value)), []);
+    const setIsAddressVerificationDisabled = useCallback(
+        (value: boolean) => dispatch(setIsAddressVerificationDisabledAC(value)),
+        []
+    );
 
-    return { steps_state, setSelectedCountry, setSelfie, setAddress };
+    return { steps_state, setSelectedCountry, setSelfie, setAddress, setIsAddressVerificationDisabled };
 };
 
-type TActionsTypes = ReturnType<typeof setSelfieAC | typeof setSelectedCountryAC | typeof setAddressAC>;
+type TActionsTypes = ReturnType<
+    typeof setSelfieAC | typeof setSelectedCountryAC | typeof setAddressAC | typeof setIsAddressVerificationDisabledAC
+>;
