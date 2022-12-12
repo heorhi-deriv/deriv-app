@@ -8,10 +8,10 @@ const DocumentTypeSelect = () => {
             <Text as='p' size='xs' line-height='m'>
                 <Localize i18n_default_text="First, we'll need to verify your identity. Choose your preferred document for submission." />
             </Text>
-            <Text as='p' size='xs' line-height='m'>
+            <Text as='p' size='xs' line-height='m' color='less-prominent'>
                 <Localize
                     i18n_default_text='Note: Please ensure all your <0>personal details</0> are up-to-date before uploading the photo of your document.'
-                    components={[<Text key={0} size='xs' weight='bold' />]}
+                    components={[<Text key={0} size='xs' weight='bold' color='less-prominent' />]}
                 />
             </Text>
         </>
@@ -96,6 +96,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
                     setInstruction(<DocumentCaptureConfirmationBack />);
                     break;
                 }
+                case 'FACIAL_INTRO':
                 case 'FACIAL_CAPTURE': {
                     setInstruction(<FacialCapture />);
                     break;
@@ -122,7 +123,7 @@ const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
 
     React.useEffect(() => {}, []);
 
-    return <div className='payment-agent-poi__onfido-instruction__instruction'>{instruction}</div>;
+    return <div className='onfido-instruction__instruction'>{instruction}</div>;
 };
 
 export default React.memo(OnfidoInstruction);

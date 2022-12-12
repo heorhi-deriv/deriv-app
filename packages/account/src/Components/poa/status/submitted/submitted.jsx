@@ -12,20 +12,14 @@ export const Submitted = ({ is_pa_signup, needs_poi, is_description_enabled = tr
     const message = localize('Your proof of address was submitted successfully');
     if (is_pa_signup) {
         return (
-            <div className='payment-agent-poi__submission-container'>
+            <div className='submission-container'>
                 <Icon
                     icon='IcCheckmarkCircle'
                     custom_color='var(--status-success)'
                     size={72}
-                    className='payment-agent-poi__submission-container__icon'
+                    className='submission-container__icon'
                 />
-                <Text
-                    align='center'
-                    size='s'
-                    as='p'
-                    weight='bold'
-                    className='payment-agent-poi__submission-container__title'
-                >
+                <Text align='center' size='s' as='p' weight='bold' className='submission-container__title'>
                     {localize('Identity verification submitted successfully!')}
                 </Text>
                 <Text
@@ -33,7 +27,7 @@ export const Submitted = ({ is_pa_signup, needs_poi, is_description_enabled = tr
                     size='xxs'
                     as='p'
                     color='less-prominent'
-                    className='payment-agent-poi__submission-container__description'
+                    className='submission-container__description'
                 >
                     {localize(
                         'Note: As your identity verification is submitted and under review, you will not be able to make any further changes.'

@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Loading, Icon, Text } from '@deriv/components';
 import { localize } from '@deriv/translations';
@@ -7,7 +6,6 @@ import { WS } from '@deriv/shared';
 import { UploadComplete } from '../upload-complete/upload-complete';
 import PoiUnsupportedFailed from 'Components/poi-unsupported-failed';
 import uploadFile from 'Components/file-uploader-container/upload-file';
-import OnfidoInstruction from 'Components/poi/onfido-instruction';
 import OnfidoUpload from '../../../../Sections/Verification/ProofOfIdentity/onfido-sdk-view';
 
 import CardDetails from './card-details';
@@ -116,40 +114,26 @@ const DetailComponent = ({
                 <React.Fragment>
                     {is_onfido_supported ? (
                         <React.Fragment>
-                            {is_pa_signup ? (
-                                <OnfidoInstruction
-                                    document_index={document_index}
-                                    setIsOnfidoLoading={setIsOnfidoLoading}
-                                />
-                            ) : (
-                                <div className={`${root_class}__detail-header`} onClick={onClickBack}>
-                                    <Icon icon='IcArrowLeftBold' />
-                                    <Text
-                                        as='p'
-                                        size='xs'
-                                        weight='bold'
-                                        color='prominent'
-                                        className={`${root_class}__back-title`}
-                                    >
-                                        {localize('Back')}
-                                    </Text>
-                                </div>
-                            )}
-                            {is_onfido_loading && <Loading is_fullscreen={false} />}
-                            <div
-                                className={classNames({
-                                    'payment-agent-poi__onfido-container--hidden': is_onfido_loading,
-                                })}
-                            >
-                                <OnfidoUpload
-                                    country_code={country_code_key}
-                                    documents_supported={[document.onfido_name]}
-                                    handleComplete={is_mt5 ? handlePOIforMT5Complete : handleComplete}
-                                    height='auto'
-                                    is_from_external={is_from_external}
-                                    {...props}
-                                />
+                            <div className={`${root_class}__detail-header`} onClick={onClickBack}>
+                                <Icon icon='IcArrowLeftBold' />
+                                <Text
+                                    as='p'
+                                    size='xs'
+                                    weight='bold'
+                                    color='prominent'
+                                    className={`${root_class}__back-title`}
+                                >
+                                    {localize('Back')}
+                                </Text>
                             </div>
+                            <OnfidoUpload
+                                country_code={country_code_key}
+                                documents_supported={[document.onfido_name]}
+                                height={height ?? null}
+                                handleComplete={is_mt5 ? handlePOIforMT5Complete : handleComplete}
+                                is_from_external={false}
+                                {...props}
+                            />
                         </React.Fragment>
                     ) : (
                         <CardDetails

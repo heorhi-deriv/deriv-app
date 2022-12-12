@@ -65,6 +65,7 @@ const SignupSideNote = () => {
             payment_agents: { initial_deposit_per_country },
         },
         account_settings: { country_code },
+        account_status,
     } = client;
 
     const closeWizard = () => {
@@ -83,7 +84,7 @@ const SignupSideNote = () => {
     return (
         <>
             <Note note={note} />
-            {is_wizard_open && <SignupWizard closeWizard={closeWizard} />}
+            {is_wizard_open && <SignupWizard closeWizard={closeWizard} account_status={account_status} />}
         </>
     );
 };

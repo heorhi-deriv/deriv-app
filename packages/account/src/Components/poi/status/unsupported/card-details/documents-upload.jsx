@@ -106,8 +106,8 @@ const DocumentsUpload = ({
                                         <InputField key={field.name} data={field} />
                                     ))}
                                 </div>
-                                <div className={`${ROOT_CLASS}__divider`} />
-                                <Text as='h3' size='s' color='prominent'>
+                                {!is_pa_signup && <div className={`${ROOT_CLASS}__divider`} />}
+                                <Text as='h3' size='s' color='prominent' align={is_pa_signup ? 'center' : 'left'}>
                                     {documents_title}
                                 </Text>
                                 <div className={`${ROOT_CLASS}__uploaders-wrap`}>

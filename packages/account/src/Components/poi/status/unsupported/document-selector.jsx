@@ -19,8 +19,8 @@ const DocumentSelector = ({ country_code, onChange, document_index }) => {
     );
 
     return (
-        <>
-            <Text as='p' line-height='m' size='xs'>
+        <div className='unsupported-pa__document-selector'>
+            <Text as='p' line-height='m' size='xs' className='unsupported-pa__document-selector__header'>
                 {localize('Please select one of the following documents:')}
             </Text>
             <DesktopWrapper>
@@ -50,7 +50,7 @@ const DocumentSelector = ({ country_code, onChange, document_index }) => {
                     }
                 />
             </MobileWrapper>
-        </>
+        </div>
     );
 };
 

@@ -1,4 +1,5 @@
 import { Formik, Field } from 'formik';
+import classNames from 'classnames';
 import React from 'react';
 import { localize, Localize } from '@deriv/translations';
 import {
@@ -151,11 +152,20 @@ export const IdvDocSubmitOnSignup = ({
                             <ThemedScrollbars is_bypassed={is_pa_signup} height='calc(100vh - 80px'>
                                 <div className='details-form'>
                                     {is_pa_signup && (
-                                        <Text as='p' size='xs' color='prominent'>
-                                            {localize(
-                                                "First, we'll need to verify your identity. Choose your preferred document type from the drop-down arrow and enter the ID number."
-                                            )}
-                                        </Text>
+                                        <DesktopWrapper>
+                                            <Text
+                                                as='p'
+                                                size='xs'
+                                                color='prominent'
+                                                className={classNames({
+                                                    'pa-poi-form-on-signup__header': is_pa_signup,
+                                                })}
+                                            >
+                                                {localize(
+                                                    "First, we'll need to verify your identity. Choose your preferred document type from the drop-down arrow and enter the ID number."
+                                                )}
+                                            </Text>
+                                        </DesktopWrapper>
                                     )}
                                     <div className='poi-form-on-signup__fields'>
                                         <div className='proof-of-identity__container'>
@@ -171,7 +181,11 @@ export const IdvDocSubmitOnSignup = ({
                                                         : localize('Identity information')}
                                                 </Text>
                                             )}
-                                            <Text className='proof-of-identity__text btm-spacer' size='xs'>
+                                            <Text
+                                                className='proof-of-identity__text btm-spacer'
+                                                size='xs'
+                                                align={is_pa_signup ? 'center' : 'left'}
+                                            >
                                                 {localize('Please select the document type and enter the ID number.')}
                                             </Text>
                                             {has_idv_error && !is_doc_selected && (

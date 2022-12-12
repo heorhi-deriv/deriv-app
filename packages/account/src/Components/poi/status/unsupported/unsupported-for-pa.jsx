@@ -1,4 +1,6 @@
 import React from 'react';
+import { Text } from '@deriv/components';
+import { Localize } from '@deriv/translations';
 import DetailComponent from './detail-component.jsx';
 import { getDocumentIndex } from './constants';
 import DocumentSelector from './document-selector';
@@ -25,6 +27,12 @@ export const UnsupportedForPA = ({
 
     return (
         <>
+            <Text as='p' size='xs' line-height='m' className='unsupported-pa__header'>
+                <Localize i18n_default_text="First, we'll need to verify your identity. Choose your preferred document photo for verification." />
+            </Text>
+            <Text as='p' size='xs' line-height='m' color='less-prominent' className='unsupported-pa__header-note'>
+                <Localize i18n_default_text='Note: Please ensure all your personal details are up-to-date before uploading the photo of your document.' />
+            </Text>
             <DocumentSelector country_code={country_code} onChange={changeDocument} document_index={document_index} />
             {document_index && (
                 <DetailComponent

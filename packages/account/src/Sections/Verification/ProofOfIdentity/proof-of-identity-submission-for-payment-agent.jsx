@@ -56,20 +56,6 @@ const POISubmissionForPaymentAgent = ({
         });
     };
 
-    const handleIdvSubmit = values => {
-        const { document_number, document_type } = values;
-        const submit_data = {
-            identity_verification_document_add: 1,
-            document_number,
-            document_type: document_type.id,
-            issuing_country: selected_country.value,
-        };
-
-        WS.send(submit_data).then(() => {
-            handlePOIComplete();
-        });
-    };
-
     //TODO: change onfido.status === identity_status_codes.pending and remove identity_status_codes.verified
     if (
         [service_code.onfido, service_code.idv].includes(submission_service) &&
@@ -99,7 +85,7 @@ const POISubmissionForPaymentAgent = ({
                         {is_onfido_loading && <Loading is_fullscreen={false} />}
                         <div
                             className={classNames({
-                                'payment-agent-poi__onfido-container--hidden': is_onfido_loading,
+                                'onfido-pa-container--hidden': is_onfido_loading,
                             })}
                         >
                             <OnfidoInstruction setIsOnfidoLoading={setIsOnfidoLoading} />

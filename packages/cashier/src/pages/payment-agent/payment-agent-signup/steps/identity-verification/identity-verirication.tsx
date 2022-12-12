@@ -68,23 +68,15 @@ const IdentityVerification = ({
     }, [selected_country, idv_data.country_code, is_idv_supported, setIDVData]);
 
     React.useEffect(() => {
-        return () => setIsIdentitySubmissionDisabled(true);
-    }, [setIsIdentitySubmissionDisabled]);
-
-    React.useEffect(() => {
         if (onfido_status !== 'none') setIsIdentitySubmissionDisabled(false);
+
+        return () => setIsIdentitySubmissionDisabled(true);
     }, [onfido_status, setIsIdentitySubmissionDisabled]);
 
     return (
-        <>
+        <div className='pa-signup-poi-container'>
             <DesktopWrapper>
-                <Text
-                    as='h2'
-                    size='m'
-                    weight='bold'
-                    line-height='m'
-                    className='payment-agent-poi__onfido-instruction__header'
-                >
+                <Text as='h2' size='m' weight='bold' line-height='m' className='pa-signup-poi-container__header'>
                     {localize('Identity verification')}
                 </Text>
             </DesktopWrapper>
@@ -101,7 +93,7 @@ const IdentityVerification = ({
                 setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
                 selected_manual_document_index={selected_manual_document_index}
             />
-        </>
+        </div>
     );
 };
 
