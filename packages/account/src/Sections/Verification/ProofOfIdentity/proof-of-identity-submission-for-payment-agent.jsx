@@ -34,8 +34,8 @@ const POISubmissionForPaymentAgent = ({
         if (selected_country) {
             const { submissions_left: idv_submissions_left } = idv;
             const { submissions_left: onfido_submissions_left } = onfido;
-            const is_onfido_supported = selected_country.identity.services.onfido.is_country_supported;
-            const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
+            const is_onfido_supported = selected_country?.identity?.services?.onfido?.is_country_supported;
+            const is_idv_supported = selected_country?.identity?.services?.idv?.is_country_supported;
             if (is_idv_supported && Number(idv_submissions_left) > 0 && !is_idv_disallowed) {
                 setSubmissionService(service_code.idv);
             } else if (onfido_submissions_left && is_onfido_supported) {
@@ -57,10 +57,7 @@ const POISubmissionForPaymentAgent = ({
     };
 
     //TODO: change onfido.status === identity_status_codes.pending and remove identity_status_codes.verified
-    if (
-        [service_code.onfido, service_code.idv].includes(submission_service) &&
-        [identity_status_codes.pending, identity_status_codes.verified].includes(onfido.status)
-    ) {
+    if ([identity_status_codes.pending, identity_status_codes.verified].includes(onfido.status)) {
         return <Submitted is_pa_signup />;
     }
 
@@ -78,7 +75,7 @@ const POISubmissionForPaymentAgent = ({
                 );
             case service_code.onfido: {
                 const country_code = selected_country.value;
-                const doc_obj = selected_country.identity.services.onfido.documents_supported;
+                const doc_obj = selected_country?.identity?.services?.onfido?.documents_supported;
                 const documents_supported = Object.keys(doc_obj).map(d => doc_obj[d].display_name);
                 return (
                     <>

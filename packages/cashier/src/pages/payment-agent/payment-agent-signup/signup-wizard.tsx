@@ -56,9 +56,7 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
         setCurrentStepKey(_current_step_key);
     };
 
-    const is_idv_supported =
-        !isEmptyObject(steps_state.selected_country) &&
-        steps_state.selected_country.identity.services.idv.is_country_supported;
+    const is_idv_supported = steps_state?.selected_country?.identity?.services?.idv?.is_country_supported;
 
     // React.useEffect(() => {
     //     if (is_idv_supported && !['Country of issue', 'Identity verification'].includes(current_step_key)) {
@@ -80,7 +78,6 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
     //         WS.authorized.getAccountStatus();
     //     });
     // };
-
     if (wizard_root_el) {
         return createPortal(
             <>
@@ -116,12 +113,13 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
-                            is_submit_disabled={!steps_state.selected_country?.value}
+                            is_submit_disabled={!steps_state.selected_country?.value && onfido?.status !== 'pending'}
                             is_fullwidth
                             step_key='Country of issue'
                         >
                             <CountryOfIssue
                                 selected_country={steps_state.selected_country}
+                                onfido_status={onfido.status}
                                 onSelect={setSelectedCountry}
                             />
                         </Wizard.Step>

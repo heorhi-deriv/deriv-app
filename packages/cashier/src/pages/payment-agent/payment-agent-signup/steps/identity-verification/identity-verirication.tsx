@@ -44,7 +44,7 @@ const IdentityVerification = ({
         },
     } = account_status;
 
-    const is_idv_supported = selected_country.identity.services.idv.is_country_supported;
+    const is_idv_supported = selected_country?.identity?.services?.idv?.is_country_supported;
 
     // reset IDV form if the user selects another country with IDV verification, if not we store IDV data for previous selected country
     React.useEffect(() => {

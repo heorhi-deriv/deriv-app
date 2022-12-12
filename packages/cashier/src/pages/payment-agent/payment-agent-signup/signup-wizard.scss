@@ -22,5 +22,13 @@
                 width: 422px;
             }
         }
+        &-selector-hint {
+            margin: 2rem auto 0;
+            width: 422px;
+
+            @include mobile {
+                width: 100%;
+            }
+        }
     }
 }
