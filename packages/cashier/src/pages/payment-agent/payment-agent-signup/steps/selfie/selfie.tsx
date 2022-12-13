@@ -1,6 +1,6 @@
 import React from 'react';
 import { SelfieUpload } from '@deriv/account';
-import { DesktopWrapper, Loading, Text } from '@deriv/components';
+import { DesktopWrapper, Text } from '@deriv/components';
 import { localize } from '@deriv/translations';
 import './selfie.scss';
 
@@ -31,22 +31,11 @@ export type TSelfie = {
 
 type TSelfieStep = {
     idv_status: string;
-    is_idv_supported: boolean;
     selfie: { selfie_with_id: TSelfie } | null;
     onSelect: (value: TSelfie) => void;
 };
 
-const Selfie = ({ idv_status, is_idv_supported, selfie, onSelect }: TSelfieStep) => {
-    // const [is_loading, setIsLoading] = React.useState(false);
-
-    // React.useEffect(() => {
-    //     if (is_idv_supported) setIsLoading(true);
-    // }, []);
-
-    // if (is_loading) {
-    //     return <Loading is_fullscreen={false} />;
-    // }
-
+const Selfie = ({ idv_status, selfie, onSelect }: TSelfieStep) => {
     //TODO: change the description for the selfie depending on the step number
     return (
         <div className='pa-signup-selfie-container'>

@@ -3,11 +3,9 @@ import classNames from 'classnames';
 import { createPortal } from 'react-dom';
 import { GetAccountStatus } from '@deriv/api-types';
 import { Text } from '@deriv/components';
-import { isEmptyObject, WS } from '@deriv/shared';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from './components/cancel-wizard-dialog';
-import ApplicationStatusDialog from './components/application-status-dialog';
 import CountryOfIssue from './steps/country-of-issue';
 import IdentityVerification from './steps/identity-verification';
 import Selfie from './steps/selfie';
@@ -22,7 +20,6 @@ type TSignupWizardProps = {
 
 const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
-    const [is_application_status_dialog_active, setIsApplicationStatusDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
     const {
@@ -41,7 +38,7 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
 
     const verification_status = populateVerificationStatus(account_status);
 
-    const { idv, manual, onfido } = verification_status;
+    const { idv, onfido } = verification_status;
 
     const onClose = () => {
         setIsCancelWizardDialogActive(true);
@@ -56,28 +53,6 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
         setCurrentStepKey(_current_step_key);
     };
 
-    const is_idv_supported = steps_state?.selected_country?.identity?.services?.idv?.is_country_supported;
-
-    // React.useEffect(() => {
-    //     if (is_idv_supported && !['Country of issue', 'Identity verification'].includes(current_step_key)) {
-    //         console.log('send idv');
-    //         handleIdvSubmit();
-    //     }
-    // }, [is_idv_supported, current_step_key]);
-
-    // const handleIdvSubmit = () => {
-    //     const { document_number, document_type } = steps_state.idv_data.values;
-    //     const submit_data = {
-    //         identity_verification_document_add: 1,
-    //         document_number,
-    //         document_type: document_type.id,
-    //         issuing_country: steps_state.selected_country?.value,
-    //     };
-
-    //     WS.send(submit_data).then(() => {
-    //         WS.authorized.getAccountStatus();
-    //     });
-    // };
     if (wizard_root_el) {
         return createPortal(
             <>
@@ -86,19 +61,9 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
                     onConfirm={() => closeWizard()}
                     onCancel={() => setIsCancelWizardDialogActive(false)}
                 />
-                {/* <ApplicationStatusDialog
-                    is_visible={is_application_status_dialog_active}
-                    onClose={() => {
-                        setIsApplicationStatusDialogActive(false);
-                        closeWizard();
-                    }}
-                    status='pending_before_poi'
-                    onButtonClick={() => setIsApplicationStatusDialogActive(false)}
-                /> */}
                 <div
                     className={classNames('pa-signup-wizard', {
-                        'pa-signup-wizard--is-cancel-dialog-active':
-                            is_cancel_wizard_dialog_active || is_application_status_dialog_active,
+                        'pa-signup-wizard--is-cancel-dialog-active': is_cancel_wizard_dialog_active,
                     })}
                 >
                     <Wizard
@@ -146,12 +111,7 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
                             is_fullwidth
                             step_key='Selfie verification'
                         >
-                            <Selfie
-                                is_idv_supported={!!is_idv_supported}
-                                idv_status={idv.status}
-                                selfie={steps_state.selfie}
-                                onSelect={setSelfie}
-                            />
+                            <Selfie idv_status={idv.status} selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>
