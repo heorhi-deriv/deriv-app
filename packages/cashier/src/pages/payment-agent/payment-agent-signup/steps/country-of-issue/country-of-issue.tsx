@@ -5,11 +5,12 @@ import { Localize } from '@deriv/translations';
 import CountrySelector from './country-selector';
 
 type TCountrySelectorProps = {
+    onfido_status: string;
     onSelect: React.ComponentProps<typeof CountrySelector>['onSelect'];
     selected_country?: ResidenceList[number];
 };
 
-const CountryOfIssue = ({ onSelect, selected_country }: TCountrySelectorProps) => {
+const CountryOfIssue = ({ onfido_status, onSelect, selected_country }: TCountrySelectorProps) => {
     return (
         <>
             <DesktopWrapper>
@@ -25,6 +26,7 @@ const CountryOfIssue = ({ onSelect, selected_country }: TCountrySelectorProps) =
             </Text>
             <CountrySelector
                 className='pa-signup-wizard__step-country-dropdown'
+                onfido_status={onfido_status}
                 selected_country={selected_country}
                 onSelect={onSelect}
             />

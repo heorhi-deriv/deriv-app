@@ -9,21 +9,6 @@ import Uploader from './uploader.jsx';
 import { setInitialValues, validateFields } from './utils';
 import { ROOT_CLASS, SELFIE_DOCUMENT } from '../constants';
 
-const PaymentAgentSignupSelfieHeader = () => {
-    return (
-        <>
-            {!isMobile() ? (
-                <Text as='h2' size='m' weight='bold' color='prominent'>
-                    {localize('Selfie verification')}
-                </Text>
-            ) : null}
-            <Text as='p' size='xs' color='prominent'>
-                {localize("First, we'll need to verify your identity. Please upload your selfie here.")}
-            </Text>
-        </>
-    );
-};
-
 const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileDrop }) => {
     return (
         <div
@@ -43,9 +28,7 @@ const SelfieUpload = ({ initial_values, is_pa_signup, goBack, onConfirm, onFileD
                     return (
                         <Form className={`${ROOT_CLASS}__form`}>
                             <div className={`${ROOT_CLASS}__fields-content`}>
-                                {is_pa_signup ? (
-                                    <PaymentAgentSignupSelfieHeader />
-                                ) : (
+                                {!is_pa_signup && (
                                     <Text as='h3' size='s' weight='bold' color='prominent'>
                                         {localize('Upload your selfie')}
                                     </Text>
@@ -108,7 +91,5 @@ SelfieUpload.propTypes = {
     onFileDrop: PropTypes.func,
     onConfirm: PropTypes.func,
 };
-
-PaymentAgentSignupSelfieHeader.displayName = 'PaymentAgentSignupSelfieHeader';
 
 export default SelfieUpload;

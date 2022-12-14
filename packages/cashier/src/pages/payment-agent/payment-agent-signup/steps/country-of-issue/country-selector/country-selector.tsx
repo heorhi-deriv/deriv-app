@@ -1,13 +1,14 @@
 import React from 'react';
 import { ResidenceList } from '@deriv/api-types';
 import { Formik, Field, FieldProps } from 'formik';
-import { Autocomplete, DesktopWrapper, MobileWrapper, SelectNative } from '@deriv/components';
-import { localize } from '@deriv/translations';
+import { Autocomplete, DesktopWrapper, MobileWrapper, SelectNative, Text } from '@deriv/components';
+import { Localize, localize } from '@deriv/translations';
 import { useStore } from '../../../../../../hooks';
 import { TReactChangeEvent } from 'Types';
 import { observer } from 'mobx-react';
 
 type TCountrySelectorProps = {
+    onfido_status: string;
     onSelect: (value?: ResidenceList[number]) => void;
     selected_country?: ResidenceList[number];
     className: string;
@@ -17,7 +18,7 @@ type TValues = {
     country_input: string;
 };
 
-const CountrySelector = ({ onSelect, className, selected_country }: TCountrySelectorProps) => {
+const CountrySelector = ({ onfido_status, onSelect, className, selected_country }: TCountrySelectorProps) => {
     const {
         client: { residence_list },
     } = useStore();
@@ -58,11 +59,13 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
                                         <Autocomplete
                                             {...field}
                                             name='country_input'
+                                            placeholder={onfido_status === 'pending' && localize('Country')}
                                             className='is-desktop'
+                                            disabled={onfido_status === 'pending'}
                                             error={touched.country_input && errors.country_input}
                                             autoComplete='off'
                                             type='text'
-                                            label={localize('Country')}
+                                            label={onfido_status !== 'pending' && localize('Country')}
                                             list_items={residence_list}
                                             value={values.country_input}
                                             onBlur={(e: TReactChangeEvent) => {
@@ -86,6 +89,7 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
                                             {...field}
                                             name='country_input'
                                             className='is-mobile'
+                                            disabled={onfido_status === 'pending'}
                                             error={touched.country_input && errors.country_input}
                                             label={localize('Country')}
                                             placeholder={localize('Please select')}
@@ -103,6 +107,17 @@ const CountrySelector = ({ onSelect, className, selected_country }: TCountrySele
                             )}
                         </Field>
                     </fieldset>
+                    {onfido_status === 'pending' && (
+                        <Text
+                            as='p'
+                            size='xs'
+                            color='less-prominent'
+                            line-height='m'
+                            className='pa-signup-wizard__step-selector-hint'
+                        >
+                            <Localize i18n_default_text='Note: As proof of identity has been submitted, you’ll not be able to edit the country of issue.' />
+                        </Text>
+                    )}
                 </div>
             )}
         </Formik>
