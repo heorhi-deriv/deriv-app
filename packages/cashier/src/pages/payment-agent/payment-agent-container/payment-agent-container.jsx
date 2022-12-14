@@ -93,14 +93,14 @@ const PaymentAgentContainer = ({
                     <SideNote has_title={false} is_mobile>
                         <PaymentAgentDisclaimer />
                     </SideNote>
+                    <SideNote has_title is_mobile>
+                        <MissingPaymentMethodNote />
+                    </SideNote>
                     <SideNote has_title={false} is_mobile>
                         <PaymentAgentSignupSideNote />
                     </SideNote>
                 </>
             )}
-            <SideNote className='payment-agent-list__side-note-second' has_title={false} is_mobile>
-                <MissingPaymentMethodNote />
-            </SideNote>
             <div className='payment-agent-list__list-header'>
                 {is_deposit ? (
                     <Text as='p' line_height='s' size='xs'>

@@ -47,7 +47,7 @@ const CashierOnboardingSideNote = ({ is_crypto }) => {
 
     return (
         <div>
-            <Text className='cashier-onboarding-side-note__text' color='prominent' weight='bold' sixe='xs' as='p'>
+            <Text className='cashier-onboarding-side-note__text' color='prominent' weight='bold' size='xs' as='p'>
                 {is_crypto ? (
                     <Localize i18n_default_text='This is your {{currency_code}} account.' values={{ currency_code }} />
                 ) : (

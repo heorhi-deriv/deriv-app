@@ -30,7 +30,7 @@ const SideNoteTitle = ({ children_length, side_notes_length, title }: TSideNoteT
     const length_of_notes = children_length || side_notes_length || 0;
 
     return (
-        <Text className='side-note__title' weight='bold' as='p'>
+        <Text className='side-note__title' weight='bold' as='p' size='xs'>
             {title ||
                 (length_of_notes > 1 ? <Localize i18n_default_text='Notes' /> : <Localize i18n_default_text='Note' />)}
         </Text>

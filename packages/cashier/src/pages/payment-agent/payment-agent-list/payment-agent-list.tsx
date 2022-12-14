@@ -11,6 +11,7 @@ import DepositTab from './deposit-tab';
 import WithdrawalTab from './withdrawal-tab';
 import MissingPaymentMethodNote from '../missing-payment-method-note';
 import PaymentAgentDisclaimer from '../payment-agent-disclaimer';
+import { PaymentAgentSignupSideNote } from '../payment-agent-signup/components/signup-side-note';
 import './payment-agent-list.scss';
 
 type TProps = {
@@ -27,8 +28,11 @@ const PaymentAgentList = ({ setSideNotes }: TProps) => {
                 <SideNote has_title={false} key={0}>
                     <PaymentAgentDisclaimer />
                 </SideNote>,
-                <SideNote has_title={false} key={0}>
+                <SideNote has_title key={1}>
                     <MissingPaymentMethodNote />
+                </SideNote>,
+                <SideNote has_title={false} key={2}>
+                    <PaymentAgentSignupSideNote />
                 </SideNote>,
             ]);
         } else {
