@@ -4,7 +4,7 @@ import { isEmptyObject, WS, validAddress, validPostCode, validLetterSymbol, vali
 import { Autocomplete, Input, DesktopWrapper, MobileWrapper, SelectNative, Text, Loading } from '@deriv/components';
 import { Formik, Field, FieldProps } from 'formik';
 import { localize, Localize } from '@deriv/translations';
-import { useStore } from '../../../../../../hooks';
+import { useStore } from '@deriv/stores';
 import { FileUploaderContainer } from '@deriv/account';
 import { TReactChangeEvent } from 'Types';
 import './proof-of-address-form.scss';
