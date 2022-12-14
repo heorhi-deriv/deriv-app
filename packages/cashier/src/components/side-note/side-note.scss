@@ -6,7 +6,7 @@
         color: var(--text-general);
         font-size: var(--text-size-xxs);
         line-height: 1.5;
-        margin: 2.4rem 0;
+        margin: 1.6rem 0;
         width: auto;
         text-align: left;
 
@@ -31,5 +31,8 @@
             display: flex;
             margin-top: 1.1rem;
         }
+    }
+    &__title {
+        margin-bottom: 0.8rem;
     }
 }

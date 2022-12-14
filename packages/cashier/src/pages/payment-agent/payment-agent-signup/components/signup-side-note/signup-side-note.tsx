@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Button, Icon, Text } from '@deriv/components';
 import getNote from './signup-side-note-provider';
 import { useHistory } from 'react-router';
-import { useStore } from '../../../../../hooks';
+import { useStore } from '@deriv/stores';
 import SignupWizard from '../../signup-wizard';
 import './signup-side-note.scss';
 
@@ -25,15 +25,15 @@ const Note = ({ note }: { note: TNote }) => {
         <div className='signup-side-note'>
             <div className='signup-side-note__header'>
                 {note.icon && <Icon icon={note.icon} size={16} custom_color={note.icon_color} />}
-                <Text as='p' color={note.title_color} size='xxs' line-height='m' weight='bold'>
+                <Text as='p' color={note.title_color} size='xs' line-height='m' weight='bold'>
                     {note.title}
                 </Text>
             </div>
-            <Text as='p' className='signup-side-note__description' size='xxxs' line-height='s'>
+            <Text as='p' className='signup-side-note__description' size='xxs' line-height='s'>
                 {note.description}
             </Text>
             {note.tip && (
-                <Text as='p' className='signup-side-note__tip' size='xxxs' line-height='s'>
+                <Text as='p' className='signup-side-note__tip' size='xxs' line-height='s'>
                     {note.tip}
                 </Text>
             )}

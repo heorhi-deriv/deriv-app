@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { ProofOfIdentityContainerForPaymentAgent } from '@deriv/account';
 import { Text, DesktopWrapper } from '@deriv/components';
 import { localize } from '@deriv/translations';
-import { useStore } from '../../../../../hooks';
+import { useStore } from '@deriv/stores';
 import { TStepsState } from '../steps-reducer';
 import './identity-verification.scss';
 
