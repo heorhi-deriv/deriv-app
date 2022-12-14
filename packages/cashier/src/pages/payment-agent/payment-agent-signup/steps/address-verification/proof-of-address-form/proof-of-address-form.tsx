@@ -295,6 +295,10 @@ const ProofOfAddressForm = ({
                             <FileUploaderContainer
                                 onRef={(ref: unknown) => (file_uploader_ref = ref)}
                                 onFileDrop={(df: TProofFiles) => {
+                                    onSelect({
+                                        ...address!,
+                                        proof_of_address: { files: df.files, error_message: df.error_message },
+                                    });
                                     setDocumentFile({ files: df.files, error_message: df.error_message });
                                 }}
                                 getSocket={WS.getSocket}
