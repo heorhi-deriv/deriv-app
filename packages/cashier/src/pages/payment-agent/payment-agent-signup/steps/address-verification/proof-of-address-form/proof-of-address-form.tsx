@@ -302,6 +302,7 @@ const ProofOfAddressForm = ({
                                     setDocumentFile({ files: df.files, error_message: df.error_message });
                                 }}
                                 getSocket={WS.getSocket}
+                                values={address?.proof_of_address?.files}
                             />
                         </div>
                     </div>
