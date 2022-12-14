@@ -63,56 +63,47 @@ export type TStepsState = {
     } | null;
 };
 
-const ACTION_TYPES = {
-    SET_IDV_DATA: 'SET_IDV_DATA',
-    SET_IS_IDENTITY_SUBMISSION_DISABLED: 'SET_IS_IDENTITY_SUBMISSION_DISABLED',
-    SET_MANUAL_DATA: 'SET_MANUAL_DATA',
-    SET_SELFIE: 'SET_SELFIE',
-    SET_SELECTED_COUNTRY: 'SET_SELECTED_COUNTRY',
-    SET_SELECTED_MANUAL_DOCUMENT_INDEX: 'SET_SELECTED_MANUAL_DOCUMENT_INDEX',
-} as const;
-
 // Action creators
 const setSelfieAC = (value: TSelfie) => {
     return {
-        type: ACTION_TYPES.SET_SELFIE,
+        type: 'SET_SELFIE',
         value,
-    };
+    } as const;
 };
 
 const setSelectedCountryAC = (value?: ResidenceList[number]) => {
     return {
-        type: ACTION_TYPES.SET_SELECTED_COUNTRY,
+        type: 'SET_SELECTED_COUNTRY',
         value,
-    };
+    } as const;
 };
 
 const setIDVDataAC = (value: TStepsState['idv_data']) => {
     return {
-        type: ACTION_TYPES.SET_IDV_DATA,
+        type: 'SET_IDV_DATA',
         value,
-    };
+    } as const;
 };
 
 const setIsIdentitySubmissionDisabledAC = (value: boolean) => {
     return {
-        type: ACTION_TYPES.SET_IS_IDENTITY_SUBMISSION_DISABLED,
+        type: 'SET_IS_IDENTITY_SUBMISSION_DISABLED',
         value,
-    };
+    } as const;
 };
 
 const setManualDataAC = (value: TStepsState['manual_data']) => {
     return {
-        type: ACTION_TYPES.SET_MANUAL_DATA,
+        type: 'SET_MANUAL_DATA',
         value,
-    };
+    } as const;
 };
 
 const setSelectedManualDocumentIndexAC = (value: string) => {
     return {
-        type: ACTION_TYPES.SET_SELECTED_MANUAL_DOCUMENT_INDEX,
+        type: 'SET_SELECTED_MANUAL_DOCUMENT_INDEX',
         value,
-    };
+    } as const;
 };
 
 // Initial state
@@ -135,13 +126,13 @@ const initial_state = {
 // Reducer
 const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState => {
     switch (action.type) {
-        case ACTION_TYPES.SET_SELFIE:
+        case 'SET_SELFIE':
             return { ...state, selfie: { selfie_with_id: action.value } };
-        case ACTION_TYPES.SET_SELECTED_COUNTRY:
+        case 'SET_SELECTED_COUNTRY':
             return { ...state, selected_country: action.value };
-        case ACTION_TYPES.SET_IS_IDENTITY_SUBMISSION_DISABLED:
+        case 'SET_IS_IDENTITY_SUBMISSION_DISABLED':
             return { ...state, is_identity_submission_disabled: action.value };
-        case ACTION_TYPES.SET_IDV_DATA: {
+        case 'SET_IDV_DATA': {
             return {
                 ...state,
                 idv_data: {
@@ -153,7 +144,7 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
                     !isEmptyObject(action.value.errors) || !action.value.values.document_type.id,
             };
         }
-        case ACTION_TYPES.SET_MANUAL_DATA: {
+        case 'SET_MANUAL_DATA': {
             return {
                 ...state,
                 manual_data: { values: action.value.values, errors: action.value.errors },
@@ -161,7 +152,7 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
                     !isEmptyObject(action.value.errors) || isEmptyObject(action.value.values),
             };
         }
-        case ACTION_TYPES.SET_SELECTED_MANUAL_DOCUMENT_INDEX:
+        case 'SET_SELECTED_MANUAL_DOCUMENT_INDEX':
             return { ...state, selected_manual_document_index: action.value };
         default:
             return state;
