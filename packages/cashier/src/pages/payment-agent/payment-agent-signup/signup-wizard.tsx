@@ -1,28 +1,44 @@
 import React from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
+import { GetAccountStatus } from '@deriv/api-types';
 import { Text } from '@deriv/components';
 import { Localize, localize } from '@deriv/translations';
 import { Wizard } from '@deriv/ui';
 import CancelWizardDialog from './components/cancel-wizard-dialog';
 import CountryOfIssue from './steps/country-of-issue';
+import IdentityVerification from './steps/identity-verification';
 import Selfie from './steps/selfie';
+import { populateVerificationStatus } from './helpers/verification';
 import { usePaymentAgentSignupReducer } from './steps/steps-reducer';
 import './signup-wizard.scss';
 
 type TSignupWizardProps = {
+    account_status: GetAccountStatus;
     closeWizard: VoidFunction;
 };
 
-const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
+const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
     const [is_cancel_wizard_dialog_active, setIsCancelWizardDialogActive] = React.useState(false);
     const [current_step_key, setCurrentStepKey] = React.useState<string>();
 
-    const { steps_state, setSelectedCountry, setSelfie } = usePaymentAgentSignupReducer();
+    const {
+        steps_state,
+        setSelectedCountry,
+        setSelectedManualDocumentIndex,
+        setSelfie,
+        setIDVData,
+        setManualData,
+        setIsIdentitySubmissionDisabled,
+    } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
 
     const wizard_root_el = document.getElementById('wizard_root');
+
+    const verification_status = populateVerificationStatus(account_status);
+
+    const { idv, onfido } = verification_status;
 
     const onClose = () => {
         setIsCancelWizardDialogActive(true);
@@ -62,20 +78,40 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                     >
                         <Wizard.Step
                             title={localize('Country of issue')}
-                            is_submit_disabled={!steps_state.selected_country?.value}
+                            is_submit_disabled={!steps_state.selected_country?.value && onfido?.status !== 'pending'}
                             is_fullwidth
+                            step_key='Country of issue'
                         >
                             <CountryOfIssue
                                 selected_country={steps_state.selected_country}
+                                onfido_status={onfido.status}
                                 onSelect={setSelectedCountry}
+                            />
+                        </Wizard.Step>
+                        <Wizard.Step
+                            title={localize('Identity verification')}
+                            is_submit_disabled={steps_state.is_identity_submission_disabled}
+                            is_fullwidth
+                            step_key='Identity verification'
+                        >
+                            <IdentityVerification
+                                idv_data={steps_state.idv_data}
+                                manual_data={steps_state.manual_data}
+                                selected_country={steps_state.selected_country}
+                                selected_manual_document_index={steps_state.selected_manual_document_index}
+                                setIDVData={setIDVData}
+                                setIsIdentitySubmissionDisabled={setIsIdentitySubmissionDisabled}
+                                setManualData={setManualData}
+                                setSelectedManualDocumentIndex={setSelectedManualDocumentIndex}
                             />
                         </Wizard.Step>
                         <Wizard.Step
                             title={localize('Selfie verification')}
                             is_submit_disabled={!steps_state.selfie?.selfie_with_id}
                             is_fullwidth
+                            step_key='Selfie verification'
                         >
-                            <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />
+                            <Selfie idv_status={idv.status} selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

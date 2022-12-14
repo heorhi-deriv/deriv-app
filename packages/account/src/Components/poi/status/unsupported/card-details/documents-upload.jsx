@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { localize } from '@deriv/translations';
-import { isMobile } from '@deriv/shared';
+import { isMobile, isEmptyObject } from '@deriv/shared';
 import { Button, Icon, Text } from '@deriv/components';
 import InputField from './input-field.jsx';
 import Uploader from './uploader.jsx';
@@ -38,12 +38,41 @@ const IconsItem = ({ data }) => (
     </div>
 );
 
-const DocumentsUpload = ({ initial_values, is_from_external, data, goToCards, onSubmit }) => {
+const DocumentsUpload = ({
+    initial_values,
+    is_pa_signup,
+    is_from_external,
+    data,
+    goToCards,
+    onSubmit,
+    manual_values,
+    setManualData,
+}) => {
+    const formik_ref = React.useRef();
+
     const { fields, documents_title, documents } = data;
 
     const fields_title = localize('First, enter your {{label}} and the expiry date.', {
         label: fields[0].label,
     });
+
+    // TODO: refactor nested ternary
+    const formik_initial_values = React.useMemo(
+        () =>
+            // eslint-disable-next-line no-nested-ternary
+            !is_pa_signup
+                ? initial_values || setInitialValues([...fields, ...documents])
+                : !isEmptyObject(manual_values)
+                ? manual_values
+                : setInitialValues([...fields, ...documents]),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
+
+    React.useEffect(() => {
+        if (is_pa_signup && isEmptyObject(manual_values))
+            formik_ref?.current.resetForm({ values: setInitialValues([...fields, ...documents]) });
+    }, [is_pa_signup, fields, documents, manual_values]);
 
     return (
         <div
@@ -52,9 +81,11 @@ const DocumentsUpload = ({ initial_values, is_from_external, data, goToCards, on
             })}
         >
             <Formik
-                initialValues={initial_values || setInitialValues([...fields, ...documents])}
-                validate={values => validateFields(values, fields, documents)}
+                initialValues={formik_initial_values}
+                validate={values => validateFields(values, fields, documents, setManualData)}
                 onSubmit={onSubmit}
+                innerRef={formik_ref}
+                validateOnMount={is_pa_signup}
             >
                 {({ values, isValid, touched }) => {
                     const is_form_touched = Object.keys(touched).length > 0;
@@ -65,16 +96,18 @@ const DocumentsUpload = ({ initial_values, is_from_external, data, goToCards, on
                     return (
                         <Form className={`${ROOT_CLASS}__form`}>
                             <div className={`${ROOT_CLASS}__fields-content`}>
-                                <Text as='h3' size='s' color='prominent'>
-                                    {fields_title}
-                                </Text>
+                                {!is_pa_signup && (
+                                    <Text as='h3' size='s' color='prominent'>
+                                        {fields_title}
+                                    </Text>
+                                )}
                                 <div className={`${ROOT_CLASS}__fields-wrap`}>
                                     {fields.map(field => (
                                         <InputField key={field.name} data={field} />
                                     ))}
                                 </div>
-                                <div className={`${ROOT_CLASS}__divider`} />
-                                <Text as='h3' size='s' color='prominent'>
+                                {!is_pa_signup && <div className={`${ROOT_CLASS}__divider`} />}
+                                <Text as='h3' size='s' color='prominent' align={is_pa_signup ? 'center' : 'left'}>
                                     {documents_title}
                                 </Text>
                                 <div className={`${ROOT_CLASS}__uploaders-wrap`}>
@@ -93,22 +126,24 @@ const DocumentsUpload = ({ initial_values, is_from_external, data, goToCards, on
                                     ))}
                                 </div>
                             </div>
-                            <div className={`${ROOT_CLASS}__btns`}>
-                                <Button
-                                    onClick={goToCards}
-                                    secondary
-                                    large
-                                    text={localize('Go back')}
-                                    icon={<Icon icon={'IcButtonBack'} size={16} />}
-                                />
-                                <Button
-                                    type='submit'
-                                    primary
-                                    large
-                                    is_disabled={!isValid || (!is_form_touched && is_form_empty)}
-                                    text={localize('Next')}
-                                />
-                            </div>
+                            {!is_pa_signup && (
+                                <div className={`${ROOT_CLASS}__btns`}>
+                                    <Button
+                                        onClick={goToCards}
+                                        secondary
+                                        large
+                                        text={localize('Go back')}
+                                        icon={<Icon icon={'IcButtonBack'} size={16} />}
+                                    />
+                                    <Button
+                                        type='submit'
+                                        primary
+                                        large
+                                        is_disabled={!isValid || (!is_form_touched && is_form_empty)}
+                                        text={localize('Next')}
+                                    />
+                                </div>
+                            )}
                         </Form>
                     );
                 }}
@@ -118,9 +153,14 @@ const DocumentsUpload = ({ initial_values, is_from_external, data, goToCards, on
 };
 
 DocumentsUpload.propTypes = {
-    initial_values: PropTypes.object,
     data: PropTypes.object,
+    initial_values: PropTypes.object,
+    is_from_external: PropTypes.bool,
+    is_pa_signup: PropTypes.bool,
+    manual_values: PropTypes.object,
     goToCards: PropTypes.func,
     onSubmit: PropTypes.func,
+    document_index: PropTypes.string,
+    setManualData: PropTypes.func,
 };
 export default DocumentsUpload;

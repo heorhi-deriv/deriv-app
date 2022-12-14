@@ -52,6 +52,8 @@ module.exports = function (env) {
             'proof-of-identity-form-on-signup': 'Components/poi/poi-form-on-signup',
             'proof-of-identity-container-for-mt5':
                 'Sections/Verification/ProofOfIdentity/proof-of-identity-container-for-mt5',
+            'proof-of-identity-container-for-payment-agent':
+                'Sections/Verification/ProofOfIdentity/proof-of-identity-container-for-payment-agent',
             'poi-poa-docs-submitted': 'Components/poi-poa-docs-submitted/poi-poa-docs-submitted.jsx',
             'reset-trading-password-modal': 'Components/reset-trading-password-modal',
             'risk-tolerance-warning-modal': 'Components/trading-assessment/risk-tolerance-warning-modal.jsx',

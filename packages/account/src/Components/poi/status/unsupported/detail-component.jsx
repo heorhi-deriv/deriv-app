@@ -18,19 +18,25 @@ const STATUS = {
 };
 
 const DetailComponent = ({
-    document,
-    onClickBack,
-    root_class,
     country_code_key,
+    document,
     documents_supported,
-    onfido_service_token,
-    height,
     handleComplete,
-    is_onfido_supported,
-    is_from_external,
-    setIsCfdPoiCompleted,
-    is_mt5,
     handlePOIforMT5Complete,
+    height,
+    is_from_external,
+    is_mt5,
+    is_onfido_loading,
+    is_onfido_supported,
+    is_pa_signup,
+    manual_values,
+    onClickBack,
+    onfido_service_token,
+    root_class,
+    document_index,
+    setIsCfdPoiCompleted,
+    setManualData,
+    setIsOnfidoLoading,
     ...props
 }) => {
     const [status, setStatus] = React.useState();
@@ -132,10 +138,13 @@ const DetailComponent = ({
                     ) : (
                         <CardDetails
                             data={document.details}
-                            onComplete={onComplete}
                             goToCards={onClickBack}
                             is_from_external={is_from_external}
+                            is_pa_signup={is_pa_signup}
+                            manual_values={manual_values}
+                            onComplete={onComplete}
                             setIsCfdPoiCompleted={setIsCfdPoiCompleted}
+                            setManualData={setManualData}
                         />
                     )}
                 </React.Fragment>
@@ -144,13 +153,21 @@ const DetailComponent = ({
 };
 
 DetailComponent.propTypes = {
-    handleComplete: PropTypes.func,
-    has_poa: PropTypes.bool,
-    onfido_service_token: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     country_code_key: PropTypes.number,
-    height: PropTypes.number,
+    handleComplete: PropTypes.func,
     handlePOIforMT5Complete: PropTypes.func,
+    has_poa: PropTypes.bool,
+    height: PropTypes.number,
+    is_from_external: PropTypes.bool,
     is_mt5: PropTypes.bool,
+    is_onfido_loading: PropTypes.bool,
+    is_pa_signup: PropTypes.bool,
+    onClickBack: PropTypes.func,
+    onfido_service_token: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    root_class: PropTypes.string,
+    document_index: PropTypes.string,
+    setManualData: PropTypes.func,
+    setIsOnfidoLoading: PropTypes.func,
 };
 
 export default DetailComponent;

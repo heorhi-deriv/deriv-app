@@ -4,7 +4,16 @@ import SelfieUpload from './selfie-upload.jsx';
 import { SELFIE_DOCUMENT } from '../constants';
 import './card-details.scss';
 
-const CardDetails = ({ data, goToCards, onComplete, is_from_external, setIsCfdPoiCompleted }) => {
+const CardDetails = ({
+    data,
+    goToCards,
+    is_from_external,
+    is_pa_signup,
+    manual_values,
+    onComplete,
+    setIsCfdPoiCompleted,
+    setManualData,
+}) => {
     const [documents, setDocuments] = React.useState();
     const [selfie, setSelfie] = React.useState();
     const [is_selfie_upload, setIsSelfieUpload] = React.useState(false);
@@ -23,11 +32,14 @@ const CardDetails = ({ data, goToCards, onComplete, is_from_external, setIsCfdPo
         <React.Fragment>
             {!is_selfie_upload ? (
                 <DocumentsUpload
+                    data={data}
                     initial_values={documents}
                     is_from_external={is_from_external}
-                    data={data}
+                    is_pa_signup={is_pa_signup}
                     goToCards={goToCards}
+                    manual_values={manual_values}
                     onSubmit={onSubmitDocuments}
+                    setManualData={setManualData}
                 />
             ) : (
                 <SelfieUpload
