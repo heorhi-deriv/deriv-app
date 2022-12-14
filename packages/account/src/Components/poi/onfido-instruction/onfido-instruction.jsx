@@ -58,72 +58,62 @@ const FacialCaptureConfirmation = () => {
     );
 };
 
-const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
-    const [instruction, setInstruction] = React.useState(null);
-
-    const changeInstruction = React.useCallback(
-        event => {
-            switch (event.detail.eventName) {
-                case 'DOCUMENT_TYPE_SELECT': {
-                    setInstruction(<DocumentTypeSelect />);
-                    setIsOnfidoLoading(false);
-                    break;
-                }
-                case 'DOCUMENT_CAPTURE_FRONT': {
-                    setInstruction(<DocumentCaptureFront />);
-                    setIsOnfidoLoading(false);
-                    break;
-                }
-                case 'CROSS_DEVICE_INTRO':
-                case 'CROSS_DEVICE_GET_LINK': {
-                    setInstruction(<DocumentCaptureFront />);
-                    break;
-                }
-                case 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT': {
-                    const onfido_back_btn = document.querySelector('.onfido-sdk-ui-NavigationBar-back');
-                    onfido_back_btn?.addEventListener(
-                        'click',
-                        () => {
-                            setInstruction(<DocumentCaptureFront />);
-                        },
-                        { once: true }
-                    );
-                    setInstruction(<DocumentCaptureConfirmationFront />);
-                    break;
-                }
-                case 'DOCUMENT_CAPTURE_BACK':
-                case 'DOCUMENT_CAPTURE_CONFIRMATION_BACK': {
-                    setInstruction(<DocumentCaptureConfirmationBack />);
-                    break;
-                }
-                case 'FACIAL_INTRO':
-                case 'FACIAL_CAPTURE': {
-                    setInstruction(<FacialCapture />);
-                    break;
-                }
-                case 'FACIAL_CAPTURE_CONFIRMATION': {
-                    setInstruction(<FacialCaptureConfirmation />);
-                    break;
-                }
-                default:
-                    setInstruction(null);
-                    setIsOnfidoLoading(false);
-            }
-        },
-        [setIsOnfidoLoading]
-    );
+const Instruction = ({ setIsOnfidoLoading }) => {
+    const [onfido_event_name, setOnfidoEventName] = React.useState('');
 
     React.useEffect(() => {
-        window.addEventListener('userAnalyticsEvent', changeInstruction);
+        if (['DOCUMENT_TYPE_SELECT', 'DOCUMENT_CAPTURE_FRONT'].includes(onfido_event_name)) setIsOnfidoLoading(false);
+
+        if (onfido_event_name === 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT') {
+            const onfido_back_btn = document.querySelector('.onfido-sdk-ui-NavigationBar-back');
+            onfido_back_btn?.addEventListener(
+                'click',
+                () => {
+                    setOnfidoEventName('DOCUMENT_CAPTURE_FRONT');
+                },
+                { once: true }
+            );
+        }
+    }, [onfido_event_name, setIsOnfidoLoading]);
+
+    React.useEffect(() => {
+        const changeEventName = event => setOnfidoEventName(event.detail.eventName);
+
+        window.addEventListener('userAnalyticsEvent', changeEventName);
 
         return () => {
-            window.removeEventListener('userAnalyticsEvent', changeInstruction);
+            window.removeEventListener('userAnalyticsEvent', changeEventName);
         };
-    }, [changeInstruction]);
+    }, []);
 
-    React.useEffect(() => {}, []);
+    if (onfido_event_name === 'DOCUMENT_TYPE_SELECT') {
+        return <DocumentTypeSelect />;
+    }
+    if (['DOCUMENT_CAPTURE_FRONT', 'CROSS_DEVICE_INTRO', 'CROSS_DEVICE_GET_LINK'].includes(onfido_event_name)) {
+        return <DocumentCaptureFront />;
+    }
+    if (onfido_event_name === 'DOCUMENT_CAPTURE_CONFIRMATION_FRONT') {
+        return <DocumentCaptureConfirmationFront />;
+    }
+    if (['DOCUMENT_CAPTURE_BACK', 'DOCUMENT_CAPTURE_CONFIRMATION_BACK'].includes(onfido_event_name)) {
+        return <DocumentCaptureConfirmationBack />;
+    }
+    if (['FACIAL_INTRO', 'FACIAL_CAPTURE'].includes(onfido_event_name)) {
+        return <FacialCapture />;
+    }
+    if (onfido_event_name === 'FACIAL_CAPTURE_CONFIRMATION') {
+        return <FacialCaptureConfirmation />;
+    }
 
-    return <div className='onfido-instruction__instruction'>{instruction}</div>;
+    return null;
+};
+
+const OnfidoInstruction = ({ setIsOnfidoLoading }) => {
+    return (
+        <div className='onfido-instruction__instruction'>
+            <Instruction setIsOnfidoLoading={setIsOnfidoLoading} />
+        </div>
+    );
 };
 
 export default React.memo(OnfidoInstruction);
