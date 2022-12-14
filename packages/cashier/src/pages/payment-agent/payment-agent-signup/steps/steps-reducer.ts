@@ -227,12 +227,12 @@ export const usePaymentAgentSignupReducer = () => {
 };
 
 type TActionsTypes = ReturnType<
-    | typeof setSelfieAC
+    | typeof setAddressAC
+    | typeof setIDVDataAC
+    | typeof setIsAddressVerificationDisabledAC
+    | typeof setIsIdentitySubmissionDisabledAC
+    | typeof setManualDataAC
     | typeof setSelectedCountryAC
     | typeof setSelectedManualDocumentIndexAC
-    | typeof setIDVDataAC
-    | typeof setManualDataAC
-    | typeof setIsIdentitySubmissionDisabledAC
-    | typeof setAddressAC
-    | typeof setIsAddressVerificationDisabledAC
+    | typeof setSelfieAC
 >;
