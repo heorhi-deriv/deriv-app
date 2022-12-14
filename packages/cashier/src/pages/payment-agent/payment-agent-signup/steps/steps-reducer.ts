@@ -9,14 +9,14 @@ type TStepsState = {
     } | null;
     selected_country?: ResidenceList[number];
     address?: TAddress;
-    address_verification_disabled?: boolean;
+    is_address_verification_disabled?: boolean;
 };
 
 const ACTION_TYPES = {
     SET_SELFIE: 'SET_SELFIE',
     SET_SELECTED_COUNTRY: 'SET_SELECTED_COUNTRY',
     SET_ADDRESS: 'SET_ADDRESS',
-    SET_ADDRESS_VERIFICATION_DISABLED: 'SET_ADDRESS_VERIFICATION_DISABLED',
+    SET_IS_ADDRESS_VERIFICATION_DISABLED: 'SET_IS_ADDRESS_VERIFICATION_DISABLED',
 } as const;
 
 // Action creators
@@ -43,7 +43,7 @@ const setAddressAC = (value?: TAddress) => {
 
 const setIsAddressVerificationDisabledAC = (value?: boolean) => {
     return {
-        type: ACTION_TYPES.SET_ADDRESS_VERIFICATION_DISABLED,
+        type: ACTION_TYPES.SET_IS_ADDRESS_VERIFICATION_DISABLED,
         value,
     };
 };
@@ -60,7 +60,7 @@ const initial_state = {
         address_postcode: '',
         proof_of_address: null,
     },
-    address_verification_disabled: true,
+    is_address_verification_disabled: true,
 };
 
 // Reducer
@@ -72,8 +72,8 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
             return { ...state, selected_country: action.value };
         case ACTION_TYPES.SET_ADDRESS:
             return { ...state, address: action.value };
-        case ACTION_TYPES.SET_ADDRESS_VERIFICATION_DISABLED:
-            return { ...state, address_verification_disabled: action.value };
+        case ACTION_TYPES.SET_IS_ADDRESS_VERIFICATION_DISABLED:
+            return { ...state, is_address_verification_disabled: action.value };
         default:
             return state;
     }

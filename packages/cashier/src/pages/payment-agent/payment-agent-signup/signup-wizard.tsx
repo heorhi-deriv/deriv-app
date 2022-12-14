@@ -80,8 +80,8 @@ const SignupWizard = ({ closeWizard }: TSignupWizardProps) => {
                             <Selfie selfie={steps_state.selfie} onSelect={setSelfie} />
                         </Wizard.Step>
                         <Wizard.Step
-                            title='Address verification'
-                            is_submit_disabled={steps_state.address_verification_disabled}
+                            title={localize('Address verification')}
+                            is_submit_disabled={steps_state.is_address_verification_disabled}
                             is_fullwidth
                         >
                             <AddressVerification
