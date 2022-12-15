@@ -2749,7 +2749,7 @@ $MIN_HEIGHT_FLOATING: calc(
 .financial-banner {
     width: 49.5rem;
     border-radius: 4px;
-    position: relaitve;
+    position: relative;
     background-color: var(--status-warning-transparent);
 
     @include mobile {

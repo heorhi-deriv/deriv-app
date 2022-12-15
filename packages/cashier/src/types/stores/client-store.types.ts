@@ -3,6 +3,8 @@ import {
     Authorize,
     ResidenceList,
     CountriesListResponse,
+    StatesList,
+    StatesListResponse,
     DetailsOfEachMT5Loginid,
 } from '@deriv/api-types';
 
@@ -28,6 +30,7 @@ export type TClientStore = {
     current_currency_type?: string;
     current_fiat_currency?: string;
     fetchResidenceList: () => Promise<CountriesListResponse>;
+    fetchStatesList: (residence_id?: string) => Promise<StatesListResponse>;
     getLimits: () => void;
     is_account_setting_loaded: boolean;
     is_eu: boolean;
@@ -55,6 +58,7 @@ export type TClientStore = {
     standpoint: {
         iom: string;
     };
+    states_list: StatesList;
     switchAccount: (value?: string) => void;
     verification_code: {
         payment_agent_withdraw: string;

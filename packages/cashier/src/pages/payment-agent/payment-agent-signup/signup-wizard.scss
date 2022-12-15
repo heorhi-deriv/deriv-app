@@ -10,6 +10,15 @@
         &-hint {
             margin-top: 0.8rem;
         }
+        &-form-container {
+            margin: 3.2rem auto 0;
+            width: 42.2rem;
+
+            @include mobile {
+                margin-top: 2.4rem;
+                width: 100%;
+            }
+        }
         &-country-dropdown {
             margin-top: 3.2rem;
 
@@ -19,7 +28,33 @@
 
             .is-desktop {
                 margin: 0 auto;
-                width: 422px;
+                width: 42.2rem;
+            }
+        }
+        &-address {
+            .dc-autocomplete {
+                margin-bottom: 3.2em;
+            }
+
+            &-upload-section {
+                margin-top: 1.2em;
+
+                &-list {
+                    margin-top: 1.4em;
+
+                    li {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+
+                        &:before {
+                            content: '\2022';
+                            color: $color-grey-1;
+                            font-weight: bold;
+                            margin-right: 0.8em;
+                        }
+                    }
+                }
             }
         }
         &-selector-hint {

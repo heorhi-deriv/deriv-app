@@ -9,6 +9,7 @@ import CancelWizardDialog from './components/cancel-wizard-dialog';
 import CountryOfIssue from './steps/country-of-issue';
 import IdentityVerification from './steps/identity-verification';
 import Selfie from './steps/selfie';
+import AddressVerification from './steps/address-verification';
 import { populateVerificationStatus } from './helpers/verification';
 import { usePaymentAgentSignupReducer } from './steps/steps-reducer';
 import './signup-wizard.scss';
@@ -30,6 +31,8 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
         setIDVData,
         setManualData,
         setIsIdentitySubmissionDisabled,
+        setAddress,
+        setIsAddressVerificationDisabled,
     } = usePaymentAgentSignupReducer();
 
     const is_final_step = current_step_key === 'complete_step';
@@ -112,6 +115,18 @@ const SignupWizard = ({ account_status, closeWizard }: TSignupWizardProps) => {
                             step_key='Selfie verification'
                         >
                             <Selfie idv_status={idv.status} selfie={steps_state.selfie} onSelect={setSelfie} />
+                        </Wizard.Step>
+                        <Wizard.Step
+                            title={localize('Address verification')}
+                            is_submit_disabled={steps_state.is_address_verification_disabled}
+                            is_fullwidth
+                        >
+                            <AddressVerification
+                                selected_country_id={steps_state.selected_country?.value || ''}
+                                address={steps_state.address}
+                                onSelect={setAddress}
+                                setIsAddressVerificationDisabled={setIsAddressVerificationDisabled}
+                            />
                         </Wizard.Step>
                         <Wizard.Step step_key='complete_step' title='Step 3' is_fullwidth>
                             <>

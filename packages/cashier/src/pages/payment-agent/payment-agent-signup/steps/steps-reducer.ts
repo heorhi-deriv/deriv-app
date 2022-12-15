@@ -2,6 +2,7 @@ import { useCallback, useReducer } from 'react';
 import { isEmptyObject } from '@deriv/shared';
 import { ResidenceList } from '@deriv/api-types';
 import { TSelfie } from './selfie/selfie';
+import type { TAddress } from './address-verification/proof-of-address-form/proof-of-address-form';
 import { Moment } from 'moment';
 
 //TODO: refactor TSelfie type into TUploadedDocumentType
@@ -61,6 +62,8 @@ export type TStepsState = {
     selfie: {
         selfie_with_id: TSelfie;
     } | null;
+    address?: TAddress;
+    is_address_verification_disabled?: boolean;
 };
 
 // Action creators
@@ -106,8 +109,30 @@ const setSelectedManualDocumentIndexAC = (value: string) => {
     } as const;
 };
 
+const setAddressAC = (value?: TAddress) => {
+    return {
+        type: 'SET_ADDRESS',
+        value,
+    } as const;
+};
+
+const setIsAddressVerificationDisabledAC = (value?: boolean) => {
+    return {
+        type: 'SET_IS_ADDRESS_VERIFICATION_DISABLED',
+        value,
+    } as const;
+};
+
 // Initial state
 const initial_state = {
+    address: {
+        address_line_1: '',
+        address_line_2: '',
+        address_city: '',
+        address_state: '',
+        address_postcode: '',
+        proof_of_address: null,
+    },
     idv_data: {
         values: {
             document_number: '',
@@ -116,6 +141,7 @@ const initial_state = {
         errors: { document_number: '', document_type: '' },
         country_code: '',
     },
+    is_address_verification_disabled: true,
     is_identity_submission_disabled: true,
     manual_data: { values: {}, errors: {} },
     selected_country: {},
@@ -130,6 +156,10 @@ const stepsReducer = (state: TStepsState, action: TActionsTypes): TStepsState =>
             return { ...state, selfie: { selfie_with_id: action.value } };
         case 'SET_SELECTED_COUNTRY':
             return { ...state, selected_country: action.value };
+        case 'SET_ADDRESS':
+            return { ...state, address: action.value };
+        case 'SET_IS_ADDRESS_VERIFICATION_DISABLED':
+            return { ...state, is_address_verification_disabled: action.value };
         case 'SET_IS_IDENTITY_SUBMISSION_DISABLED':
             return { ...state, is_identity_submission_disabled: action.value };
         case 'SET_IDV_DATA': {
@@ -177,23 +207,32 @@ export const usePaymentAgentSignupReducer = () => {
         (value: boolean) => dispatch(setIsIdentitySubmissionDisabledAC(value)),
         []
     );
+    const setAddress = useCallback((value: TAddress) => dispatch(setAddressAC(value)), []);
+    const setIsAddressVerificationDisabled = useCallback(
+        (value: boolean) => dispatch(setIsAddressVerificationDisabledAC(value)),
+        []
+    );
 
     return {
         steps_state,
+        setAddress,
         setIDVData,
+        setIsAddressVerificationDisabled,
+        setIsIdentitySubmissionDisabled,
         setManualData,
         setSelectedCountry,
         setSelectedManualDocumentIndex,
         setSelfie,
-        setIsIdentitySubmissionDisabled,
     };
 };
 
 type TActionsTypes = ReturnType<
-    | typeof setSelfieAC
+    | typeof setAddressAC
+    | typeof setIDVDataAC
+    | typeof setIsAddressVerificationDisabledAC
+    | typeof setIsIdentitySubmissionDisabledAC
+    | typeof setManualDataAC
     | typeof setSelectedCountryAC
     | typeof setSelectedManualDocumentIndexAC
-    | typeof setIDVDataAC
-    | typeof setManualDataAC
-    | typeof setIsIdentitySubmissionDisabledAC
+    | typeof setSelfieAC
 >;

@@ -27,8 +27,8 @@ const fileReadErrorMessage = filename => {
     return localize('Unable to read file {{name}}', { name: filename });
 };
 
-const FileUploader = React.forwardRef(({ onFileDrop, getSocket }, ref) => {
-    const [document_file, setDocumentFile] = useStateCallback({ files: [], error_message: null });
+const FileUploader = React.forwardRef(({ onFileDrop, getSocket, values }, ref) => {
+    const [document_file, setDocumentFile] = useStateCallback({ files: values || [], error_message: null });
 
     const handleAcceptedFiles = files => {
         if (files.length > 0) {
@@ -125,6 +125,7 @@ FileUploader.displayName = 'FileUploader';
 FileUploader.propTypes = {
     onFileDrop: PropTypes.func,
     getSocket: PropTypes.func,
+    values: PropTypes.array,
 };
 
 export default FileUploader;
