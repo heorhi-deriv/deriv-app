@@ -51,12 +51,21 @@ const ProofOfAddressForm = ({
     setIsAddressVerificationDisabled,
     selected_country_id,
 }: TProofOfAddressFormProps) => {
+    const required_fields = ['address_line_1', 'address_city', 'address_state', 'address_postcode'];
+    const isFormFilled = (values: TPOAFormValues | TAddress, errors?: Partial<TPOAFormValues>) => {
+        const has_errors = (errors && !isEmptyObject(errors)) ?? false;
+        const has_values = !Object.keys(values).some(
+            key => required_fields.includes(key) && values[key as keyof TPOAFormValues] === ''
+        );
+        return !has_errors && has_values;
+    };
+
     const [document_file, setDocumentFile] = React.useState<TProofFiles>(
         address?.proof_of_address || { files: [], error_message: null }
     );
     const [states_list, setStatesList] = React.useState<StatesList>();
     const [is_loading, setIsLoading] = React.useState(true);
-    const [is_form_filled, setIsFormFilled] = React.useState(false);
+    const [is_form_filled, setIsFormFilled] = React.useState<boolean>(isFormFilled(address!));
     const {
         client: { fetchStatesList },
     } = useStore();
@@ -87,7 +96,6 @@ const ProofOfAddressForm = ({
         const errors: Partial<TPOAFormValues> = {};
         const validateValues = validate(errors, values);
         const permitted_characters = ". , ' : ; ( ) @ # / -";
-        const required_fields = ['address_line_1', 'address_city', 'address_state', 'address_postcode'];
         const error_msg = {
             required: localize('This field is required'),
             validation_letter_symbol_message: localize(
@@ -138,12 +146,7 @@ const ProofOfAddressForm = ({
             ...values,
             proof_of_address: document_file,
         });
-        setIsFormFilled(
-            isEmptyObject(errors) &&
-                !Object.keys(values).some(
-                    key => required_fields.includes(key) && values[key as keyof TPOAFormValues] === ''
-                )
-        );
+        setIsFormFilled(isFormFilled(values, errors));
 
         return errors;
     };

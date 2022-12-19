@@ -1,4 +1,11 @@
-import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid } from '@deriv/api-types';
+import type {
+    GetAccountStatus,
+    Authorize,
+    DetailsOfEachMT5Loginid,
+    CountriesListResponse,
+    StatesListResponse,
+    StatesList,
+} from '@deriv/api-types';
 import type { RouteComponentProps } from 'react-router';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
@@ -22,6 +29,8 @@ type TClientStore = {
     currency: string;
     current_currency_type?: string;
     current_fiat_currency?: string;
+    fetchResidenceList: () => Promise<CountriesListResponse>;
+    fetchStatesList: (residence_id?: string) => Promise<StatesListResponse>;
     getLimits: () => void;
     is_account_setting_loaded: boolean;
     is_eu: boolean;
@@ -47,6 +56,7 @@ type TClientStore = {
     standpoint: {
         iom: string;
     };
+    states_list: StatesList;
     switchAccount: (value?: string) => void;
     verification_code: {
         payment_agent_withdraw: string;
