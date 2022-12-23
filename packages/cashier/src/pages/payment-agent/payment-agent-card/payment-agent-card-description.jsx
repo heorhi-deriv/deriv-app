@@ -9,10 +9,12 @@ import PaymentAgentDetail from '../payment-agent-detail';
 const PaymentAgentCardDescription = ({ is_dark_mode_on, payment_agent }) => {
     const payment_agent_urls = toJS(payment_agent.urls);
 
+    const george = 'George';
+
     return (
         <div className='payment-agent-card__description-container'>
             <Text as='p' line_height='s' size='xs' weight='bold'>
-                {payment_agent.name}
+                {george}
             </Text>
             {payment_agent.further_information && (
                 <Text
