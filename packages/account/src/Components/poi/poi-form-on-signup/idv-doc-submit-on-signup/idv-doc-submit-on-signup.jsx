@@ -2,7 +2,6 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { Formik, Field } from 'formik';
 import classNames from 'classnames';
-import React from 'react';
 import { localize, Localize } from '@deriv/translations';
 import {
     Autocomplete,
