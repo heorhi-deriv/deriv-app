@@ -113,4 +113,5 @@ export type TRootStore = {
     client: TClientStore;
     common: TCommonStore;
     ui: TUiStore;
+    modules: Record<string, any>;
 };

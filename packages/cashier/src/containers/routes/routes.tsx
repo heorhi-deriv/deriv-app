@@ -1,20 +1,16 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
+import { observer, useStore } from '@deriv/stores';
 import { useTheme } from '@deriv/ui';
-import { connect } from 'Stores/connect';
-import { TClientStore, TCommonStore, TRootStore } from 'Types';
 import BinaryRoutes from './binary-routes';
 import ErrorComponent from './error-component';
 
-type TRoutesProps = RouteComponentProps & {
-    error: TCommonStore['error'];
-    has_error: TCommonStore['has_error'];
-    is_logged_in: TClientStore['is_logged_in'];
-    is_logging_in: TClientStore['is_logging_in'];
-    is_dark_mode_on: boolean;
-};
+const Routes = observer(() => {
+    const { client, common, ui } = useStore();
+    const { is_logged_in, is_logging_in } = client;
+    const { error, has_error } = common;
+    const { is_dark_mode_on } = ui;
 
-const Routes = ({ error, has_error, is_logged_in, is_logging_in, is_dark_mode_on }: TRoutesProps) => {
     const { setColorMode } = useTheme();
 
     React.useEffect(() => {
@@ -26,14 +22,6 @@ const Routes = ({ error, has_error, is_logged_in, is_logging_in, is_dark_mode_on
     }
 
     return <BinaryRoutes is_logged_in={is_logged_in} is_logging_in={is_logging_in} />;
-};
+});
 
-// need to wrap withRouter around connect
-// to prevent updates on <BinaryRoutes /> from being blocked
-export default connect(({ client, common, ui }: TRootStore) => ({
-    is_logged_in: client.is_logged_in,
-    is_logging_in: client.is_logging_in,
-    error: common.error,
-    has_error: common.has_error,
-    is_dark_mode_on: ui.is_dark_mode_on,
-}))(withRouter(Routes));
+export default withRouter(Routes);

@@ -3,7 +3,6 @@ import { setWebsocket } from '@deriv/shared';
 import { StoreProvider } from '@deriv/stores';
 import { init } from 'Utils/server_time';
 import Routes from 'Containers/routes';
-import { MobxContentProvider } from 'Stores/connect';
 import { ThemeProvider } from '@deriv/ui';
 
 const App = ({ passthrough: { WS, root_store } }) => {
@@ -14,13 +13,11 @@ const App = ({ passthrough: { WS, root_store } }) => {
     }, []);
 
     return (
-        <MobxContentProvider store={root_store}>
-            <ThemeProvider>
-                <StoreProvider store={root_store}>
-                    <Routes />
-                </StoreProvider>
-            </ThemeProvider>
-        </MobxContentProvider>
+        <ThemeProvider>
+            <StoreProvider store={root_store}>
+                <Routes />
+            </StoreProvider>
+        </ThemeProvider>
     );
 };
 
