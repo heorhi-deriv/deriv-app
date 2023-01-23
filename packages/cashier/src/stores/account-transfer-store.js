@@ -558,10 +558,9 @@ export default class AccountTransferStore {
             // not allowed to transfer from MT to MT
             // not allowed to transfer from Dxtrade to Dxtrade
             // not allowed to transfer between MT and Dxtrade
-            const first_non_cfd = this.accounts_list.find(
-                account => !account.is_mt && !account.is_dxtrade && !account.is_derivez
-            );
-            this.onChangeTransferTo({ target: { value: first_non_cfd.value } });
+            // if new value of selected_from is different from selected_to
+            // switch the value of selected_to to current client loginid
+            this.onChangeTransferTo({ target: { value: this.root_store.client.loginid } });
         }
 
         if (hasTransferNotAllowedLoginid(selected_from.value)) {
