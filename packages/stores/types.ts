@@ -2,6 +2,7 @@ import type {
     GetAccountStatus,
     Authorize,
     DetailsOfEachMT5Loginid,
+    LogOutResponse,
     CountriesListResponse,
     StatesListResponse,
     StatesList,
@@ -42,6 +43,7 @@ type TClientStore = {
     is_identity_verification_needed: boolean;
     is_logged_in: boolean;
     is_logging_in: boolean;
+    is_pre_appstore: boolean;
     is_switching: boolean;
     is_tnc_needed: boolean;
     is_virtual: boolean;
@@ -74,6 +76,10 @@ type TClientStore = {
     is_authentication_needed: boolean;
     authentication_status: TAuthenticationStatus;
     mt5_login_list: DetailsOfEachMT5Loginid[];
+    is_risky_client: boolean;
+    logout: () => Promise<LogOutResponse>;
+    should_allow_authentication: boolean;
+    is_landing_company_loaded: boolean;
 };
 
 type TCommonStoreError = {
@@ -86,6 +92,7 @@ type TCommonStoreError = {
     should_show_refresh: boolean;
     redirectOnClick: () => void;
     setError: (has_error: boolean, error: TCommonStoreError | null) => void;
+    app_routing_history: unknown[];
 };
 
 type TCommonStore = {
@@ -95,6 +102,7 @@ type TCommonStore = {
     platform: string;
     routeBackInApp: (history: Pick<RouteComponentProps, 'history'>, additional_platform_path?: string[]) => void;
     routeTo: (pathname: string) => void;
+    changeCurrentLanguage: (new_language: string) => void;
 };
 
 type TUiStore = {
@@ -107,6 +115,13 @@ type TUiStore = {
     setCurrentFocus: (value: string) => void;
     toggleAccountsDialog: () => void;
     toggleCashier: () => void;
+    setDarkMode: (is_dark_mode_on: boolean) => boolean;
+};
+
+type TTradersHubStore = {
+    closeModal: () => void;
+    content_flag: any;
+    openModal: (modal_id: string, props?: any) => void;
 };
 
 export type TRootStore = {
@@ -114,4 +129,5 @@ export type TRootStore = {
     common: TCommonStore;
     ui: TUiStore;
     modules: Record<string, any>;
+    traders_hub: TTradersHubStore;
 };

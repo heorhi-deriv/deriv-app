@@ -22,8 +22,7 @@ export type TAuthAccountInfo = NonNullable<Authorize['account_list']>[0] & {
 };
 
 export type TPlatformContext = {
-    is_appstore?: boolean;
-    is_pre_appstore?: boolean;
+    is_appstore: boolean;
 };
 
 export type TCurrencyConfig = {
@@ -95,6 +94,7 @@ export type TRouteConfig = TRoute & {
 };
 
 export type TBinaryRoutes = {
+    is_pre_appstore: boolean;
     is_logged_in: boolean;
     is_logging_in: boolean;
 };
