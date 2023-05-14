@@ -18,6 +18,8 @@ export const getCashierOptions = (type: TWalletType) => {
                         <>
                             <AccountTransfer onClose={() => {}} />
                             <AccountTransfer onClose={() => {}} />
+                            <AccountTransfer onClose={() => {}} />
+                            <AccountTransfer onClose={() => {}} />
                         </>
                     ) : (
                         <p>Deposit Real</p>
