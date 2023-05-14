@@ -1,8 +1,9 @@
 import React from 'react';
-import { Modal } from '@deriv/components';
+import { Modal, DesktopWrapper, MobileWrapper, MobileDialog } from '@deriv/components';
 import WalletModalHeader from './wallet-modal-header';
 import WalletModalBody from './wallet-modal-body';
 import { observer, useStore } from '@deriv/stores';
+import classNames from 'classnames';
 
 const WalletModal = observer(() => {
     const store = useStore();
@@ -42,8 +43,8 @@ const WalletModal = observer(() => {
         };
     }, [active_tab_index, is_wallet_modal_visible, is_mobile]);
 
-    return (
-        <Modal is_open={is_wallet_modal_visible} className='wallet-modal' portalId='app_contents'>
+    const content = (
+        <>
             <WalletModalHeader
                 balance={balance}
                 closeModal={closeModal}
@@ -58,12 +59,35 @@ const WalletModal = observer(() => {
                 active_tab_index={active_tab_index}
                 is_dark={is_dark_mode_on}
                 is_demo={is_demo}
-                ref={tab_content_ref}
-                setActiveTabIndex={setActiveTabIndex}
                 is_wallet_name_visible={is_wallet_name_visible}
+                setActiveTabIndex={setActiveTabIndex}
                 wallet_type={wallet_type}
             />
-        </Modal>
+        </>
+    );
+
+    return (
+        <>
+            <DesktopWrapper>
+                <Modal is_open={is_wallet_modal_visible} className='wallet-modal' portalId='app_contents'>
+                    {content}
+                </Modal>
+            </DesktopWrapper>
+            <MobileWrapper>
+                <MobileDialog
+                    className='mobile-wallet'
+                    wrapper_classname={classNames('mobile-wallet__wrapper', {
+                        'content-scrolled': !is_wallet_name_visible,
+                    })}
+                    portal_element_id='deriv_app'
+                    visible={is_wallet_modal_visible}
+                    has_content_scroll={false}
+                    ref={tab_content_ref}
+                >
+                    {content}
+                </MobileDialog>
+            </MobileWrapper>
+        </>
     );
 });
 
