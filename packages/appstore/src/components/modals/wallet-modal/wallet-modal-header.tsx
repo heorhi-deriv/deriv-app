@@ -1,11 +1,10 @@
 import React from 'react';
-import { DemoLight, DemoDark } from '../../../public/images/index';
+// import { DemoLight, DemoDark } from '../../../public/images/index';
 import classNames from 'classnames';
 import { Badge, GradientBackground, Icon, Text, Watermark } from '@deriv/components';
 import { formatMoney, getCurrencyDisplayCode } from '@deriv/shared';
 import { localize } from '@deriv/translations';
 import { getWalletCurrencyIcon } from 'Constants/utils';
-import { getWalletModalBackgrounds } from 'Constants/wallet-backgrounds';
 
 type TWalletModalHeaderProps = {
     balance?: string | number;
@@ -93,16 +92,9 @@ const WalletModalHeader = ({
         return { icon, ...size };
     }, [currency, getCurrencyIconSize, is_dark, is_demo]);
 
-    const getBackgroundName = React.useCallback(() => {
-        if (is_demo) {
-            return 'demo';
-        }
-        return currency.toLowerCase();
-    }, [is_demo, currency]);
-
     return (
-        <GradientBackground {...getWalletModalBackgrounds(getBackgroundName())}>
-            {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />}
+        <GradientBackground color='#FBDDDD'>
+            {/* {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
             <div
                 className={classNames(header_class_name, {
                     [`${header_class_name}--hide-title`]: !is_wallet_name_visible,
