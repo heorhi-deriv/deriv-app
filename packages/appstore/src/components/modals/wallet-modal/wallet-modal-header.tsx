@@ -28,7 +28,7 @@ const WalletModalHeader = ({
     shortcode,
     is_wallet_name_visible,
 }: TWalletModalHeaderProps) => {
-    const header_class_name = 'wallet-modal__header';
+    const header_class_name = 'modal-header';
 
     const wallet_title = React.useMemo(() => {
         return `${is_demo ? localize('Demo') : ''} ${getCurrencyDisplayCode(currency)} ${localize('Wallet')}`;

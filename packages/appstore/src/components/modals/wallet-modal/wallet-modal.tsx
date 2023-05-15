@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, DesktopWrapper, MobileWrapper, MobileDialog } from '@deriv/components';
+import { DesktopWrapper, MobileDialog, MobileWrapper, Modal } from '@deriv/components';
 import WalletModalHeader from './wallet-modal-header';
 import WalletModalBody from './wallet-modal-body';
 import { observer, useStore } from '@deriv/stores';
@@ -16,7 +16,7 @@ const WalletModal = observer(() => {
     // TODO: Temporary wallet type. Will be refactored later. Add correct type
     const wallet_type = is_demo ? 'demo' : 'real';
 
-    const tab_content_ref = React.useRef<HTMLDivElement>(null);
+    const mobile_dialog_ref = React.useRef<HTMLDivElement>(null);
     const [active_tab_index, setActiveTabIndex] = React.useState<number>(0);
     const [is_wallet_name_visible, setIsWalletNameVisible] = React.useState<boolean>(true);
 
@@ -26,7 +26,7 @@ const WalletModal = observer(() => {
     };
 
     React.useEffect(() => {
-        const el_tab_content = tab_content_ref.current;
+        const el_mobile_dialog = mobile_dialog_ref.current;
 
         const handleScroll = (e: Event) => {
             const target = e.target as HTMLDivElement;
@@ -34,16 +34,16 @@ const WalletModal = observer(() => {
         };
 
         if (is_mobile) {
-            el_tab_content?.addEventListener('scroll', handleScroll);
+            el_mobile_dialog?.addEventListener('scroll', handleScroll);
             setIsWalletNameVisible(true);
         }
 
         return () => {
-            el_tab_content?.removeEventListener('scroll', handleScroll);
+            el_mobile_dialog?.removeEventListener('scroll', handleScroll);
         };
     }, [active_tab_index, is_wallet_modal_visible, is_mobile]);
 
-    const content = (
+    const body = (
         <>
             <WalletModalHeader
                 balance={balance}
@@ -69,22 +69,22 @@ const WalletModal = observer(() => {
     return (
         <>
             <DesktopWrapper>
-                <Modal is_open={is_wallet_modal_visible} className='wallet-modal' portalId='app_contents'>
-                    {content}
+                <Modal is_open={is_wallet_modal_visible} className='wallet-modal' portalId='deriv_app'>
+                    {body}
                 </Modal>
             </DesktopWrapper>
             <MobileWrapper>
                 <MobileDialog
-                    className='mobile-wallet'
-                    wrapper_classname={classNames('mobile-wallet__wrapper', {
+                    className='wallet-mobile-dialog'
+                    wrapper_classname={classNames('wallet-mobile-dialog__wrapper', {
                         'content-scrolled': !is_wallet_name_visible,
                     })}
                     portal_element_id='deriv_app'
                     visible={is_wallet_modal_visible}
                     has_content_scroll={false}
-                    ref={tab_content_ref}
+                    ref={mobile_dialog_ref}
                 >
-                    {content}
+                    {body}
                 </MobileDialog>
             </MobileWrapper>
         </>
