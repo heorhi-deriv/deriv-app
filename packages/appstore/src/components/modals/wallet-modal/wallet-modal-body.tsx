@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Tabs, ThemedScrollbars } from '@deriv/components';
-import { isDesktop } from '@deriv/shared';
+import { Tabs } from '@deriv/components';
 import { getCashierOptions, TWalletType } from './provider';
 
 type TWalletModalBodyProps = {
@@ -40,9 +39,7 @@ const WalletModalBody = ({
             {getCashierOptions(wallet_type).map(option => {
                 return (
                     <div key={option.label} icon={option.icon} label={option.label}>
-                        <ThemedScrollbars is_bypassed={isDesktop()} is_scrollbar_hidden>
-                            {option.content}
-                        </ThemedScrollbars>
+                        {option.content}
                     </div>
                 );
             })}
