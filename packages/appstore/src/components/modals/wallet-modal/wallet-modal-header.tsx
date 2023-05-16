@@ -1,4 +1,5 @@
 import React from 'react';
+//TODO: uncomment when backgrounds for modal will be ready
 // import { DemoLight, DemoDark } from '../../../public/images/index';
 import classNames from 'classnames';
 import { Badge, GradientBackground, Icon, Text, Watermark } from '@deriv/components';
@@ -94,7 +95,8 @@ const WalletModalHeader = ({
 
     return (
         <GradientBackground color='#FBDDDD'>
-            {/* {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
+            {/* TODO: uncomment when backgrounds for modal will be ready
+            {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
             <div
                 className={classNames(header_class_name, {
                     [`${header_class_name}--hide-title`]: !is_wallet_name_visible,
