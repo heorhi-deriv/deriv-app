@@ -30,7 +30,8 @@ const WalletModal = observer(() => {
 
         const handleScroll = (e: Event) => {
             const target = e.target as HTMLDivElement;
-            setIsWalletNameVisible(!(target.scrollTop > 0));
+            const height_offset = 40;
+            setIsWalletNameVisible(!(target.scrollTop > height_offset));
         };
 
         if (is_mobile) {
@@ -77,7 +78,7 @@ const WalletModal = observer(() => {
                 <MobileDialog
                     className='wallet-mobile-dialog'
                     wrapper_classname={classNames('wallet-mobile-dialog__wrapper', {
-                        'content-scrolled': !is_wallet_name_visible,
+                        'scrolled-content': !is_wallet_name_visible,
                     })}
                     portal_element_id='deriv_app'
                     visible={is_wallet_modal_visible}

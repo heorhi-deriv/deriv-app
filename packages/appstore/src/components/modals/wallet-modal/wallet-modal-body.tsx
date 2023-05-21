@@ -25,7 +25,7 @@ const WalletModalBody = ({
             active_icon_color={is_dark ? 'var(--badge-white)' : ''}
             active_index={active_tab_index}
             className={classNames('modal-body__tabs', {
-                scrolled: !is_wallet_name_visible,
+                is_scrolled: !is_wallet_name_visible,
             })}
             has_active_line={false}
             has_bottom_line={false}
