@@ -18,8 +18,19 @@ type TWalletModalHeaderProps = {
     is_wallet_name_visible: boolean;
 };
 
-const HeaderBackground = ({ children }: React.PropsWithChildren) => {
-    return <div className='header-background'>{children}</div>;
+type THeaderBackground = {
+    is_dark: boolean;
+    is_demo: boolean;
+};
+
+const HeaderBackground = ({ is_demo, is_dark, children }: React.PropsWithChildren<THeaderBackground>) => {
+    return (
+        <div className='header-background'>
+            {/* TODO: uncomment when backgrounds for modal will be ready
+            {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
+            {children}
+        </div>
+    );
 };
 
 const WalletModalHeader = ({
@@ -98,9 +109,7 @@ const WalletModalHeader = ({
     }, [currency, getCurrencyIconSize, is_dark, is_demo]);
 
     return (
-        <HeaderBackground>
-            {/* TODO: uncomment when backgrounds for modal will be ready
-            {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
+        <HeaderBackground is_demo={is_demo} is_dark={is_dark}>
             <div
                 className={classNames(header_class_name, {
                     [`${header_class_name}--hidden-title`]: !is_wallet_name_visible,
