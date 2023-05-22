@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Tabs, ThemedScrollbars } from '@deriv/components';
-import { isDesktop } from '@deriv/shared';
+import { Tabs } from '@deriv/components';
 import { getCashierOptions, TWalletType } from './provider';
 
 type TWalletModalBodyProps = {
@@ -25,8 +24,8 @@ const WalletModalBody = ({
         <Tabs
             active_icon_color={is_dark ? 'var(--badge-white)' : ''}
             active_index={active_tab_index}
-            className={classNames('wallet-modal__tabs', {
-                scrolled: !is_wallet_name_visible,
+            className={classNames('modal-body__tabs', {
+                is_scrolled: !is_wallet_name_visible,
             })}
             has_active_line={false}
             has_bottom_line={false}
@@ -40,9 +39,7 @@ const WalletModalBody = ({
             {getCashierOptions(wallet_type).map(option => {
                 return (
                     <div key={option.label} icon={option.icon} label={option.label}>
-                        <ThemedScrollbars is_bypassed={isDesktop()} is_scrollbar_hidden>
-                            {option.content}
-                        </ThemedScrollbars>
+                        {option.content}
                     </div>
                 );
             })}
