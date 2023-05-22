@@ -18,6 +18,10 @@ type TWalletModalHeaderProps = {
     is_wallet_name_visible: boolean;
 };
 
+const HeaderBackground = ({ children }: React.PropsWithChildren) => {
+    return <div className='header-background'>{children}</div>;
+};
+
 const WalletModalHeader = ({
     balance,
     closeModal,
@@ -94,45 +98,46 @@ const WalletModalHeader = ({
     }, [currency, getCurrencyIconSize, is_dark, is_demo]);
 
     return (
-        <div
-            className={classNames(header_class_name, {
-                [`${header_class_name}--hidden-title`]: !is_wallet_name_visible,
-            })}
-            style={{ backgroundColor: '#FBDDDD' }}
-        >
+        <HeaderBackground>
             {/* TODO: uncomment when backgrounds for modal will be ready
             {is_demo && <Watermark image={`url(${is_dark ? DemoDark : DemoLight})`} opacity={is_dark ? 0.32 : 0.24} />} */}
-            <div className={`${header_class_name}__title-wrapper`}>
-                <div className={classNames(`${header_class_name}__title title-visibility`)}>
+            <div
+                className={classNames(header_class_name, {
+                    [`${header_class_name}--hidden-title`]: !is_wallet_name_visible,
+                })}
+            >
+                <div className={`${header_class_name}__title-wrapper`}>
+                    <div className={classNames(`${header_class_name}__title title-visibility`)}>
+                        <Text
+                            size={is_mobile ? 'xs' : 's'}
+                            as='span'
+                            className={getStylesByClassName(`${header_class_name}__title-wallet`)}
+                        >
+                            {wallet_title}
+                        </Text>
+                        {is_demo ? (
+                            <Badge type='contained' background_color='blue' label={getBadgeLabel()} />
+                        ) : (
+                            <Badge type='bordered' label={getBadgeLabel()} />
+                        )}
+                    </div>
                     <Text
-                        size={is_mobile ? 'xs' : 's'}
-                        as='span'
-                        className={getStylesByClassName(`${header_class_name}__title-wallet`)}
+                        as='p'
+                        size={is_mobile ? 'xsm' : 'm'}
+                        weight='bold'
+                        className={getStylesByClassName(`${header_class_name}__title-balance`)}
                     >
-                        {wallet_title}
+                        {formatMoney(currency, balance, true)} {getCurrencyDisplayCode(currency)}
                     </Text>
-                    {is_demo ? (
-                        <Badge type='contained' background_color='blue' label={getBadgeLabel()} />
-                    ) : (
-                        <Badge type='bordered' label={getBadgeLabel()} />
-                    )}
                 </div>
-                <Text
-                    as='p'
-                    size={is_mobile ? 'xsm' : 'm'}
-                    weight='bold'
-                    className={getStylesByClassName(`${header_class_name}__title-balance`)}
-                >
-                    {formatMoney(currency, balance, true)} {getCurrencyDisplayCode(currency)}
-                </Text>
+                <div className={classNames(`${header_class_name}__currency-icon icon-visibility`)}>
+                    <Icon {...getCurrencyIconProps()} data_testid='dt_currency_icon' />
+                </div>
+                <div className={classNames(`${header_class_name}__close-icon`)}>
+                    <Icon icon={getCloseIcon()} onClick={closeModal} data_testid='dt_close_icon' />
+                </div>
             </div>
-            <div className={classNames(`${header_class_name}__currency-icon icon-visibility`)}>
-                <Icon {...getCurrencyIconProps()} data_testid='dt_currency_icon' />
-            </div>
-            <div className={classNames(`${header_class_name}__close-icon`)}>
-                <Icon icon={getCloseIcon()} onClick={closeModal} data_testid='dt_close_icon' />
-            </div>
-        </div>
+        </HeaderBackground>
     );
 };
 
