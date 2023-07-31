@@ -1,13 +1,11 @@
 import { useMemo, useState, useEffect } from 'react';
 import useTransferBetweenAccounts from './useTransferBetweenAccounts';
+import usePopulateAccounts from './usePopulateAccounts';
 
 const useWalletTransfer = () => {
-    const {
-        active_wallet,
-        trading_accounts,
-        wallet_accounts,
-        isLoading: is_accounts_loading,
-    } = useTransferBetweenAccounts();
+    const { accounts, isLoading: is_accounts_loading } = useTransferBetweenAccounts();
+
+    const { active_wallet, trading_accounts, wallet_accounts } = usePopulateAccounts(accounts);
 
     const [from_account, setFromAccount] = useState<typeof active_wallet>();
     const [to_account, setToAccount] = useState<typeof active_wallet>();
