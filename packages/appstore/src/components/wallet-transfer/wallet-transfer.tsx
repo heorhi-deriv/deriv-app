@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Field, FieldProps, Formik, Form, FormikHelpers } from 'formik';
 import { AmountInput, AnimatedList, AlertMessage, Button, Loading } from '@deriv/components';
-import { useCurrencyConfig, useWalletTransfer } from '@deriv/hooks';
+import { useCurrencyConfig, useTransferBetweenAccountsValidator, useWalletTransfer } from '@deriv/hooks';
 import { validNumber } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { localize, Localize } from '@deriv/translations';
@@ -46,6 +46,16 @@ const WalletTransfer = observer(({ is_wallet_name_visible, setIsWalletNameVisibl
         setFromAccount,
         setToAccount,
     } = useWalletTransfer();
+
+    const { errorList, fieldValidator } = useTransferBetweenAccountsValidator();
+
+    // React.useEffect(() => {
+    //     if (from_account && to_account) fieldValidator(from_account, to_account);
+    // }, [from_account, to_account]);
+
+    React.useEffect(() => {
+        setMessageList(errorList);
+    }, [errorList]);
 
     const [message_list, setMessageList] = React.useState<TMessageItem[]>([]);
 
@@ -193,6 +203,7 @@ const WalletTransfer = observer(({ is_wallet_name_visible, setIsWalletNameVisibl
                                             initial_value={field.value}
                                             label={localize('Amount you send')}
                                             onChange={(value: number) => {
+                                                fieldValidator(from_account, values.from_amount, to_account);
                                                 setValues({
                                                     from_amount: value,
                                                     to_amount: is_amount_to_input_disabled ? 0 : value,
