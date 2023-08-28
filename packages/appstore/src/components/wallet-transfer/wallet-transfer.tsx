@@ -49,6 +49,8 @@ const WalletTransfer = observer(({ is_wallet_name_visible, setIsWalletNameVisibl
     } = useWalletTransfer();
 
     // const [message_list, setMessageList] = React.useState<TMessageItem[]>([]);
+  
+    const [message_list, setMessageList] = React.useState<TMessageItem[]>([]);
 
     const active_wallet_name = getAccountName({ ...active_wallet });
 
@@ -278,6 +280,58 @@ const WalletTransferContent = ({
             ''
         );
     }, [active_wallet?.loginid, active_wallet_name, from_account, to_account?.loginid]);
+
+    const clearErrorMessages = React.useCallback(
+        () => setMessageList(list => list.filter(el => el.type !== 'error')),
+        []
+    );
+
+    const validateAmount = (amount: number) => {
+        clearErrorMessages();
+
+        if (!amount || is_amount_to_input_disabled) return;
+
+        if (active_wallet?.is_demo) {
+            const { is_valid, message } = validNumber(amount.toString(), {
+                type: 'float',
+                decimals: getConfig(from_account?.currency || '')?.fractional_digits,
+                min: 1,
+                max: from_account?.balance,
+            });
+
+            const should_reset_balance =
+                active_wallet?.balance !== undefined &&
+                amount > active_wallet?.balance &&
+                active_wallet?.balance < initial_demo_balance;
+
+            if (from_account?.loginid === active_wallet.loginid && should_reset_balance) {
+                setMessageList(list => [
+                    ...list,
+                    {
+                        variant: 'with-action-button',
+                        id: ERROR_CODES.is_demo.insufficient_fund,
+                        button_label: localize('Reset balance'),
+                        onClickHandler: () => setWalletModalActiveTab('Deposit'),
+                        message: localize(
+                            'You have insufficient fund in the selected wallet, please reset your virtual balance'
+                        ),
+                        type: 'error',
+                    },
+                ]);
+            } else if (!is_valid) {
+                //else if not wallet loginid and not is_ok message
+                setMessageList(list => [
+                    ...list,
+                    {
+                        variant: 'base',
+                        id: ERROR_CODES.is_demo.between_min_max,
+                        message: `${message} ${from_account?.display_currency_code}` || '',
+                        type: 'error',
+                    },
+                ]);
+            }
+        }
+    };
 
     const onSelectFromAccount = React.useCallback(
         (
