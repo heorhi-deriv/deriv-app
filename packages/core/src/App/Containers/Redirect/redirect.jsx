@@ -22,6 +22,7 @@ const Redirect = ({
     const url_params = new URLSearchParams(url_query_string);
     let redirected_to_route = false;
     const action_param = url_params.get('action');
+    const loginid = url_params.get('loginid');
     const code_param = url_params.get('code') || verification_code[action_param];
     const ext_platform_url = url_params.get('ext_platform_url');
 
@@ -111,7 +112,16 @@ const Redirect = ({
             break;
         }
         case 'payment_withdraw': {
-            history.push(routes.cashier_withdrawal);
+            const is_wallet_account = /CRW|VRW/.test(loginid);
+
+            if (is_wallet_account) {
+                history.push({
+                    pathname: routes.traders_hub,
+                    search: url_query_string,
+                });
+            } else {
+                history.push(routes.cashier_withdrawal);
+            }
             redirected_to_route = true;
             break;
         }

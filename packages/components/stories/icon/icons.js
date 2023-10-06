@@ -1030,6 +1030,7 @@ export const icons =
     'wallet': [
         'IcWalletBitcoinDark',
         'IcWalletBitcoinLight',
+        'IcWalletClipboard',
         'IcWalletCurrencyAud',
         'IcWalletCurrencyEur',
         'IcWalletCurrencyGbp',

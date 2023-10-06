@@ -67,7 +67,7 @@ const WalletOptionsAndMultipliersListing = observer(() => {
         is_logging_in,
         is_switching,
     } = client;
-    const { available_platforms, is_eu_user, is_real, no_MF_account, no_CR_account, is_demo } = traders_hub;
+    const { available_platforms, is_eu_user, no_MF_account, no_CR_account, is_demo } = traders_hub;
 
     const wallet_account = useActiveWallet();
 
@@ -94,22 +94,31 @@ const WalletOptionsAndMultipliersListing = observer(() => {
         }
     };
 
+    const is_trading_account_exists = wallet_account.linked_to?.some(acc => acc.platform === 'dtrade');
+
+    const get_account_card_name = wallet_account.is_malta_wallet
+        ? localize('Deriv Apps account')
+        : localize('Deriv Apps');
+    const get_account_card_description = wallet_account.is_malta_wallet
+        ? localize('Get a Deriv Apps trading account regulated by MFSA to trade multipliers on Deriv Trader.')
+        : localize('Get a Deriv Apps trading account to trade options and multipliers on these apps.');
+
     return (
         <ListingContainer
-            wallet_account={wallet_account}
+            wallet_account={is_trading_account_exists ? wallet_account : undefined}
             className='wallet-content__border-reset'
             title={<OptionsTitle landing_company_name={wallet_account.landing_company_name} />}
             description={<ListingContainerDescription landing_company_name={wallet_account.landing_company_name} />}
             is_deriv_platform
         >
-            {is_real && (no_CR_account || no_MF_account) && (
+            {!is_trading_account_exists && (
                 <div className='full-row'>
                     <TradingAppCard
                         action_type='get'
                         availability='All'
                         clickable_icon
-                        name={localize('Deriv account')}
-                        description={localize('Get a real Deriv account, start trading and manage your funds.')}
+                        name={get_account_card_name}
+                        description={get_account_card_description}
                         icon='Options'
                         onAction={derivAccountAction}
                     />

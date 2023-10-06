@@ -1,7 +1,9 @@
 import React from 'react';
-import BalanceText from '../balance-text';
+
+import { mockStore, StoreProvider } from '@deriv/stores';
 import { render, screen } from '@testing-library/react';
-import { StoreProvider, mockStore } from '@deriv/stores';
+
+import BalanceText from '../balance-text';
 
 const createWrapper = (mock: ReturnType<typeof mockStore>) => {
     const wrapper = ({ children }: { children: JSX.Element }) => <StoreProvider store={mock}>{children}</StoreProvider>;

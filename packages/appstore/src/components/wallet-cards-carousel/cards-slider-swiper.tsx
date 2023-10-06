@@ -25,19 +25,16 @@ const CardsSliderSwiper = observer(() => {
             const index = emblaApi?.selectedScrollSnap() || 0;
             setActiveIndex(index + 1);
         });
-    }, [emblaApi]);
+
+        emblaApi?.on('settle', () => {
+            const index = emblaApi?.selectedScrollSnap() || 0;
+            if (!data[index]?.is_selected) switchAccount(data[index]?.loginid);
+        });
+    }, [active_index, data, emblaApi, switchAccount]);
 
     useEffect(() => {
         emblaApi?.scrollTo(active_index - 1);
     }, [active_index, emblaApi]);
-
-    useEffect(() => {
-        const timeout_id = setTimeout(() => {
-            if (!data[active_index - 1]?.is_selected) switchAccount(data[active_index - 1]?.loginid);
-        }, 1000);
-
-        return () => clearTimeout(timeout_id);
-    }, [active_index, data, switchAccount]);
 
     useEffect(() => {
         setActiveIndex(active_wallet_index + 1);
@@ -73,7 +70,7 @@ const CardsSliderSwiper = observer(() => {
 
     return (
         <React.Fragment>
-            <div className='wallet-cards-carousel__viewport' ref={emblaRef}>
+            <div ref={emblaRef}>
                 <div className='wallet-cards-carousel__container'>{slider}</div>
             </div>
             <div className='wallet-cards-carousel__pagination'>

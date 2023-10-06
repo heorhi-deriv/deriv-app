@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import { observer, useStore } from '@deriv/stores';
 import { ThemedScrollbars, Loading } from '@deriv/components';
 import { useActiveWallet, useWalletsList } from '@deriv/hooks';
-import { observer, useStore } from '@deriv/stores';
 import AddMoreWallets from 'Components/add-more-wallets';
 import ModalManager from 'Components/modals/modal-manager';
 import DesktopWalletsList from './desktop-wallets-list';
 import MobileWalletsCarousel from './mobile-wallets-carousel';
+import WalletTourGuide from 'Modules/tour-guide/wallet-tour-guide';
 import './wallets.scss';
 
 const Wallets = observer(() => {
@@ -24,12 +25,13 @@ const Wallets = observer(() => {
     if (!is_authorize) return <Loading is_fullscreen />;
 
     return (
-        <ThemedScrollbars className={'wallets-module'}>
-            <div className={'wallets-module__content'}>
+        <ThemedScrollbars className='wallets-module' is_scrollbar_hidden>
+            <div className='wallets-module__content'>
                 {is_mobile ? <MobileWalletsCarousel /> : <DesktopWalletsList />}
                 <AddMoreWallets />
             </div>
             <ModalManager />
+            <WalletTourGuide />
         </ThemedScrollbars>
     );
 });

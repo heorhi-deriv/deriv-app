@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Clipboard, Icon, Text } from '@deriv/components';
-import { isMobile } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import { Localize, localize } from '@deriv/translations';
 import { useCashierStore } from '../../../stores/useCashierStores';
@@ -27,7 +26,11 @@ const Status = () => {
     );
 };
 
-const AccountInformation = ({ account }: { account: TAccount }) => {
+const AccountInformation = observer(({ account }: { account: TAccount }) => {
+    const {
+        ui: { is_mobile },
+    } = useStore();
+
     return (
         <div className='crypto-withdraw-receipt__account-info'>
             <div className='crypto-withdraw-receipt__account-info-detail'>
@@ -35,7 +38,7 @@ const AccountInformation = ({ account }: { account: TAccount }) => {
                 <Text
                     color='prominent'
                     weight='bold'
-                    size={isMobile() ? 'xxs' : 's'}
+                    size={is_mobile ? 'xxs' : 's'}
                     align='center'
                     className='crypto-withdraw-receipt__account-info-detail-text'
                 >
@@ -44,7 +47,7 @@ const AccountInformation = ({ account }: { account: TAccount }) => {
             </div>
             <Text
                 color='less-prominent'
-                size={isMobile() ? 'xs' : 's'}
+                size={is_mobile ? 'xs' : 's'}
                 align='center'
                 className='crypto-withdraw-receipt__account-info-detail-text'
             >
@@ -52,9 +55,12 @@ const AccountInformation = ({ account }: { account: TAccount }) => {
             </Text>
         </div>
     );
-};
+});
 
-const WalletInformation = ({ account, blockchain_address }: TWalletInformationProps) => {
+const WalletInformation = observer(({ account, blockchain_address }: TWalletInformationProps) => {
+    const {
+        ui: { is_mobile },
+    } = useStore();
     const text = getAccountText(account);
     return (
         <div className='crypto-withdraw-receipt__account-info'>
@@ -78,7 +84,7 @@ const WalletInformation = ({ account, blockchain_address }: TWalletInformationPr
                 <Text
                     color='less-prominent'
                     as='p'
-                    size={isMobile() ? 'xxs' : 'xs'}
+                    size={is_mobile ? 'xxs' : 'xs'}
                     align='center'
                     className='crypto-withdraw-receipt__account-info-detail-text'
                 >
@@ -86,18 +92,19 @@ const WalletInformation = ({ account, blockchain_address }: TWalletInformationPr
                 </Text>
                 <Clipboard
                     text_copy={blockchain_address}
-                    info_message={isMobile() ? '' : localize('copy')}
+                    info_message={is_mobile ? '' : localize('copy')}
                     icon='IcCashierClipboard'
                     success_message={localize('copied!')}
-                    popoverAlignment={isMobile() ? 'left' : 'bottom'}
+                    popoverAlignment={is_mobile ? 'left' : 'bottom'}
                 />
             </div>
         </div>
     );
-};
+});
 
 const CryptoWithdrawReceipt = observer(() => {
-    const { client } = useStore();
+    const { client, ui } = useStore();
+    const { is_mobile } = ui;
     const { currency, is_switching } = client;
     const { account_transfer, general_store, transaction_history, withdraw } = useCashierStore();
     const { selected_from: account } = account_transfer;
@@ -126,13 +133,13 @@ const CryptoWithdrawReceipt = observer(() => {
                 <Localize i18n_default_text='Your withdrawal will be processed within 24 hours' />
             </Text>
             <div className='crypto-withdraw-receipt__detail'>
-                {!isMobile() && <Status />}
+                {!is_mobile && <Status />}
                 <Text
                     as='p'
                     color='profit-success'
                     weight='bold'
                     align='center'
-                    size={isMobile() ? 'm' : 'l'}
+                    size={is_mobile ? 'm' : 'l'}
                     className='crypto-withdraw-receipt__crypto'
                 >
                     <Localize
@@ -143,7 +150,7 @@ const CryptoWithdrawReceipt = observer(() => {
                         }}
                     />
                 </Text>
-                {isMobile() && <Status />}
+                {is_mobile && <Status />}
                 <AccountInformation account={account} />
                 <Icon className='crypto-withdraw-receipt__icon' icon='IcArrowDown' size={30} />
                 <WalletInformation account={account} blockchain_address={blockchain_address} />

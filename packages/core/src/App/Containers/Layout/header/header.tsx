@@ -1,10 +1,12 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { useFeatureFlags, useWalletAccountsList } from '@deriv/hooks';
 import { PlatformContext, routes } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
 import DefaultHeader from './default-header.jsx';
 import DashboardHeader from './dashboard-header.jsx';
 import DTraderHeader from './dtrader-header.jsx';
+import DTraderHeaderWallets from './dtrader-header-wallets';
 import TradersHubHeader from './traders-hub-header';
 
 const Header = observer(() => {
@@ -18,6 +20,10 @@ const Header = observer(() => {
         pathname.startsWith(routes.cashier) ||
         pathname.startsWith(routes.compare_cfds);
 
+    const { is_wallet_enabled } = useFeatureFlags();
+    const { has_wallet } = useWalletAccountsList();
+    const should_show_wallets = is_wallet_enabled && has_wallet;
+
     if (is_appstore) {
         return <DashboardHeader />;
     } else if (is_logged_in) {
@@ -27,7 +33,7 @@ const Header = observer(() => {
         } else if (pathname === routes.onboarding) {
             result = null;
         } else {
-            result = <DTraderHeader />;
+            result = should_show_wallets ? <DTraderHeaderWallets /> : <DTraderHeader />;
         }
         return result;
     } else if (pathname === routes.onboarding) {

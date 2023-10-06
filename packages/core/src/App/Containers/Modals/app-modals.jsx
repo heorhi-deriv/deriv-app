@@ -8,6 +8,7 @@ import MT5AccountNeededModal from 'App/Components/Elements/Modals/mt5-account-ne
 import RedirectNoticeModal from 'App/Components/Elements/Modals/RedirectNotice';
 import { connect } from 'Stores/connect';
 
+import WalletsMigrationInProgress from './wallets-upgrade-in-progress/wallets-migration-in-progress';
 import CompletedAssessmentModal from './completed-assessment-modal.jsx';
 import CooldownWarningModal from './cooldown-warning-modal.jsx';
 import MT5Notification from './mt5-notification';
@@ -73,6 +74,7 @@ const AppModals = ({
     is_trading_experience_incomplete,
     should_show_risk_accept_modal,
     is_need_real_account_for_cashier_modal_visible,
+    is_wallet_migration_in_progress_popup,
 }) => {
     const temp_session_signup_params = SessionStore.get('signup_query_param');
     const url_params = new URLSearchParams(useLocation().search || temp_session_signup_params);
@@ -154,9 +156,11 @@ const AppModals = ({
     if (is_ready_to_deposit_modal_visible) {
         ComponentToLoad = <ReadyToDepositModal />;
     }
-
     if (is_need_real_account_for_cashier_modal_visible) {
         ComponentToLoad = <NeedRealAccountForCashierModal />;
+    }
+    if (is_wallet_migration_in_progress_popup) {
+        ComponentToLoad = <WalletsMigrationInProgress />;
     }
 
     return (
@@ -192,4 +196,5 @@ export default connect(({ client, ui, traders_hub }) => ({
     content_flag: traders_hub.content_flag,
     is_trading_experience_incomplete: client.is_trading_experience_incomplete,
     should_show_risk_accept_modal: ui.should_show_risk_accept_modal,
+    is_wallet_migration_in_progress_popup: client.is_wallet_migration_in_progress_popup,
 }))(AppModals);

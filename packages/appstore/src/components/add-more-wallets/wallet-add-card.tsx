@@ -1,10 +1,11 @@
 import React from 'react';
 import { TWalletInfo } from 'Types';
+import { useCurrencyConfig } from '@deriv/api';
 import { Text, WalletCard } from '@deriv/components';
-import { useCurrencyConfig } from '@deriv/hooks';
+import { useCreateWallet } from '@deriv/hooks';
 import { observer, useStore } from '@deriv/stores';
+import { getWalletCurrencyIcon } from 'Constants/utils';
 import { Localize } from '@deriv/translations';
-import { getWalletCurrencyIcon } from '@deriv/utils';
 import wallet_description_mapper from 'Constants/wallet_description_mapper';
 
 type TAddWalletCard = {
@@ -19,6 +20,7 @@ const AddWalletCard = observer(({ wallet_info }: TAddWalletCard) => {
     const { currency = '', landing_company_name, is_added, gradient_card_class } = wallet_info;
     const { getConfig } = useCurrencyConfig();
     const currency_config = getConfig(currency);
+    const { mutate: createWallet } = useCreateWallet();
 
     const wallet_details = {
         currency,
@@ -32,7 +34,17 @@ const AddWalletCard = observer(({ wallet_info }: TAddWalletCard) => {
     return (
         <div className='add-wallets__card'>
             <div className='add-wallets__card-wrapper'>
-                <WalletCard wallet={wallet_details} size='medium' state={is_added ? 'added' : 'add'} />
+                <WalletCard
+                    wallet={wallet_details}
+                    size='medium'
+                    state={is_added ? 'added' : 'add'}
+                    onClick={() =>
+                        !is_added &&
+                        createWallet({
+                            payload: { currency, account_type: currency_config?.is_crypto ? 'crypto' : 'doughflow' },
+                        })
+                    }
+                />
                 <div className='add-wallets__card-description'>
                     <Text as='h3' color='prominent' size={is_mobile ? 'xs' : 's'} weight='bold'>
                         <Localize

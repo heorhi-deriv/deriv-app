@@ -13,6 +13,7 @@ type TMenuLink = {
     icon: string;
     is_active: boolean;
     is_disabled: boolean;
+    as_disabled: boolean;
     is_hidden: boolean;
     link_to: string;
     onClickLink: () => void;
@@ -26,6 +27,7 @@ const MenuLink = observer(
         icon = '',
         is_active,
         is_disabled,
+        as_disabled,
         is_hidden,
         link_to = '',
         onClickLink,
@@ -113,8 +115,10 @@ const MenuLink = observer(
                 <div
                     className={classNames('header__menu-mobile-link', {
                         'header__menu-mobile-link--disabled': is_disabled,
+                        'dc-mobile-drawer__submenu-toggle--disabled': as_disabled,
                     })}
                     data-testid={data_testid}
+                    onClick={onClickLink}
                 >
                     <Icon className='header__menu-mobile-link-icon' icon={icon} />
                     <span className='header__menu-mobile-link-text'>{text}</span>

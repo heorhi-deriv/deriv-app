@@ -1,12 +1,14 @@
 import React from 'react';
-import classNames from 'classnames';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
+import classNames from 'classnames';
+
+import { useOnClickOutside } from '../../hooks';
+import Icon from '../icon/icon';
+import Text from '../text/text';
+
 import Body from './modal-body';
 import Footer from './modal-footer';
-import Text from '../text/text';
-import Icon from '../icon/icon';
-import { useOnClickOutside } from '../../hooks';
 
 interface IClickEvent extends MouseEvent {
     path?: HTMLElement[];
@@ -37,6 +39,7 @@ type TModalElement = {
     title?: string | React.ReactNode;
     toggleModal?: (e?: React.MouseEvent<HTMLElement>) => void;
     width?: string;
+    shouldCloseOnEscape?: boolean;
 };
 
 const ModalElement = ({
@@ -65,6 +68,7 @@ const ModalElement = ({
     title,
     toggleModal,
     width,
+    shouldCloseOnEscape,
 }: React.PropsWithChildren<TModalElement>) => {
     const el_ref = React.useRef(document.createElement('div'));
     const el_portal_node = portalId && document.getElementById(portalId);
@@ -115,11 +119,11 @@ const ModalElement = ({
     }, []);
     const closeOnEscButton = React.useCallback(
         (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
+            if (shouldCloseOnEscape && e.key === 'Escape') {
                 toggleModal?.();
             }
         },
-        [toggleModal]
+        [toggleModal, shouldCloseOnEscape]
     );
     React.useEffect(() => {
         window.addEventListener('keydown', closeOnEscButton);
@@ -242,6 +246,7 @@ const Modal = ({
     transition_timeout,
     toggleModal,
     width,
+    shouldCloseOnEscape = true,
 }: React.PropsWithChildren<TModal>) => (
     <CSSTransition
         appear
@@ -282,6 +287,7 @@ const Modal = ({
             small={small}
             width={width}
             elements_to_ignore={elements_to_ignore}
+            shouldCloseOnEscape={shouldCloseOnEscape}
         >
             {children}
         </ModalElement>

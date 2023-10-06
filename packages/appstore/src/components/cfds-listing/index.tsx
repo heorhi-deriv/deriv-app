@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StaticUrl } from '@deriv/components';
-import { useCFDCanGetMoreMT5Accounts } from '@deriv/hooks';
+import { useCFDCanGetMoreMT5Accounts, useWalletMigration } from '@deriv/hooks';
 import { observer, useStore } from '@deriv/stores';
 import { isMobile, formatMoney, getAuthenticationStatusInfo, Jurisdiction } from '@deriv/shared';
 import { localize, Localize } from '@deriv/translations';
@@ -53,9 +53,15 @@ const CFDsListing = observer(() => {
         CFDs_restricted_countries,
         financial_restricted_countries,
     } = traders_hub;
+    const { is_in_progress } = useWalletMigration();
 
-    const { setAccountType } = cfd;
-    const { is_landing_company_loaded, real_account_creation_unlock_date, account_status } = client;
+    const { toggleCompareAccountsModal, setAccountType } = cfd;
+    const {
+        is_landing_company_loaded,
+        real_account_creation_unlock_date,
+        account_status,
+        setWalletsMigrationInProgressPopup,
+    } = client;
     const { setAppstorePlatform } = common;
     const { openDerivRealAccountNeededModal, setShouldShowCooldownModal } = ui;
     const has_no_real_account = !has_any_real_account;
@@ -187,8 +193,8 @@ const CFDsListing = observer(() => {
                         const has_mt5_account_status =
                             existing_account.status || is_idv_revoked
                                 ? getMT5AccountAuthStatus(
-                                      existing_account.status,
-                                      existing_account?.landing_company_short
+                                      existing_account.status ?? '',
+                                      existing_account?.short_code_and_region?.toLowerCase()
                                   )
                                 : null;
 
@@ -245,10 +251,15 @@ const CFDsListing = observer(() => {
                     })}
                     {can_get_more_cfd_mt5_accounts && (
                         <GetMoreAccounts
-                            onClick={toggleAccountTypeModalVisibility}
+                            onClick={
+                                is_in_progress
+                                    ? () => setWalletsMigrationInProgressPopup(true)
+                                    : toggleAccountTypeModalVisibility
+                            }
                             icon='IcAppstoreGetMoreAccounts'
                             title={localize('Get more')}
                             description={localize('Get more Deriv MT5 account with different type and jurisdiction.')}
+                            is_disabled={is_in_progress}
                         />
                     )}
                 </React.Fragment>

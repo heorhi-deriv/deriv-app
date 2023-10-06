@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, useOnClickOutside, Modal, Button } from '@deriv/components';
+import { Text, Modal, Button } from '@deriv/components';
 import { useStore, observer } from '@deriv/stores';
 import { Localize } from '@deriv/translations';
 import './wallets-migration-failed.scss';
@@ -8,8 +8,6 @@ const WalletsMigrationFailed = observer(() => {
     const { traders_hub, ui } = useStore();
     const { is_wallet_migration_failed, setWalletsMigrationFailedPopup } = traders_hub;
     const { is_mobile } = ui;
-
-    const wallets_migration_failed_ref = React.useRef<HTMLDivElement>(null);
 
     const handleClose = () => {
         setWalletsMigrationFailedPopup(false);
@@ -20,21 +18,9 @@ const WalletsMigrationFailed = observer(() => {
         setWalletsMigrationFailedPopup(false);
     };
 
-    const validateClickOutside = (e: MouseEvent) => {
-        return is_wallet_migration_failed && !wallets_migration_failed_ref?.current?.contains(e.target as Node);
-    };
-
-    useOnClickOutside(wallets_migration_failed_ref, handleClose, validateClickOutside);
-
     return (
-        <Modal
-            is_open={is_wallet_migration_failed}
-            toggleModal={handleClose}
-            width={is_mobile ? '32.3rem' : '44rem'}
-            should_header_stick_body={false}
-            has_close_icon={false}
-        >
-            <div ref={wallets_migration_failed_ref}>
+        <Modal is_open={is_wallet_migration_failed} toggleModal={handleClose} width={is_mobile ? '32.3rem' : '44rem'}>
+            <div>
                 <Modal.Body className='wallets-migration-failed'>
                     <Text
                         as='h1'

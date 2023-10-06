@@ -4,7 +4,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { DesktopWrapper, MobileWrapper } from '@deriv/components';
 import { routes, isMobile, getDecimalPlaces, platforms } from '@deriv/shared';
-// import { useWalletMigration } from '@deriv/hooks';
+import { useWalletMigration } from '@deriv/hooks';
 import { AccountActions, MenuLinks, PlatformSwitcher } from 'App/Components/Layout/Header';
 import platform_config from 'App/Constants/platform-config.ts';
 import RealAccountSignup from 'App/Containers/RealAccountSignup';
@@ -53,6 +53,7 @@ const DTraderHeader = ({
     toggleReadyToDepositModal,
     has_any_real_account,
     setTogglePlatformType,
+    setWalletsMigrationInProgressPopup,
 }) => {
     const addUpdateNotification = () => addNotificationMessage(client_notifications.new_version_available);
     const removeUpdateNotification = React.useCallback(
@@ -60,10 +61,9 @@ const DTraderHeader = ({
         [removeNotificationMessage]
     );
 
-    //TODO: Uncomment once useWalletMigration hook is optimized for production release.
-    // const { is_migrated, is_failed } = useWalletMigration();
-    // if (is_migrated) addNotificationMessage(client_notifications.wallets_migrated);
-    // if (is_failed) addNotificationMessage(client_notifications.wallets_failed);
+    const { is_in_progress, is_migrated, is_failed } = useWalletMigration();
+    if (is_migrated) addNotificationMessage(client_notifications.wallets_migrated);
+    if (is_failed) addNotificationMessage(client_notifications.wallets_failed);
 
     React.useEffect(() => {
         document.addEventListener('IgnorePWAUpdate', removeUpdateNotification);
@@ -71,7 +71,9 @@ const DTraderHeader = ({
     }, [removeUpdateNotification]);
 
     const handleClickCashier = () => {
-        if (!has_any_real_account && is_virtual) {
+        if (is_in_progress) {
+            setWalletsMigrationInProgressPopup(true);
+        } else if (!has_any_real_account && is_virtual) {
             toggleReadyToDepositModal();
         } else {
             history.push(routes.cashier_deposit);
@@ -167,6 +169,7 @@ const DTraderHeader = ({
                             toggleAccountsDialog={toggleAccountsDialog}
                             toggleNotifications={toggleNotifications}
                             openRealAccountSignup={openRealAccountSignup}
+                            is_deposit_button_disabled={is_in_progress}
                         />
                     </div>
                 </div>
@@ -215,6 +218,7 @@ DTraderHeader.propTypes = {
     toggleReadyToDepositModal: PropTypes.func,
     has_any_real_account: PropTypes.bool,
     setTogglePlatformType: PropTypes.func,
+    setWalletsMigrationInProgressPopup: PropTypes.func,
 };
 
 export default connect(({ client, common, ui, notifications, traders_hub }) => ({
@@ -253,4 +257,5 @@ export default connect(({ client, common, ui, notifications, traders_hub }) => (
     has_any_real_account: client.has_any_real_account,
     setTogglePlatformType: traders_hub.setTogglePlatformType,
     current_language: common.current_language,
+    setWalletsMigrationInProgressPopup: client.setWalletsMigrationInProgressPopup,
 }))(withRouter(DTraderHeader));

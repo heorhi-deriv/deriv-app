@@ -16,8 +16,11 @@ jest.mock('./../../containers/currency-switcher-container', () => jest.fn(({ chi
 
 jest.mock('@deriv/hooks', () => ({
     ...jest.requireActual('@deriv/hooks'),
+    useWalletsList: jest.fn(),
     useActiveWallet: jest.fn(),
 }));
+
+jest.mock('../wallet-cfds-listing', () => jest.fn(() => <div> WalletCFDListing</div>));
 
 describe('<WalletContent />', () => {
     it('Check class', () => {
@@ -59,7 +62,7 @@ describe('<WalletContent />', () => {
     it('Check there is NOT disclaimer for Non-EU', () => {
         render(
             <StoreProvider store={mockedRootStore}>
-                <WalletContent is_demo={false} is_malta_wallet={false} />
+                <WalletContent is_demo={true} is_malta_wallet={false} />
             </StoreProvider>
         );
 

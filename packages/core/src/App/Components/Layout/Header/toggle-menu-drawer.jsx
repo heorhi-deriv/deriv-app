@@ -7,6 +7,7 @@ import {
     useAccountTransferVisible,
     useIsP2PEnabled,
     usePaymentAgentTransferVisible,
+    useWalletMigration,
 } from '@deriv/hooks';
 import { routes, PlatformContext, getStaticUrl, whatsapp_url } from '@deriv/shared';
 import { observer, useStore } from '@deriv/stores';
@@ -43,6 +44,7 @@ const ToggleMenuDrawer = observer(({ platform_config }) => {
         is_landing_company_loaded,
         is_pending_proof_of_ownership,
         is_eu,
+        setWalletsMigrationInProgressPopup,
     } = client;
     const { cashier } = modules;
     const { payment_agent } = cashier;
@@ -62,6 +64,7 @@ const ToggleMenuDrawer = observer(({ platform_config }) => {
     const { is_appstore } = React.useContext(PlatformContext);
     const timeout = React.useRef();
     const history = useHistory();
+    const { is_in_progress } = useWalletMigration();
 
     React.useEffect(() => {
         const processRoutes = () => {
@@ -120,14 +123,21 @@ const ToggleMenuDrawer = observer(({ platform_config }) => {
         const has_access = route_config.is_authenticated ? is_logged_in : true;
         if (!has_access) return null;
 
-        if (!route_config.routes) {
+        const is_cashier = route_config.path === routes.cashier;
+        const should_disable_cashier = is_cashier && is_in_progress;
+
+        if (should_disable_cashier || !route_config.routes) {
             return (
                 <MobileDrawer.Item key={idx}>
                     <MenuLink
-                        link_to={route_config.path}
+                        link_to={should_disable_cashier ? undefined : route_config.path}
                         icon={route_config.icon_component}
                         text={route_config.getTitle()}
-                        onClickLink={toggleDrawer}
+                        as_disabled={should_disable_cashier}
+                        onClickLink={() => {
+                            toggleDrawer();
+                            if (should_disable_cashier) setWalletsMigrationInProgressPopup(true);
+                        }}
                     />
                 </MobileDrawer.Item>
             );
@@ -147,6 +157,7 @@ const ToggleMenuDrawer = observer(({ platform_config }) => {
             }
             return false;
         };
+
         return (
             <MobileDrawer.SubMenu
                 key={idx}
