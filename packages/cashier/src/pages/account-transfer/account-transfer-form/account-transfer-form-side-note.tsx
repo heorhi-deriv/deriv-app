@@ -104,13 +104,12 @@ const AccountTransferNote = ({
             if (is_from_derivgo && is_derivez_transfer) {
                 return (
                     <Localize
-                        i18n_default_text='We’ll charge a 2% transfer fee or {{minimum_fee}} {{currency}}, whichever is higher, for transfers between your Deriv cryptocurrency and Deriv MT5 accounts, your Deriv cryptocurrency and {{platform_name_ctrader}} accounts, your Deriv cryptocurrency and {{platform_name_derivez}} accounts, and your Deriv cryptocurrency and {{platform_name_dxtrade}} accounts.'
+                        i18n_default_text='We’ll charge a 2% transfer fee or {{minimum_fee}} {{currency}}, whichever is higher, for transfers between your Deriv cryptocurrency and Deriv MT5 accounts, your Deriv cryptocurrency and {{platform_name_derivez}} accounts, and your Deriv cryptocurrency and {{platform_name_dxtrade}} accounts.'
                         values={{
                             minimum_fee,
                             currency: getCurrencyDisplayCode(currency),
                             platform_name_derivez,
                             platform_name_dxtrade,
-                            platform_name_ctrader,
                         }}
                     />
                 );
