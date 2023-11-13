@@ -2,9 +2,17 @@ import { THooks, TMarketTypes } from '../../../../../types';
 
 type TGetAccountNameProps = {
     accountCategory: THooks.TransferAccount['account_category'];
-    accountType: THooks.TransferAccount['account_type'] | 'standard';
+    accountType: THooks.TransferAccount['account_type'];
     displayCurrencyCode?: THooks.CurrencyConfig['display_code'];
     mt5MarketType: TMarketTypes.SortedMT5Accounts;
+};
+
+//TODO: remove this function when market_type will be added to transfer_between_accounts response in API
+export const getMarketType = (mt5Group?: string) => {
+    if (mt5Group?.includes('financial')) return 'financial';
+    if (mt5Group?.includes('synthetic')) return 'synthetic';
+    if (mt5Group?.includes('all')) return 'all';
+    return 'all';
 };
 
 export const getAccountName = ({
