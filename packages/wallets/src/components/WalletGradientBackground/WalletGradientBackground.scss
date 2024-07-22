@@ -803,6 +803,90 @@
             }
         }
     }
+
+    &--XRP {
+        &-desktop {
+            &-card {
+                &-light {
+                    background: radial-gradient(
+                            295.23% 141.42% at 0% 100%,
+                            rgba(108, 106, 151, 0.28) 0%,
+                            rgba(50, 48, 99, 0.48) 100%
+                        )
+                        #ffffff;
+                }
+                &-dark {
+                    background: radial-gradient(
+                            100% 277.78% at 0% 100%,
+                            rgba(39, 117, 202, 0.24) 0%,
+                            rgba(34, 76, 225, 0.48) 100%
+                        )
+                        #151717;
+                }
+            }
+
+            &-header {
+                &-light {
+                    background: radial-gradient(
+                            295.23% 141.42% at 0% 100%,
+                            rgba(108, 106, 151, 0.28) 0%,
+                            rgba(50, 48, 99, 0.48) 100%
+                        )
+                        #ffffff;
+                }
+                &-dark {
+                    background: radial-gradient(
+                            100% 4130.74% at 0% 100%,
+                            rgba(39, 117, 202, 0.4) 0%,
+                            rgba(39, 117, 202, 0.16) 50.52%,
+                            rgba(34, 76, 225, 0.4) 100%
+                        )
+                        #151717;
+                }
+            }
+        }
+        &-mobile {
+            &-card {
+                &-light {
+                    background: radial-gradient(
+                            295.23% 141.42% at 0% 100%,
+                            rgba(108, 106, 151, 0.28) 0%,
+                            rgba(50, 48, 99, 0.48) 100%
+                        )
+                        #ffffff;
+                }
+                &-dark {
+                    background: radial-gradient(
+                            100% 277.78% at 0% 100%,
+                            rgba(39, 117, 202, 0.24) 0%,
+                            rgba(34, 76, 225, 0.48) 100%
+                        )
+                        #151717;
+                }
+            }
+
+            &-header {
+                &-light {
+                    background: radial-gradient(
+                            295.23% 141.42% at 0% 100%,
+                            rgba(108, 106, 151, 0.28) 0%,
+                            rgba(50, 48, 99, 0.48) 100%
+                        )
+                        #ffffff;
+                }
+                &-dark {
+                    background: radial-gradient(
+                            100% 4130.74% at 0% 100%,
+                            rgba(39, 117, 202, 0.4) 0%,
+                            rgba(39, 117, 202, 0.16) 50.52%,
+                            rgba(34, 76, 225, 0.4) 100%
+                        )
+                        #151717;
+                }
+            }
+        }
+    }
+
     &--demo {
         &-desktop {
             &-card {
