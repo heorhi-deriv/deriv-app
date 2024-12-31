@@ -1611,8 +1611,8 @@ export default class ClientStore extends BaseStore {
                 authorize_response.authorize.preferred_language,
                 this.is_new_session
             );
-            const stored_language = LocalStore.get(LANGUAGE_KEY);
-            if (stored_language && language !== stored_language) {
+            const stored_language_without_double_quotes = LocalStore.get(LANGUAGE_KEY).replace(/"/g, '');
+            if (stored_language_without_double_quotes && language !== stored_language_without_double_quotes) {
                 window.history.replaceState({}, document.title, urlForLanguage(language));
                 await this.root_store.common.changeSelectedLanguage(language);
             }
